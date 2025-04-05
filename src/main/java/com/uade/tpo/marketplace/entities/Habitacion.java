@@ -28,4 +28,6 @@ public class Habitacion {
 
     @ManyToMany(mappedBy = "habitaciones")
     private List<Reserva> reservas;
+    @ManyToMany(mappedBy = "habitaciones")
+    private List<Carrito> carritos;
 }

@@ -9,7 +9,7 @@ import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
-@DiscriminatorValue("admin")
+@DiscriminatorValue("gestor")
 @Data
 public class Gestor extends Cuenta{
     @Column(nullable = false)
