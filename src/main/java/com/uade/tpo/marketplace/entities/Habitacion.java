@@ -5,13 +5,17 @@ import java.util.List;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import lombok.Data;
 
+@Data
+@Entity
 public class Habitacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

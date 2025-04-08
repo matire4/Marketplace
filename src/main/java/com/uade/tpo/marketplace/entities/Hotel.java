@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
@@ -41,10 +42,10 @@ public class Hotel {
     private List<Pregunta> preguntas;
 
     @ManyToOne
-    @Column(name = "gestor_id", nullable = false)
+    @JoinColumn(name = "gestor_id", nullable = false)
     private Gestor gestor;
     @ManyToOne
-    @Column(name = "categoria_id", nullable = false)
+    @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
     public Hotel() {

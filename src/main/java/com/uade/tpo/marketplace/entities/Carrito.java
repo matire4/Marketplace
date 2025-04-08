@@ -20,9 +20,10 @@ public class Carrito {
     @OneToOne
     @JoinColumn(name = "UsuarioId", referencedColumnName = "UsuarioId")
     private Usuario usuario;
-    @ManyToMany
-    @JoinTable(name = "carrito_habitacion", joinColumns = @JoinColumn(name = "carrito_id"), inverseJoinColumns = @JoinColumn(name = "habitacion_id"))
-    private Habitacion habitacion;
+    // @ManyToMany
+    // @JoinTable(name = "carrito_habitacion", joinColumns = @JoinColumn(name =
+    // "carrito_id"), inverseJoinColumns = @JoinColumn(name = "habitacion_id"))
+    // private Habitacion habitacion;
 
     public Carrito() {
     }

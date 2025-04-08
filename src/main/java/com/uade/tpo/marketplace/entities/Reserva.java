@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.entities;
 
 import java.sql.Date;
+import java.util.List;
 
 import com.uade.tpo.marketplace.enums.Estado;
 
@@ -28,9 +29,10 @@ public class Reserva {
     @Column(nullable = false)
     Estado estado;
 
-    @ManyToMany(mappedBy = "reserva")
-    @JoinTable(name = "habitacion_reserva", joinColumns = @JoinColumn(name = "habitacion_id"), inverseJoinColumns = @JoinColumn(name = "reserva_id"))
-    private Habitacion habitacion;
+    // En Reserva.java
+    @ManyToMany
+    @JoinTable(name = "habitacion_reserva", joinColumns = @JoinColumn(name = "reserva_id"), inverseJoinColumns = @JoinColumn(name = "habitacion_id"))
+    private List<Habitacion> habitaciones;
 
     public Reserva() {
     }

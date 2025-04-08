@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
@@ -21,13 +22,13 @@ public class Pregunta {
     private String respuesta;
 
     @ManyToOne
-    @Column(name = "hotel_id", nullable = false)
+    @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
     @ManyToOne
-    @Column(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
     @ManyToOne
-    @Column(name = "habitacion_id")
+    @JoinColumn(name = "habitacion_id", nullable = true)
     private Habitacion habitacion;
 
     public Pregunta() {
