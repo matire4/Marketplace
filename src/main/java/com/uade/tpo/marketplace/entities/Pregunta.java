@@ -29,4 +29,12 @@ public class Pregunta {
     @ManyToOne
     @Column(name = "habitacion_id")
     private Habitacion habitacion;
+
+    public Pregunta() {
+    }
+
+    public Pregunta(String pregunta, String respuesta) {
+        this.pregunta = pregunta;
+        this.respuesta = respuesta;
+    }
 }

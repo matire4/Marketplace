@@ -22,4 +22,11 @@ public class Categoria {
 
     @OneToMany(mappedBy = "categoria")
     List<Hotel> hoteles;
+
+    public Categoria() {
+    }
+
+    public Categoria(String nombre) {
+        this.nombre = nombre;
+    }
 }

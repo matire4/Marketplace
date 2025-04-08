@@ -13,11 +13,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @DiscriminatorValue("usuario")
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Usuario extends Cuenta{
+public class Usuario extends Cuenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +27,7 @@ public class Usuario extends Cuenta{
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
-    private String apellido; 
+    private String apellido;
     @Column(nullable = false)
     RolUsuario rolUsuario;
 
@@ -36,4 +38,15 @@ public class Usuario extends Cuenta{
 
     @OneToOne
     private Carrito carrito;
+
+    public Usuario() {
+    }
+
+    public Usuario(String nombre, String apellido, RolUsuario rolUsuario, String username, String password,
+            String email, String telefono) {
+        super(username, password, email, telefono);
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.rolUsuario = rolUsuario;
+    }
 }

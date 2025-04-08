@@ -11,7 +11,7 @@ import jakarta.persistence.InheritanceType;
 import lombok.Data;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) //esto cambia segun la forma de login q terminemos usando
+@Inheritance(strategy = InheritanceType.JOINED) // esto cambia segun la forma de login q terminemos usando
 @DiscriminatorColumn(name = "tipo_usuario")
 @Data
 public abstract class Cuenta {
@@ -27,4 +27,14 @@ public abstract class Cuenta {
     private String email;
     @Column(nullable = false, unique = true)
     private String telefono;
+
+    public Cuenta() {
+    }
+
+    public Cuenta(String username, String password, String email, String telefono) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.telefono = telefono;
+    }
 }

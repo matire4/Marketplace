@@ -29,6 +29,15 @@ public class Reserva {
     Estado estado;
 
     @ManyToMany(mappedBy = "reserva")
-    @JoinTable(name = "habitacion_reserva",joinColumns = @JoinColumn(name = "habitacion_id"), inverseJoinColumns = @JoinColumn(name = "reserva_id"))
+    @JoinTable(name = "habitacion_reserva", joinColumns = @JoinColumn(name = "habitacion_id"), inverseJoinColumns = @JoinColumn(name = "reserva_id"))
     private Habitacion habitacion;
+
+    public Reserva() {
+    }
+
+    public Reserva(Date fecha, double precio, Estado estado) {
+        this.fecha = fecha;
+        this.precio = precio;
+        this.estado = estado;
+    }
 }

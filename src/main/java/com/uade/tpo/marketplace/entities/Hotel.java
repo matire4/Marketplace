@@ -46,4 +46,18 @@ public class Hotel {
     @ManyToOne
     @Column(name = "categoria_id", nullable = false)
     private Categoria categoria;
+
+    public Hotel() {
+    }
+
+    public Hotel(String nombre, String telefono, String email, String description, String direccion, String ciudad,
+            String pais) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.email = email;
+        this.descripcion = description;
+        this.direccion = direccion;
+        this.ciudad = ciudad;
+        this.pais = pais;
+    }
 }

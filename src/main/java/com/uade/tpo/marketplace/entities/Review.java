@@ -26,4 +26,12 @@ public class Review {
     @ManyToOne
     @Column(name = "hotel_id", nullable = false)
     private Hotel hotel;
+
+    public Review() {
+    }
+
+    public Review(double rating, String comment) {
+        this.rating = rating;
+        this.comment = comment;
+    }
 }
