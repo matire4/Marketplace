@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.dto.HotelRequest;
+import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.service.HotelService;
 
@@ -38,10 +40,20 @@ public class HotelController {
     }
 
     @PostMapping
-    public ResponseEntity<Hotel> createHotel(@RequestBody HotelRequest hotelRequest) throws HotelDuplicateException {
-        Hotel result = hotelService.createHotel(hotelRequest.getNombre(), hotelRequest.getTelefono(),
-                hotelRequest.getEmail(), hotelRequest.getDescripcion(), hotelRequest.getDireccion(),
-                hotelRequest.getCiudad(), hotelRequest.getPais());
+    public ResponseEntity<Hotel> createHotel(@RequestBody HotelRequest hotelRequest) throws HotelDuplicateException,
+            GestorNotFoundException,
+            CategoriaNotFoundException {
+        Hotel result = hotelService.createHotel(
+                hotelRequest.getNombre(),
+                hotelRequest.getTelefono(),
+                hotelRequest.getEmail(),
+                hotelRequest.getDescripcion(),
+                hotelRequest.getDireccion(),
+                hotelRequest.getCiudad(),
+                hotelRequest.getPais(),
+                hotelRequest.getGestorId(),
+                hotelRequest.getCategoriaId());
+
         return ResponseEntity.created(URI.create("/hoteles" + result.getId())).body(result);
     }
 }

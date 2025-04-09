@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
@@ -37,11 +39,19 @@ public class HotelServiceImpl implements HotelService {
             String description,
             String direccion,
             String ciudad,
-            String pais) throws HotelDuplicateException {
+            String pais,
+            Long gestorId,
+            Long categoriaId) throws HotelDuplicateException, GestorNotFoundException,
+            CategoriaNotFoundException {
+
         List<Hotel> hoteles = hotelRepository.findByEmail(email);
         if (hoteles.isEmpty()) {
-            Gestor gestor = gestorRepository.save(new Gestor("Manuel", "manuel", "manuel", "11111", "Manuel", "123"));
-            Categoria categoria = categoriaRepository.save(new Categoria("Hotel"));
+
+            Gestor gestor = gestorRepository.findById(gestorId)
+                    .orElseThrow(() -> new GestorNotFoundException());
+            Categoria categoria = categoriaRepository.findById(categoriaId)
+                    .orElseThrow(() -> new CategoriaNotFoundException());
+
             return hotelRepository.save(new Hotel(
                     nombre,
                     telefono,

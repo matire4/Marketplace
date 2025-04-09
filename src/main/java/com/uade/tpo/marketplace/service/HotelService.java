@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 
 public interface HotelService {
@@ -17,6 +19,10 @@ public interface HotelService {
             String description,
             String direccion,
             String ciudad,
-            String pais)
-            throws HotelDuplicateException;
+            String pais,
+            Long gestorId,
+            Long categoriaId)
+            throws HotelDuplicateException,
+            GestorNotFoundException,
+            CategoriaNotFoundException;
 }
