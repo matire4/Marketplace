@@ -7,11 +7,13 @@ import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
+import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 
 public interface HotelService {
     public List<Hotel> getHotels();
 
-    public Optional<Hotel> getHotelById(Long hotelId);
+    public Optional<Hotel> getHotelById(Long hotelId)
+            throws HotelNotFoundException;
 
     public Hotel createHotel(String nombre,
             String telefono,

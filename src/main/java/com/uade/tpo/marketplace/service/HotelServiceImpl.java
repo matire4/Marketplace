@@ -12,6 +12,7 @@ import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
+import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
@@ -29,7 +30,8 @@ public class HotelServiceImpl implements HotelService {
         return hotelRepository.findAll();
     }
 
-    public Optional<Hotel> getHotelById(Long hotelId) {
+    public Optional<Hotel> getHotelById(Long hotelId)
+            throws HotelNotFoundException {
         return hotelRepository.findById(hotelId);
     }
 

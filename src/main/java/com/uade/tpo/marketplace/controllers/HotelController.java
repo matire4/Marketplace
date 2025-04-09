@@ -18,6 +18,7 @@ import com.uade.tpo.marketplace.entities.dto.HotelRequest;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
+import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.service.HotelService;
 
 @RestController
@@ -32,7 +33,8 @@ public class HotelController {
     }
 
     @GetMapping("/{hotelId}")
-    public ResponseEntity<Hotel> getHotelById(@PathVariable Long hotelId) {
+    public ResponseEntity<Hotel> getHotelById(@PathVariable Long hotelId)
+            throws HotelNotFoundException {
         Optional<Hotel> result = hotelService.getHotelById(hotelId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
