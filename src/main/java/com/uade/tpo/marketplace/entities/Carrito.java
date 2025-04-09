@@ -1,6 +1,9 @@
 package com.uade.tpo.marketplace.entities;
 
 import lombok.Data;
+
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,12 +21,15 @@ public class Carrito {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "UsuarioId", referencedColumnName = "UsuarioId")
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
-    // @ManyToMany
-    // @JoinTable(name = "carrito_habitacion", joinColumns = @JoinColumn(name =
-    // "carrito_id"), inverseJoinColumns = @JoinColumn(name = "habitacion_id"))
-    // private Habitacion habitacion;
+    @ManyToMany
+    @JoinTable(
+        name = "carrito_habitacion",
+        joinColumns = @JoinColumn(name = "carrito_id"),
+        inverseJoinColumns = @JoinColumn(name = "habitacion_id")
+    )
+    private List<Habitacion> habitaciones;
 
     public Carrito() {
     }

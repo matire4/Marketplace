@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data
@@ -33,6 +34,9 @@ public class Reserva {
     @ManyToMany
     @JoinTable(name = "habitacion_reserva", joinColumns = @JoinColumn(name = "reserva_id"), inverseJoinColumns = @JoinColumn(name = "habitacion_id"))
     private List<Habitacion> habitaciones;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id") // esta columna va a estar en la tabla Reserva
+    private Usuario usuario;
 
     public Reserva() {
     }

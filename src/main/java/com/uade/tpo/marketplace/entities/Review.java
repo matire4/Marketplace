@@ -22,7 +22,7 @@ public class Review {
     private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
