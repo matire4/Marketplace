@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.entities;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,10 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "Hotel")
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,5 +63,8 @@ public class Hotel {
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.pais = pais;
+    }
+    public String getEmail() {
+        return email;
     }
 }
