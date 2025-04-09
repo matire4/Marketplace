@@ -1,7 +1,6 @@
 package com.uade.tpo.marketplace.entities;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,7 +54,7 @@ public class Hotel {
     }
 
     public Hotel(String nombre, String telefono, String email, String description, String direccion, String ciudad,
-            String pais) {
+            String pais, Gestor gestor, Categoria categoria) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.email = email;
@@ -63,8 +62,7 @@ public class Hotel {
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.pais = pais;
-    }
-    public String getEmail() {
-        return email;
+        this.gestor = gestor;
+        this.categoria = categoria;
     }
 }

@@ -24,9 +24,9 @@ public class Gestor extends Cuenta {
     public Gestor() {
     }
 
-    public Gestor(String username, String password, String email, String telefono, String nombre, List<Hotel> hoteles) {
+    public Gestor(String username, String password, String email, String telefono, String nombre, String cuil) {
         super(username, password, email, telefono);
         this.nombre = nombre;
-        this.hoteles = hoteles;
+        this.cuil = cuil;
     }
 }
