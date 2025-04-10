@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
+import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
@@ -45,7 +48,8 @@ public class HotelServiceImpl implements HotelService {
                         String ciudad,
                         String pais,
                         Long gestorId,
-                        Long categoriaId) throws HotelDuplicateException, GestorNotFoundException,
+                        Long categoriaId,
+                        List<HabitacionDTO> habitaciones) throws HotelDuplicateException, GestorNotFoundException,
                         CategoriaNotFoundException {
 
                 List<Hotel> hoteles = hotelRepository.findByEmail(email);
@@ -56,7 +60,7 @@ public class HotelServiceImpl implements HotelService {
                         Categoria categoria = categoriaRepository.findById(categoriaId)
                                         .orElseThrow(() -> new CategoriaNotFoundException());
 
-                        return hotelRepository.save(new Hotel(
+                        Hotel hotel = new Hotel(
                                         nombre,
                                         telefono,
                                         email,
@@ -65,7 +69,20 @@ public class HotelServiceImpl implements HotelService {
                                         ciudad,
                                         pais,
                                         gestor,
-                                        categoria));
+                                        categoria);
+
+                        if (habitaciones != null) {
+                                habitaciones.stream().forEach(habitacion -> {
+                                        Habitacion newHabitacion = new Habitacion(habitacion.getTipoHabitacion(),
+                                                        habitacion.getCapacidad(), habitacion.getPrecioPorNoche(),
+                                                        habitacion.getNumeroHabitacion(), habitacion.getImagen());
+
+                                        hotel.getHabitaciones().add(newHabitacion);
+                                        newHabitacion.setHotel(hotel);
+                                });
+                        }
+
+                        return hotelRepository.save(hotel);
                 }
                 throw new HotelDuplicateException();
         }

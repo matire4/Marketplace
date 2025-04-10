@@ -9,7 +9,23 @@ PUT /hoteles
     "ciudad": "Haltom City",
     "pais": "Romania",
     "gestorId": 1,
-    "categoriaId": 1
+    "categoriaId": 1,
+    "habitacionesParaCrear": [
+        {
+            "tipoHabitacion": "doble",
+            "capacidad": 4,
+            "precioPorNoche": 200.0,
+            "numeroHabitacion": "704",
+            "imagen": ""
+        },
+        {
+            "tipoHabitacion": "individual",
+            "capacidad": 2,
+            "precioPorNoche": 170.0,
+            "numeroHabitacion": "207",
+            "imagen": ""
+        }
+    ]
 }
 
 PUT /gestores

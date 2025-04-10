@@ -2,6 +2,8 @@ package com.uade.tpo.marketplace.entities.dto;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -15,6 +17,10 @@ public class HotelDTO {
     private String ciudad;
     private String pais;
     private List<Long> habitacionesIds;
+
+    @JsonIgnore
+    private List<HabitacionDTO> habitacionesParaCrear;
+
     private List<Long> reviewsIds;
     private List<Long> preguntasIds;
     private Long gestorId;
