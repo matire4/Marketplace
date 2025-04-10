@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ import com.uade.tpo.marketplace.service.GestorService;
 public class GestorController {
     @Autowired
     private GestorService gestorService;
+
+    @GetMapping
+    public ResponseEntity<List<GestorDTO>> getGestores() {
+        return ResponseEntity.ok(gestorService.getGestores());
+    }
 
     @GetMapping("/{gestorId}")
     public ResponseEntity<GestorDTO> getGestorById(@PathVariable Long gestorId)

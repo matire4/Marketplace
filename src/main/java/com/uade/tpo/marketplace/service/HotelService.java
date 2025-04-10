@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Hotel;
-import com.uade.tpo.marketplace.entities.dto.CategoriaDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;

@@ -38,3 +38,15 @@ PUT /gestores
     "nombre": "Hilton",
     "cuil": "68279"
 }
+
+PUT / usuarios
+
+{
+    "nombre": "Mandy",
+    "apellido": "Weissnat",
+    "rolUsuario": "Cliente",
+    "username": "mandy123",
+    "password": "FIwjAnyXWDmfV_c",
+    "email": "mandy@gmail.com",
+    "telefono": "688-435-6057"
+}

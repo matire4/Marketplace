@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Gestor;
@@ -8,15 +9,20 @@ import com.uade.tpo.marketplace.exceptions.GestorDuplicateException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 
 public interface GestorService {
-    Optional<Gestor> getGestorById(Long gestorId) throws GestorNotFoundException;
 
-    Gestor createGestor(String username, String password, String email, String telefono, String nombre, String cuil)
-            throws GestorDuplicateException;
+        public List<GestorDTO> getGestores();
 
-    Gestor updateGestor(Long gestorId, String username, String password, String email, String telefono, String nombre, String cuil)
-            throws GestorNotFoundException, GestorDuplicateException;
+        public Optional<Gestor> getGestorById(Long gestorId) throws GestorNotFoundException;
 
-    void deleteGestor(Long gestorId) throws GestorNotFoundException;
+        public Gestor createGestor(String username, String password, String email, String telefono, String nombre,
+                        String cuil)
+                        throws GestorDuplicateException;
 
-    GestorDTO gestorToGestorDTO(Gestor gestor);
+        public Gestor updateGestor(Long gestorId, String username, String password, String email, String telefono,
+                        String nombre, String cuil)
+                        throws GestorNotFoundException, GestorDuplicateException;
+
+        public void deleteGestor(Long gestorId) throws GestorNotFoundException;
+
+        public GestorDTO gestorToGestorDTO(Gestor gestor);
 }

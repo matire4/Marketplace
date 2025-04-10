@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,12 @@ public class GestorServiceImpl implements GestorService {
     private GestorRepository gestorRepository;
 
     @Override
+    public List<GestorDTO> getGestores() {
+        List<Gestor> gestores = gestorRepository.findAll();
+        return gestores.stream().map(gestor -> this.gestorToGestorDTO(gestor)).toList();
+    }
+
+    @Override
     public Optional<Gestor> getGestorById(Long gestorId) throws GestorNotFoundException {
         return Optional.ofNullable(
                 gestorRepository.findById(gestorId)
@@ -27,12 +34,11 @@ public class GestorServiceImpl implements GestorService {
     public Gestor createGestor(String username, String password, String email, String telefono, String nombre,
             String cuil)
             throws GestorDuplicateException {
-        if (gestorRepository.existsByUsername(username)) {
+        if (gestorRepository.existsByUsername(username))
             throw new GestorDuplicateException();
-        }
-        if (gestorRepository.existsByEmail(email)) {
+
+        if (gestorRepository.existsByEmail(email))
             throw new GestorDuplicateException();
-        }
 
         Gestor gestor = new Gestor(username, password, email, telefono, nombre, cuil);
         return gestorRepository.save(gestor);
