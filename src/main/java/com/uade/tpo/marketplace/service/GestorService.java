@@ -8,17 +8,15 @@ import com.uade.tpo.marketplace.exceptions.GestorDuplicateException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 
 public interface GestorService {
-        public Optional<Gestor> getGestorById(Long gestorId)
-                        throws GestorNotFoundException;
+    Optional<Gestor> getGestorById(Long gestorId) throws GestorNotFoundException;
 
-        public Gestor createGestor(
-                        String username,
-                        String password,
-                        String email,
-                        String telefono,
-                        String nombre,
-                        String cuil)
-                        throws GestorDuplicateException;
+    Gestor createGestor(String username, String password, String email, String telefono, String nombre, String cuil)
+            throws GestorDuplicateException;
 
-        public GestorDTO gestorToGestorDTO(Gestor gestor);
+    Gestor updateGestor(Long gestorId, String username, String password, String email, String telefono, String nombre, String cuil)
+            throws GestorNotFoundException, GestorDuplicateException;
+
+    void deleteGestor(Long gestorId) throws GestorNotFoundException;
+
+    GestorDTO gestorToGestorDTO(Gestor gestor);
 }

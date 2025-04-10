@@ -17,46 +17,68 @@ public class GestorServiceImpl implements GestorService {
     @Autowired
     private GestorRepository gestorRepository;
 
-    public Optional<Gestor> getGestorById(Long gestorId)
-            throws GestorNotFoundException {
-        return gestorRepository.findById(gestorId);
+    @Override
+    public Optional<Gestor> getGestorById(Long gestorId) throws GestorNotFoundException {
+        return Optional.ofNullable(
+                gestorRepository.findById(gestorId)
+                        .orElseThrow(() -> new GestorNotFoundException())
+        );
     }
 
-    public Gestor createGestor(String username,
-            String password,
-            String email,
-            String telefono,
-            String nombre,
-            String cuil)
+    @Override
+    public Gestor createGestor(String username, String password, String email, String telefono, String nombre, String cuil)
             throws GestorDuplicateException {
-        List<Gestor> gestores = gestorRepository.findByCuil(cuil);
-        if (gestores.isEmpty())
-            return gestorRepository.save(new Gestor(
-                    username,
-                    password,
-                    email,
-                    telefono,
-                    nombre,
-                    cuil));
-        throw new GestorDuplicateException();
+        if (gestorRepository.existsByUsername(username)) {
+            throw new GestorDuplicateException();
+        }
+        if (gestorRepository.existsByEmail(email)) {
+            throw new GestorDuplicateException();
+        }
+
+        Gestor gestor = new Gestor(username, password, email, telefono, nombre, cuil);
+        return gestorRepository.save(gestor);
     }
 
+    @Override
+    public Gestor updateGestor(Long gestorId, String username, String password, String email, String telefono, String nombre, String cuil)
+            throws GestorNotFoundException, GestorDuplicateException {
+        Gestor gestor = gestorRepository.findById(gestorId)
+                .orElseThrow(() -> new GestorNotFoundException());
+
+        if (gestorRepository.existsByUsernameAndIdNot(username, gestorId)) {
+            throw new GestorDuplicateException();
+        }
+        if (gestorRepository.existsByEmailAndIdNot(email, gestorId)) {
+            throw new GestorDuplicateException();
+        }
+
+        gestor.setUsername(username);
+        gestor.setPassword(password);
+        gestor.setEmail(email);
+        gestor.setTelefono(telefono);
+        gestor.setNombre(nombre);
+        gestor.setCuil(cuil);
+
+        return gestorRepository.save(gestor);
+    }
+
+    @Override
+    public void deleteGestor(Long gestorId) throws GestorNotFoundException {
+        Gestor gestor = gestorRepository.findById(gestorId)
+                .orElseThrow(() -> new GestorNotFoundException());
+
+        gestorRepository.delete(gestor);
+    }
+
+    @Override
     public GestorDTO gestorToGestorDTO(Gestor gestor) {
         GestorDTO gestorDTO = new GestorDTO();
-
         gestorDTO.setId(gestor.getId());
-        gestorDTO.setNombre(gestor.getNombre());
-        gestorDTO.setCuil(gestor.getCuil());
         gestorDTO.setUsername(gestor.getUsername());
-        gestorDTO.setPassword(gestor.getPassword());
         gestorDTO.setEmail(gestor.getEmail());
         gestorDTO.setTelefono(gestor.getTelefono());
-        if (gestor.getHoteles() != null)
-            gestorDTO.setHotelesIds(gestor.getHoteles()
-                    .stream()
-                    .map(hotel -> hotel.getId())
-                    .toList());
-
+        gestorDTO.setNombre(gestor.getNombre());
+        gestorDTO.setCuil(gestor.getCuil());
         return gestorDTO;
     }
 }
