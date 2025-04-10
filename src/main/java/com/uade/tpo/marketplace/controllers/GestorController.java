@@ -24,7 +24,7 @@ public class GestorController {
     @Autowired
     private GestorService gestorService;
 
-    @GetMapping("/{gestorCuil}")
+    @GetMapping("/{gestorId}")
     public ResponseEntity<Gestor> getGestorById(@PathVariable Long gestorId)
             throws GestorNotFoundException {
         Optional<Gestor> result = gestorService.getGestorById(gestorId);
