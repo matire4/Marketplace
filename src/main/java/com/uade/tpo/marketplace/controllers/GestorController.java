@@ -15,7 +15,7 @@ import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.service.GestorService;
 
 @RestController
-@RequestMapping("gestores")
+@RequestMapping("/api/v1/gestores")
 public class GestorController {
     @Autowired
     private GestorService gestorService;

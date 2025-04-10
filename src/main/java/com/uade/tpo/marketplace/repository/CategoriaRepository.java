@@ -7,5 +7,5 @@ import com.uade.tpo.marketplace.entities.Categoria;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-
+    boolean existsByNombre(String nombre);
 }

@@ -22,7 +22,7 @@ import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.service.HotelService;
 
 @RestController
-@RequestMapping("hoteles")
+@RequestMapping("/api/v1/hoteles")
 public class HotelController {
     @Autowired
     private HotelService hotelService;

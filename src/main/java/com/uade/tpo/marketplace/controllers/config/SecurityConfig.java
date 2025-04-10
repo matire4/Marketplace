@@ -29,22 +29,20 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     http
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/**").permitAll()
+        .requestMatchers("/api/v1/auth/**").permitAll()
 
-            // Solo admin puede crear/editar/borrar categorías
-            .requestMatchers(HttpMethod.POST, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
-            .requestMatchers(HttpMethod.PUT, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
-            .requestMatchers(HttpMethod.DELETE, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
+        .requestMatchers(HttpMethod.POST, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
+        .requestMatchers(HttpMethod.PUT, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
 
-            // Solo gestor puede crear hoteles y habitaciones
-            .requestMatchers(HttpMethod.POST, "/api/v1/hoteles/**").hasRole("GESTOR")
-            .requestMatchers(HttpMethod.POST, "/api/v1/habitaciones/**").hasRole("GESTOR")
-
-            // Ver carrito requiere estar logueado
-            .requestMatchers("/api/v1/carrito/**").authenticated()
-
-            // Cualquier otra cosa requiere autenticación
-            .anyRequest().authenticated()
+        .requestMatchers(HttpMethod.POST, "/api/v1/productos/**").hasRole("ADMINISTRADOR")
+        
+        .requestMatchers(HttpMethod.GET, "/api/v1/categorias/**").permitAll()
+        
+        .requestMatchers("/api/v1/carrito/**").authenticated()
+        
+        .anyRequest().authenticated()
+        
         )
         .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
         .authenticationProvider(authenticationProvider)

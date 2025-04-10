@@ -20,7 +20,7 @@ import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.service.UsuarioService;
 
 @RestController
-@RequestMapping("usuarios")
+@RequestMapping("/api/v1/usuarios")
 public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
