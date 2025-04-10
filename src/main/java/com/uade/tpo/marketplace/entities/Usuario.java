@@ -1,6 +1,11 @@
 package com.uade.tpo.marketplace.entities;
 
 import java.util.List;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.uade.tpo.marketplace.enums.RolUsuario;
 
@@ -10,6 +15,7 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +23,7 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("usuario")
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Usuario extends Cuenta {
+public class Usuario extends Cuenta implements UserDetails{
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
@@ -42,5 +48,10 @@ public class Usuario extends Cuenta {
         this.nombre = nombre;
         this.apellido = apellido;
         this.rolUsuario = rolUsuario;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rolUsuario.name().toUpperCase()));
     }
 }
