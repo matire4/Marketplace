@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Gestor;
-import com.uade.tpo.marketplace.entities.dto.GestorRequest;
+import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.exceptions.GestorDuplicateException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.service.GestorService;
@@ -34,7 +34,7 @@ public class GestorController {
     }
 
     @PostMapping
-    public ResponseEntity<Gestor> createGestor(@RequestBody GestorRequest gestorRequest)
+    public ResponseEntity<Gestor> createGestor(@RequestBody GestorDTO gestorRequest)
             throws GestorDuplicateException {
         Gestor gestor = gestorService.createGestor(
                 gestorRequest.getUsername(),
