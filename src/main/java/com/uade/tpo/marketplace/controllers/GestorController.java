@@ -25,16 +25,16 @@ public class GestorController {
     private GestorService gestorService;
 
     @GetMapping("/{gestorId}")
-    public ResponseEntity<Gestor> getGestorById(@PathVariable Long gestorId)
+    public ResponseEntity<GestorDTO> getGestorById(@PathVariable Long gestorId)
             throws GestorNotFoundException {
         Optional<Gestor> result = gestorService.getGestorById(gestorId);
         if (result.isPresent())
-            return ResponseEntity.ok(result.get());
+            return ResponseEntity.ok(gestorService.gestorToGestorDTO(result.get()));
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<Gestor> createGestor(@RequestBody GestorDTO gestorRequest)
+    public ResponseEntity<GestorDTO> createGestor(@RequestBody GestorDTO gestorRequest)
             throws GestorDuplicateException {
         Gestor gestor = gestorService.createGestor(
                 gestorRequest.getUsername(),
@@ -44,6 +44,7 @@ public class GestorController {
                 gestorRequest.getNombre(),
                 gestorRequest.getCuil());
 
-        return ResponseEntity.created(URI.create("/gestores" + gestor.getId())).body(gestor);
+        return ResponseEntity.created(URI.create("/gestores" + gestor.getId()))
+                .body(gestorService.gestorToGestorDTO(gestor));
     }
 }

@@ -11,3 +11,14 @@ PUT /hoteles
     "gestorId": 1,
     "categoriaId": 1
 }
+
+PUT /gestores
+
+{
+    "username": "Gregorio70",
+    "password": "l9uTjd2jq2ZqdUI",
+    "email": "hilton@gmail.com",
+    "telefono": "+54 373757",
+    "nombre": "Hilton",
+    "cuil": "68279"
+}

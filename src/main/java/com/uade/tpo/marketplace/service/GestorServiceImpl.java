@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.marketplace.entities.Gestor;
+import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.exceptions.GestorDuplicateException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.repository.GestorRepository;
@@ -38,5 +39,24 @@ public class GestorServiceImpl implements GestorService {
                     nombre,
                     cuil));
         throw new GestorDuplicateException();
+    }
+
+    public GestorDTO gestorToGestorDTO(Gestor gestor) {
+        GestorDTO gestorDTO = new GestorDTO();
+
+        gestorDTO.setId(gestor.getId());
+        gestorDTO.setNombre(gestor.getNombre());
+        gestorDTO.setCuil(gestor.getCuil());
+        gestorDTO.setUsername(gestor.getUsername());
+        gestorDTO.setPassword(gestor.getPassword());
+        gestorDTO.setEmail(gestor.getEmail());
+        gestorDTO.setTelefono(gestor.getTelefono());
+        if (gestor.getHoteles() != null)
+            gestorDTO.setHotelesIds(gestor.getHoteles()
+                    .stream()
+                    .map(hotel -> hotel.getId())
+                    .toList());
+
+        return gestorDTO;
     }
 }
