@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationConfig {
     private final UsuarioRepository repository;
 
+    @Bean
     public UserDetailsService userDetailsService() throws UsuarioNotFoundException{
         return username -> repository.findByUsername(username);
     }
