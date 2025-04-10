@@ -28,7 +28,7 @@ public class HotelController {
     private HotelService hotelService;
 
     @GetMapping
-    public ResponseEntity<List<Hotel>> getHotels() {
+    public ResponseEntity<List<HotelDTO>> getHotels() {
         return ResponseEntity.ok(hotelService.getHotels());
     }
 
@@ -42,7 +42,7 @@ public class HotelController {
     }
 
     @PostMapping
-    public ResponseEntity<Hotel> createHotel(@RequestBody HotelDTO hotelRequest) throws HotelDuplicateException,
+    public ResponseEntity<HotelDTO> createHotel(@RequestBody HotelDTO hotelRequest) throws HotelDuplicateException,
             GestorNotFoundException,
             CategoriaNotFoundException {
         Hotel result = hotelService.createHotel(
@@ -56,6 +56,7 @@ public class HotelController {
                 hotelRequest.getGestorId(),
                 hotelRequest.getCategoriaId());
 
-        return ResponseEntity.created(URI.create("/hoteles" + result.getId())).body(result);
+        return ResponseEntity.created(URI.create("/hoteles" + result.getId()))
+                .body(hotelService.hotelToHotelDTO(result));
     }
 }
