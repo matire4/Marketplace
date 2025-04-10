@@ -1,6 +1,5 @@
 package com.uade.tpo.marketplace.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +20,8 @@ import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class HotelServiceImpl implements HotelService {
         @Autowired
@@ -40,6 +41,7 @@ public class HotelServiceImpl implements HotelService {
                 return hotelRepository.findById(hotelId);
         }
 
+        @Transactional
         public Hotel createHotel(String nombre,
                         String telefono,
                         String email,
@@ -72,13 +74,15 @@ public class HotelServiceImpl implements HotelService {
                                         categoria);
 
                         if (habitaciones != null) {
-                                habitaciones.stream().forEach(habitacion -> {
-                                        Habitacion newHabitacion = new Habitacion(habitacion.getTipoHabitacion(),
-                                                        habitacion.getCapacidad(), habitacion.getPrecioPorNoche(),
-                                                        habitacion.getNumeroHabitacion(), habitacion.getImagen());
-
-                                        hotel.getHabitaciones().add(newHabitacion);
+                                habitaciones.forEach(habitacion -> {
+                                        Habitacion newHabitacion = new Habitacion(
+                                                        habitacion.getTipoHabitacion(),
+                                                        habitacion.getCapacidad(),
+                                                        habitacion.getPrecioPorNoche(),
+                                                        habitacion.getNumeroHabitacion(),
+                                                        habitacion.getImagen());
                                         newHabitacion.setHotel(hotel);
+                                        hotel.getHabitaciones().add(newHabitacion);
                                 });
                         }
 

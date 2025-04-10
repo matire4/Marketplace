@@ -1,7 +1,9 @@
 package com.uade.tpo.marketplace.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,8 +38,8 @@ public class Hotel {
     @Column(nullable = false)
     private String pais;
 
-    @OneToMany(mappedBy = "hotel")
-    private List<Habitacion> habitaciones;
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Habitacion> habitaciones = new ArrayList<>();
     @OneToMany(mappedBy = "hotel")
     private List<Review> reviews;
     @OneToMany(mappedBy = "hotel")
@@ -64,5 +66,6 @@ public class Hotel {
         this.pais = pais;
         this.gestor = gestor;
         this.categoria = categoria;
+        this.habitaciones = new ArrayList<Habitacion>();
     }
 }
