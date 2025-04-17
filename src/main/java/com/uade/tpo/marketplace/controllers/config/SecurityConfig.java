@@ -12,6 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
+import com.uade.tpo.marketplace.enums.RolUsuario;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import lombok.RequiredArgsConstructor;
@@ -25,19 +27,27 @@ public class SecurityConfig {
         private final AuthenticationProvider authenticationProvider;
 
         @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
         .requestMatchers("/api/v1/auth/**").permitAll()
 
-        .requestMatchers(HttpMethod.POST, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
-        .requestMatchers(HttpMethod.PUT, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
-        .requestMatchers(HttpMethod.DELETE, "/api/v1/categorias/**").hasRole("ADMINISTRADOR")
-
-        .requestMatchers(HttpMethod.POST, "/api/v1/productos/**").hasRole("ADMINISTRADOR")
+        .requestMatchers(HttpMethod.POST, "/api/v1/categorias/**").permitAll()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/categorias/**").hasRole(RolUsuario.Administrador.name().toUpperCase())
+        .requestMatchers(HttpMethod.DELETE, "/api/v1/categorias/**").hasRole(RolUsuario.Administrador.name().toUpperCase())
         
-        .requestMatchers(HttpMethod.GET, "/api/v1/categorias/**").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/v1/categorias/**").authenticated()
+        .requestMatchers(HttpMethod.GET, "/api/v1/hoteles/**").authenticated()
+        .requestMatchers(HttpMethod.POST, "/api/v1/hoteles/**").authenticated()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/hoteles/**").authenticated()
+        .requestMatchers(HttpMethod.GET, "/api/v1/gestores/**").authenticated()
+        .requestMatchers(HttpMethod.POST, "/api/v1/gestores/**").authenticated()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/gestores/**").authenticated()
+
+        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/**").authenticated()
+        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios/**").authenticated()
+        .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/**").authenticated()
         
         .requestMatchers("/api/v1/carrito/**").authenticated()
         

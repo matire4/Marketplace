@@ -78,7 +78,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     }
 
-    
+
     public void deleteUsuario(Long usuarioId) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNotFoundException());

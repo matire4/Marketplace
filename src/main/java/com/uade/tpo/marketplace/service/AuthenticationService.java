@@ -31,7 +31,7 @@ public class AuthenticationService {
                                 request.getEmail().split("@")[0],
                                 passwordEncoder.encode(request.getPassword()),
                                 request.getEmail(),
-                                null);
+                                request.getPhone());
                 repository.save(user);
                 var jwtToken = jwtService.generateToken(user);
                 return AuthenticationResponse.builder()
