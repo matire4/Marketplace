@@ -12,7 +12,8 @@ import com.uade.tpo.marketplace.enums.RolUsuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class Usuario extends Cuenta implements UserDetails{
     private String nombre;
     @Column(nullable = false)
     private String apellido;
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     RolUsuario role;
 
     @OneToMany(mappedBy = "usuario")
