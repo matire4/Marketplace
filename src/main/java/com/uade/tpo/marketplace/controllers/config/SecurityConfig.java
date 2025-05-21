@@ -7,10 +7,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import com.uade.tpo.marketplace.enums.RolUsuario;
 
@@ -31,25 +29,25 @@ public class SecurityConfig {
     http
         .csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/v1/auth/**").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
 
-        .requestMatchers(HttpMethod.POST, "/api/v1/categorias/**").permitAll()
-        .requestMatchers(HttpMethod.PUT, "/api/v1/categorias/**").hasRole(RolUsuario.Administrador.name().toUpperCase())
-        .requestMatchers(HttpMethod.DELETE, "/api/v1/categorias/**").hasRole(RolUsuario.Administrador.name().toUpperCase())
+        // .requestMatchers(HttpMethod.POST, "/api/v1/categorias/**").permitAll()
+        // .requestMatchers(HttpMethod.PUT, "/api/v1/categorias/**").hasRole(RolUsuario.Administrador.name().toUpperCase())
+        // .requestMatchers(HttpMethod.DELETE, "/api/v1/categorias/**").hasRole(RolUsuario.Administrador.name().toUpperCase())
         
-        .requestMatchers(HttpMethod.GET, "/api/v1/categorias/**").authenticated()
-        .requestMatchers(HttpMethod.GET, "/api/v1/hoteles/**").authenticated()
-        .requestMatchers(HttpMethod.POST, "/api/v1/hoteles/**").authenticated()
-        .requestMatchers(HttpMethod.PUT, "/api/v1/hoteles/**").authenticated()
-        .requestMatchers(HttpMethod.GET, "/api/v1/gestores/**").authenticated()
-        .requestMatchers(HttpMethod.POST, "/api/v1/gestores/**").authenticated()
-        .requestMatchers(HttpMethod.PUT, "/api/v1/gestores/**").authenticated()
+        // .requestMatchers(HttpMethod.GET, "/api/v1/categorias/**").authenticated()
+        // .requestMatchers(HttpMethod.GET, "/api/v1/hoteles/**").authenticated()
+        // .requestMatchers(HttpMethod.POST, "/api/v1/hoteles/**").authenticated()
+        // .requestMatchers(HttpMethod.PUT, "/api/v1/hoteles/**").authenticated()
+        // .requestMatchers(HttpMethod.GET, "/api/v1/gestores/**").authenticated()
+        // .requestMatchers(HttpMethod.POST, "/api/v1/gestores/**").authenticated()
+        // .requestMatchers(HttpMethod.PUT, "/api/v1/gestores/**").authenticated()
 
-        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/**").authenticated()
-        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios/**").authenticated()
-        .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/**").authenticated()
+        // .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/**").authenticated()
+        // .requestMatchers(HttpMethod.POST, "/api/v1/usuarios/**").authenticated()
+        // .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/**").authenticated()
         
-        .requestMatchers("/api/v1/carrito/**").authenticated()
+        // .requestMatchers("/api/v1/carrito/**").authenticated()
         
         .anyRequest().authenticated()
         

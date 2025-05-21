@@ -15,7 +15,6 @@ import jakarta.persistence.Entity;
 
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,7 +28,7 @@ public class Usuario extends Cuenta implements UserDetails{
     @Column(nullable = false)
     private String apellido;
     @Column(nullable = false)
-    RolUsuario rolUsuario;
+    RolUsuario role;
 
     @OneToMany(mappedBy = "usuario")
     private List<Reserva> reservas;
@@ -47,14 +46,15 @@ public class Usuario extends Cuenta implements UserDetails{
         super(username, password, email, telefono);
         this.nombre = nombre;
         this.apellido = apellido;
-        this.rolUsuario = rolUsuario;
+        this.role = rolUsuario;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rolUsuario.name().toUpperCase()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
-        @Override
+
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }

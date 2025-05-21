@@ -68,7 +68,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
-        usuario.setRolUsuario(rolUsuario);
+        usuario.setRole(rolUsuario);
         usuario.setUsername(username);
         usuario.setPassword(password);
         usuario.setEmail(email);
@@ -91,7 +91,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioDTO.setId(usuario.getId());
         usuarioDTO.setNombre(usuario.getNombre());
         usuarioDTO.setApellido(usuario.getApellido());
-        usuarioDTO.setRolUsuario(usuario.getRolUsuario());
+        usuarioDTO.setRolUsuario(usuario.getRole());
         usuarioDTO.setUsername(usuario.getUsername());
         usuarioDTO.setPassword(usuario.getPassword());
         usuarioDTO.setEmail(usuario.getEmail());
