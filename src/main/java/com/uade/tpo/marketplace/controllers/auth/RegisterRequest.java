@@ -1,6 +1,6 @@
 package com.uade.tpo.marketplace.controllers.auth;
 
-import com.uade.tpo.marketplace.enums.RolUsuario;
+import com.uade.tpo.marketplace.enums.Role;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    private String firstname;
-    private String lastname;
-    private String email;
+    private String name; // can be firstname or name depending on the user type
+    private String lastname; // is not null for user
+    private String email; 
+    private String cuil; // is not null for gestor
     private String password;
-    private RolUsuario role;
+    private Role role; 
     private String phone;
 }

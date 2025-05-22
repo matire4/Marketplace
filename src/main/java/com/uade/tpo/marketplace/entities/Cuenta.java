@@ -1,5 +1,7 @@
 package com.uade.tpo.marketplace.entities;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -15,7 +17,7 @@ import lombok.Data;
 @Inheritance(strategy = InheritanceType.JOINED) // esto cambia segun la forma de login q terminemos usando
 @DiscriminatorColumn(name = "tipo_usuario", discriminatorType = DiscriminatorType.STRING)
 @Data
-public abstract class Cuenta {
+public abstract class Cuenta implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

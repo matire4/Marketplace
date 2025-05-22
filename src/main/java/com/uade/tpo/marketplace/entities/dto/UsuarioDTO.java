@@ -2,7 +2,7 @@ package com.uade.tpo.marketplace.entities.dto;
 
 import java.util.List;
 
-import com.uade.tpo.marketplace.enums.RolUsuario;
+import com.uade.tpo.marketplace.enums.Role;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class UsuarioDTO {
     private String password;
     private String email;
     private String telefono;
-    private RolUsuario rolUsuario;
+    private Role rolUsuario;
     private List<Long> reservasIds;
     private List<Long> reviewsIds;
     private Long carritoId;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
-import com.uade.tpo.marketplace.enums.RolUsuario;
+import com.uade.tpo.marketplace.enums.Role;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.repository.UsuarioRepository;
@@ -33,7 +33,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario createUsuario(String nombre,
             String apellido,
-            RolUsuario rolUsuario,
+            Role rolUsuario,
             String username,
             String password,
             String email,
@@ -53,7 +53,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             Long usuarioId,
             String nombre,
             String apellido,
-            RolUsuario rolUsuario,
+            Role rolUsuario,
             String username,
             String password,
             String email,

@@ -11,18 +11,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
-import com.uade.tpo.marketplace.repository.UsuarioRepository;
+import com.uade.tpo.marketplace.repository.CuentaRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UsuarioRepository repository;
+    private final CuentaRepository cuentaRepository;
 
     @Bean
     public UserDetailsService userDetailsService() throws UsuarioNotFoundException{
-        return username -> repository.findByUsername(username);
+        return username -> cuentaRepository.findByUsername(username);
     }
 
     @Bean

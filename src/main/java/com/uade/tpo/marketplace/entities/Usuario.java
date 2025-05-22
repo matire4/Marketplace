@@ -5,9 +5,8 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import com.uade.tpo.marketplace.enums.RolUsuario;
+import com.uade.tpo.marketplace.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
@@ -23,13 +22,13 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("usuario")
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Usuario extends Cuenta implements UserDetails{
+public class Usuario extends Cuenta {
     @Column(nullable = false)
     private String nombre;
     @Column(nullable = false)
     private String apellido;
     @Enumerated(EnumType.STRING)
-    RolUsuario role;
+    Role role;
 
     @OneToMany(mappedBy = "usuario")
     private List<Reserva> reservas;
@@ -42,7 +41,7 @@ public class Usuario extends Cuenta implements UserDetails{
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, RolUsuario rolUsuario, String username, String password,
+    public Usuario(String nombre, String apellido, Role rolUsuario, String username, String password,
             String email, String telefono) {
         super(username, password, email, telefono);
         this.nombre = nombre;
