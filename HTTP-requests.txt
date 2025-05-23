@@ -1,4 +1,4 @@
-PUT /hoteles
+POST /api/v1/hoteles
 
 {
     "nombre": "Five seasons",
@@ -28,25 +28,37 @@ PUT /hoteles
     ]
 }
 
-PUT /gestores
+POST /api/v1/auth/register      para gestores
 
 {
-    "username": "Gregorio70",
     "password": "l9uTjd2jq2ZqdUI",
-    "email": "hilton@gmail.com",
-    "telefono": "+54 373757",
-    "nombre": "Hilton",
-    "cuil": "68279"
+    "email": "hilton@gmail.com",            // no se puede repetir en DB
+    "phone": "+54 373757",            // no se puede repetir en DB
+    "name": "Hilton",
+    "cuil": "68279",            // no se puede repetir en DB
+    "role": "GESTOR"
 }
 
-PUT / usuarios
+POST /api/v1/auth/register      para usuarios, y reemplazar CLIENTE por ADMINISTRADOR segun convenga
 
 {
-    "nombre": "Mandy",
-    "apellido": "Weissnat",
-    "rolUsuario": "Cliente",
-    "username": "mandy123",
+    "name": "Mandy",
+    "lastname": "Weissnat",
+    "role": "CLIENTE",
     "password": "FIwjAnyXWDmfV_c",
-    "email": "mandy@gmail.com",
-    "telefono": "688-435-6057"
+    "email": "mandy@gmail.com",            // no se puede repetir en DB
+    "phone": "688-435-6057"            // no se puede repetir en DB
+}
+
+POST /api/v1/auth/authenticate      obviamente remplazar con datos que ya existan
+
+{
+    "username": "username"
+    "password": "password"
+}
+
+POST /api/v1/categorias
+
+{
+    "nombre": "nombre"            // no se puede repetir en DB
 }
