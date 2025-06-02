@@ -42,15 +42,24 @@ public class Habitacion {
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarritoHabitacion> carritoHabitacion;
 
+    @ManyToOne
+    @JoinColumn(name = "gestor_id", nullable = false)
+    private Gestor gestor;
+    @ManyToOne
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
+
     public Habitacion() {
     }
 
     public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHatiacion,
-            String imagen) {
+            String imagen, Gestor gestor, Categoria categoria) {
         this.tipoHabitacion = tipoHabitacion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;
         this.numeroHabitacion = numeroHatiacion;
         this.imagen = imagen;
+        this.gestor = gestor;
+        this.categoria = categoria;
     }
 }

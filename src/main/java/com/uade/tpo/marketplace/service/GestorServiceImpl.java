@@ -88,3 +88,10 @@ public class GestorServiceImpl implements GestorService {
         return gestorDTO;
     }
 }
+
+
+//HabitacionRepository, Service e implement
+//Controlerhabitacion -> Endpoint
+//Excepcion de habitacion
+
+//Reservas -> Revisar

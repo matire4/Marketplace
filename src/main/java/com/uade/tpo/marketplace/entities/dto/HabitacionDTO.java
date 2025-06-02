@@ -8,7 +8,6 @@ import lombok.Data;
 
 @Data
 public class HabitacionDTO {
-    private Long id;
     private TipoHabitacion tipoHabitacion;
     private int capacidad;
     private double precioPorNoche;
@@ -17,4 +16,6 @@ public class HabitacionDTO {
     private Long hotelId;
     private List<Long> reservasIds;
     private List<Long> carritosIds;
+    private Long gestorId;
+    private Long categoriaId;
 }
