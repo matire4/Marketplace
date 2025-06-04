@@ -80,7 +80,9 @@ public class HotelServiceImpl implements HotelService {
                                                         habitacion.getCapacidad(),
                                                         habitacion.getPrecioPorNoche(),
                                                         habitacion.getNumeroHabitacion(),
-                                                        habitacion.getImagen());
+                                                        habitacion.getImagen(),
+                                                        gestor,
+                                                        categoria);
                                         newHabitacion.setHotel(hotel);
                                         hotel.getHabitaciones().add(newHabitacion);
                                 });

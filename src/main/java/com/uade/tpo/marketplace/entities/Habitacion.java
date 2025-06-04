@@ -52,12 +52,12 @@ public class Habitacion {
     public Habitacion() {
     }
 
-    public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHatiacion,
+    public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHabitacion,
             String imagen, Gestor gestor, Categoria categoria) {
         this.tipoHabitacion = tipoHabitacion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;
-        this.numeroHabitacion = numeroHatiacion;
+        this.numeroHabitacion = numeroHabitacion;
         this.imagen = imagen;
         this.gestor = gestor;
         this.categoria = categoria;

@@ -14,17 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
-import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
-import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
-import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
-import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.service.HabitacionService;
-import com.uade.tpo.marketplace.service.HotelService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -34,8 +28,8 @@ public class HabitacionController {
     private HabitacionService habitacionService;
 
     @GetMapping
-    public ResponseEntity<List<HabitacionDTO>> gatHabitacion() {
-        return ResponseEntity.ok(habitacionService.getHabitacion());
+    public ResponseEntity<List<HabitacionDTO>> getHabitacion() {
+        return ResponseEntity.ok(habitacionService.getHabitaciones());
     }
     
     @GetMapping("/{habitacionId}")
@@ -43,7 +37,7 @@ public class HabitacionController {
             throws HabitacionNotFoundException {
         Optional<Habitacion> result = habitacionService.getHabitacionById(habitacionId);
         if (result.isPresent())
-            return ResponseEntity.ok(habitacionService.habitacionHabitacionDTO(result.get()));
+            return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result.get()));
         return ResponseEntity.noContent().build();
     }
 
@@ -51,17 +45,17 @@ public class HabitacionController {
     public ResponseEntity<HabitacionDTO> createHabitacion(@RequestBody HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
             CategoriaNotFoundException {
-        Hotel result = habitacionRequest.createHabitacion(
+        Habitacion result = habitacionService.createHabitacion(
                 habitacionRequest.getTipoHabitacion(),
                 habitacionRequest.getCapacidad(),
                 habitacionRequest.getPrecioPorNoche(),
                 habitacionRequest.getNumeroHabitacion(),
                 habitacionRequest.getImagen(),
                 habitacionRequest.getGestorId(),
-                habitacionRequest.getCategoriaId(),
+                habitacionRequest.getCategoriaId());
 
         return ResponseEntity.created(URI.create("/habitaciones" + result.getId()))
-                .body(habitacionService.habitacionHabitacionDTO(result));
+                .body(habitacionService.habitacionToHabitacionDTO(result));
     }
 
 }

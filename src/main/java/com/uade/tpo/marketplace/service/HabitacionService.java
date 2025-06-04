@@ -1,22 +1,19 @@
 package com.uade.tpo.marketplace.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
-import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
+import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
-import com.uade.tpo.marketplace.repository.HabitacionRepository;
 
 public interface HabitacionService {
-        public List<HabitacionDTO> getHabitacion();
+        public List<HabitacionDTO> getHabitaciones();
 
-        public Optional<Habitacion> getHabitacionId(long habitacionesIds)
+        public Optional<Habitacion> getHabitacionById(long habitacionId)
                         throws HabitacionNotFoundException;
 
         public Habitacion createHabitacion(TipoHabitacion tipoHabitacion,
@@ -25,13 +22,7 @@ public interface HabitacionService {
                         String numeroHabitacion,
                         String imagen,
                         Long gestorId,
-                        Long categoriaId,
-                        List<Long> reservasIds,
-                        List<Long> carritosIds,
-                        Long gestorId,
-                        Long categoriaId);
+                        Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException;
 
-        public habitacion habitacionHabitacionDTO(Habitacion habitacion);
-
-
+        public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 }
