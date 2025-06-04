@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.service.HabitacionService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -39,6 +42,26 @@ public class HabitacionController {
         if (result.isPresent())
             return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result.get()));
         return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{habitacionId}")
+    public ResponseEntity<Void> deleteHabitacion(@PathVariable Long habitacionId)
+            throws HabitacionNotFoundException {
+        Optional<Habitacion> result = habitacionService.getHabitacionById(habitacionId);
+        if (result.isPresent()) {
+            habitacionService.deleteHabitacion(habitacionId);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{habitacionId}")
+    public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable Long habitacionId,
+            @RequestBody HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
+            GestorNotFoundException,
+            CategoriaNotFoundException {
+        Habitacion result = habitacionService.updateHabitacion(habitacionId,habitacionRequest);
+        return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result));
     }
 
     @PostMapping

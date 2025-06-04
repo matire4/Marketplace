@@ -25,4 +25,9 @@ public interface HabitacionService {
                         Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException;
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
+
+        public void deleteHabitacion(Long habitacionId) throws HabitacionNotFoundException;
+
+        public Habitacion updateHabitacion(Long habitacionId, HabitacionDTO habitacionRequest)
+                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException;
 }
