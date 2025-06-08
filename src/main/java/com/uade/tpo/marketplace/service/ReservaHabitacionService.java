@@ -1,0 +1,15 @@
+package com.uade.tpo.marketplace.service;
+
+import java.util.List;
+
+import com.uade.tpo.marketplace.entities.ReservaHabitacion;
+import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
+import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
+
+public interface ReservaHabitacionService {
+    List<ReservaHabitacionDTO> getReservasHabitacionesByReservaId(Long reservaId) throws ReservaNotFounException;
+    ReservaHabitacionDTO createReservaHabitacion(ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException;
+    ReservaHabitacionDTO updateReservaHabitacion(Long reservaHabitacionId, ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException;
+    void deleteReservaHabitacion(Long reservaHabitacionId) throws ReservaNotFounException;
+    ReservaHabitacionDTO reservaHabitacionToReservaHabitacionDTO(ReservaHabitacion reservaHabitacion);
+}

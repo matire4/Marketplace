@@ -3,8 +3,6 @@ package com.uade.tpo.marketplace.entities;
 import java.sql.Date;
 import java.util.List;
 
-import com.uade.tpo.marketplace.enums.Estado;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,8 +25,6 @@ public class Reserva {
     private Date fecha;
     @Column(nullable = false)
     private double precio;
-    @Column(nullable = false)
-    Estado estado;
 
     // En Reserva.java
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -40,9 +36,10 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Date fecha, double precio, Estado estado) {
+    public Reserva(Date fecha, List<ReservaHabitacion> ReservasHabitacion, Usuario usuario) {
         this.fecha = fecha;
-        this.precio = precio;
-        this.estado = estado;
+        this.ReservasHabitacion = ReservasHabitacion;
+        this.usuario = usuario;
+        this.precio = ReservasHabitacion.stream().mapToDouble(ReservaHabitacion::getPrecio).sum();
     }
 }

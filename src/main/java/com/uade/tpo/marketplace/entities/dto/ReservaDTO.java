@@ -1,16 +1,15 @@
 package com.uade.tpo.marketplace.entities.dto;
 
 import java.sql.Date;
-
-import com.uade.tpo.marketplace.enums.Estado;
+import java.util.List;
 
 import lombok.Data;
 
 @Data
 public class ReservaDTO {
     private Long id;
+    private List<ReservaHabitacionDTO> habitaciones;
+    private UsuarioDTO usuarioDTO;
     private Date fecha;
     private double precio;
-    private Estado estado;
-    private Long habitacionId;
 }
