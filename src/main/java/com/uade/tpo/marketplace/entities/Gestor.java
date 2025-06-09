@@ -31,6 +31,8 @@ public class Gestor extends Cuenta{
     Role role = Role.GESTOR; // for difference between gestor and user
     @OneToMany(mappedBy = "gestor")
     private List<Hotel> hoteles;
+    @OneToMany(mappedBy = "gestor")
+    private List<Departamento> departamentos;
 
     public Gestor() {
     }
