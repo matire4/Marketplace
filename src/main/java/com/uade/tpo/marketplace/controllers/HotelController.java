@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
+import com.uade.tpo.marketplace.service.DepartamentoService;
 import com.uade.tpo.marketplace.service.HotelService;
 
 @RestController
@@ -26,10 +28,36 @@ import com.uade.tpo.marketplace.service.HotelService;
 public class HotelController {
     @Autowired
     private HotelService hotelService;
+    @Autowired
+    private DepartamentoService departamentoService; // lo meto aca para manolo
 
     @GetMapping
     public ResponseEntity<List<HotelDTO>> getHotels() {
         return ResponseEntity.ok(hotelService.getHotels());
+    }
+
+    @GetMapping("/departamentos") // esto despues se movera a su controller
+    public ResponseEntity<List<DepartamentoDTO>> getDepartamentos() {
+        return ResponseEntity.ok(departamentoService.getDepartamentos());
+    }
+
+    @PostMapping("/departamentos") // esto despues se movera a su controller
+    public ResponseEntity<DepartamentoDTO> createDepartamento(@RequestBody DepartamentoDTO departamentoRequest)
+            throws GestorNotFoundException, CategoriaNotFoundException {
+        var result = departamentoService.createDepartamento(
+                departamentoRequest.getCapacidad(),
+                departamentoRequest.getPrecioPorNoche(),
+                departamentoRequest.getNumeroDepartamento(),
+                departamentoRequest.getDescripcion(),
+                departamentoRequest.getDireccion(),
+                departamentoRequest.getImagen(),
+                departamentoRequest.getGestorId(),
+                departamentoRequest.getCategoriaId());
+
+        return ResponseEntity.created(null).body(null); // URI.create("/departamentos/" + result.getId()))
+                // .body(departamentoService.departamentoToDepartamentoDTO(result));
+
+            //cuando tenga su controller se corrige
     }
 
     @GetMapping("/{hotelId}")
