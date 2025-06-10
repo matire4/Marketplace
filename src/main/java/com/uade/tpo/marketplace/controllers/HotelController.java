@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Hotel;
-import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
-import com.uade.tpo.marketplace.service.DepartamentoService;
 import com.uade.tpo.marketplace.service.HotelService;
 
 @RestController
@@ -28,8 +26,6 @@ import com.uade.tpo.marketplace.service.HotelService;
 public class HotelController {
     @Autowired
     private HotelService hotelService;
-    @Autowired
-    private DepartamentoService departamentoService; // lo meto aca para manolo
 
     @GetMapping
     public ResponseEntity<List<HotelDTO>> getHotels() {

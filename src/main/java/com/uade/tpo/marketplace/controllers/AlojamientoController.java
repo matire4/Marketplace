@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uade.tpo.marketplace.entities.Alojamiento;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
 import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
 import com.uade.tpo.marketplace.service.AlojamientoService;
@@ -14,7 +13,7 @@ import com.uade.tpo.marketplace.service.AlojamientoService;
 @RestController
 @RequestMapping("/api/v1/alojamientos")
 public class AlojamientoController {
-    
+
     @Autowired
     private AlojamientoService alojamientoService;
 
@@ -24,7 +23,7 @@ public class AlojamientoController {
     }
 
     @GetMapping("/{alojamientoId}")
-    public ResponseEntity<AlojamientoDTO> getAlojamientoById(@PathVariable Long alojamientoId) 
+    public ResponseEntity<AlojamientoDTO> getAlojamientoById(@PathVariable Long alojamientoId)
             throws AlojamientoNotFoundException {
         return ResponseEntity.ok(alojamientoService.getAlojamientoById(alojamientoId)
                 .map(alojamientoService::alojamientoToAlojamientoDTO)

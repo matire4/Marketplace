@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -45,7 +44,7 @@ public abstract class Alojamiento {
     private List<Pregunta> preguntas;
     @OneToMany(mappedBy = "alojamiento")
     private List<Imagen> imagenes;
-    
+
     @ManyToOne
     @JoinColumn(name = "gestor_id", nullable = false)
     private Gestor gestor;
@@ -53,7 +52,8 @@ public abstract class Alojamiento {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
-    public Alojamiento(String descripcion, String direccion, String ciudad, String pais, Gestor gestor, Categoria categoria) {
+    public Alojamiento(String descripcion, String direccion, String ciudad, String pais, Gestor gestor,
+            Categoria categoria) {
         this.gestor = gestor;
         this.descripcion = descripcion;
         this.direccion = direccion;
