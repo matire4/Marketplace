@@ -62,3 +62,248 @@ POST /api/v1/categorias
 {
     "nombre": "nombre"            // no se puede repetir en DB
 }
+
+
+
+// HOTELES CON HABITACIONES
+POST /api/v1/hoteles
+{
+    "nombre": "Grand Plaza Hotel",
+    "telefono": "555-123-456",
+    "email": "info@grandplaza.com",
+    "descripcion": "Lujoso hotel 5 estrellas en el centro",
+    "direccion": "Av. Corrientes 1234",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "habitacionesParaCrear": [
+        {
+            "tipoHabitacion": "SUITE",
+            "capacidad": 4,
+            "precioPorNoche": 350.0,
+            "numeroHabitacion": "501",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "DOBLE",
+            "capacidad": 2,
+            "precioPorNoche": 250.0,
+            "numeroHabitacion": "502",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "FAMILIAR",
+            "capacidad": 6,
+            "precioPorNoche": 450.0,
+            "numeroHabitacion": "503",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "INDIVIDUAL",
+            "capacidad": 1,
+            "precioPorNoche": 150.0,
+            "numeroHabitacion": "504",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "SUITE_PREMIUM",
+            "capacidad": 3,
+            "precioPorNoche": 550.0,
+            "numeroHabitacion": "505",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 4,
+    "precioPorNoche": 280.0,
+    "numeroDepartamento": "A101",
+    "descripcion": "Moderno departamento con vista panorámica",
+    "direccion": "Av. Santa Fe 4567",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "disponible": true,
+    "imagenesBase64": [
+        {
+            "descripcion": "Vista sala principal",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "descripcion": "Vista dormitorio principal",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}
+
+POST /api/v1/reservas/departamento
+{
+    "fecha": "2025-07-01",
+    "usuarioId": 1,
+    "reservasDepartamento": [
+        {
+            "departamentoId": 1,
+            "fechaDesde": "2025-07-15",
+            "fechaHasta": "2025-07-20",
+            "cantidadPersonas": 3,
+            "nombreReserva": "Juan Pérez"
+        }
+    ]
+}
+
+POST /api/v1/reservas/habitacion
+{
+    "fecha": "2025-07-01",
+    "usuarioId": 1,
+    "reservasHabitacion": [
+        {
+            "habitacionId": 1,
+            "fechaDesde": "2025-07-15",
+            "fechaHasta": "2025-07-20",
+            "cantidadPersonas": 2,
+            "nombreReserva": "María González"
+        }
+    ]
+}
+
+POST /api/v1/hoteles
+{
+    "nombre": "Sunset Bay Resort",
+    "telefono": "555-987-654",
+    "email": "info@sunsetbay.com",
+    "descripcion": "Resort de lujo con vista al mar y spa premium",
+    "direccion": "Av. del Mar 789",
+    "ciudad": "Mar del Plata",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 1,
+    "habitacionesParaCrear": [
+        {
+            "tipoHabitacion": "SUITE_PREMIUM",
+            "capacidad": 4,
+            "precioPorNoche": 650.0,
+            "numeroHabitacion": "PH1",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "SUITE",
+            "capacidad": 3,
+            "precioPorNoche": 450.0,
+            "numeroHabitacion": "801",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "FAMILIAR",
+            "capacidad": 5,
+            "precioPorNoche": 550.0,
+            "numeroHabitacion": "802",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "DOBLE",
+            "capacidad": 2,
+            "precioPorNoche": 350.0,
+            "numeroHabitacion": "803",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "tipoHabitacion": "SUITE_PREMIUM",
+            "capacidad": 2,
+            "precioPorNoche": 750.0,
+            "numeroHabitacion": "PH2",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 6,
+    "precioPorNoche": 420.0,
+    "numeroDepartamento": "PH01",
+    "descripcion": "Penthouse de lujo con terraza y jacuzzi",
+    "direccion": "Av. Libertador 2500",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 1,
+    "disponible": true,
+    "imagenesBase64": [
+        {
+            "descripcion": "Vista terraza",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "descripcion": "Vista living",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 3,
+    "precioPorNoche": 180.0,
+    "numeroDepartamento": "B205",
+    "descripcion": "Departamento moderno en zona universitaria",
+    "direccion": "Av. Las Heras 1800",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 2,
+    "disponible": true,
+    "imagenesBase64": [
+        {
+            "descripcion": "Vista completa",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 2,
+    "precioPorNoche": 150.0,
+    "numeroDepartamento": "C304",
+    "descripcion": "Monoambiente ejecutivo céntrico",
+    "direccion": "Corrientes 1500",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 2,
+    "disponible": true,
+    "imagenesBase64": [
+        {
+            "descripcion": "Vista general",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 4,
+    "precioPorNoche": 290.0,
+    "numeroDepartamento": "D401",
+    "descripcion": "Departamento familiar con piscina",
+    "direccion": "Bulnes 2200",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "disponible": true,
+    "imagenesBase64": [
+        {
+            "descripcion": "Vista piscina",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        },
+        {
+            "descripcion": "Vista dormitorios",
+            "imagenBase64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
+        }
+    ]
+}

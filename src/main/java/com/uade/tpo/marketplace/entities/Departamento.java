@@ -39,6 +39,8 @@ public class Departamento extends Alojamiento {
 
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarritoDepartamento> carritoDepartamento;
+    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservaDepartamento> reservasDepartamento;
 
     @ManyToOne
     @JoinColumn(name = "gestor_id", nullable = false)

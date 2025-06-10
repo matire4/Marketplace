@@ -22,7 +22,7 @@ public class Imagen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(columnDefinition = "TEXT")
     String imagen;
     
 

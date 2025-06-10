@@ -1,0 +1,291 @@
+// HOTELES CON HABITACIONES
+POST /api/v1/hoteles
+{
+    "nombre": "Grand Hotel Plaza",
+    "telefono": "555-123-456",
+    "email": "info@grandplaza.com",
+    "descripcion": "Hotel de lujo en el centro de la ciudad",
+    "direccion": "Av. Principal 123",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "habitacionesParaCrear": [
+        {
+            "tipoHabitacion": "SUITE",
+            "capacidad": 4,
+            "precioPorNoche": 350.0,
+            "numeroHabitacion": "501",
+            "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QBaRXhpZgAATU0AKgAAAAgABQMBAAUAAAABAAAASgMDAAEAAAABAAAAAFEQAAEAAAABAQAAAFERAAQAAAABAAAOxFESAAQAAAABAAAOxAAAAAAAAYagAACxj//bAEMAAgEBAgEBAgICAgICAgIDBQMDAwMDBgQEAwUHBgcHBwYHBwgJCwkICAoIBwcKDQoKCwwMDAwHCQ4PDQwOCwwMDP/bAEMBAgICAwMDBgMDBgwIBwgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDP/AABEIAQABAAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/2gAMAwEAAhEDEQA/AP38ooooAKKKKAP/2Q=="
+        },
+        {
+            "tipoHabitacion": "DOBLE",
+            "capacidad": 2,
+            "precioPorNoche": 200.0,
+            "numeroHabitacion": "502",
+            "imagen": "doble-502.jpg"
+        },
+        {
+            "tipoHabitacion": "INDIVIDUAL",
+            "capacidad": 1,
+            "precioPorNoche": 150.0,
+            "numeroHabitacion": "503",
+            "imagen": "individual-503.jpg"
+        },
+        {
+            "tipoHabitacion": "FAMILIAR",
+            "capacidad": 6,
+            "precioPorNoche": 450.0,
+            "numeroHabitacion": "504",
+            "imagen": "familiar-504.jpg"
+        },
+        {
+            "tipoHabitacion": "SUITE_PREMIUM",
+            "capacidad": 3,
+            "precioPorNoche": 500.0,
+            "numeroHabitacion": "505",
+            "imagen": "suite-premium-505.jpg"
+        }
+    ]
+}
+
+POST /api/v1/hoteles
+{
+    "nombre": "Luxury Resort & Spa",
+    "telefono": "555-789-012",
+    "email": "contact@luxuryresort.com",
+    "descripcion": "Resort de lujo con spa y vista al mar",
+    "direccion": "Costa Avenue 456",
+    "ciudad": "Mar del Plata",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 1,
+    "habitacionesParaCrear": [
+        {
+            "tipoHabitacion": "SUITE_PREMIUM",
+            "capacidad": 4,
+            "precioPorNoche": 600.0,
+            "numeroHabitacion": "601",
+            "imagen": "suite-601.jpg"
+        },
+        {
+            "tipoHabitacion": "SUITE",
+            "capacidad": 3,
+            "precioPorNoche": 450.0,
+            "numeroHabitacion": "602",
+            "imagen": "suite-602.jpg"
+        },
+        {
+            "tipoHabitacion": "DOBLE",
+            "capacidad": 2,
+            "precioPorNoche": 300.0,
+            "numeroHabitacion": "603",
+            "imagen": "doble-603.jpg"
+        },
+        {
+            "tipoHabitacion": "FAMILIAR",
+            "capacidad": 5,
+            "precioPorNoche": 550.0,
+            "numeroHabitacion": "604",
+            "imagen": "familiar-604.jpg"
+        },
+        {
+            "tipoHabitacion": "SUITE_PREMIUM",
+            "capacidad": 2,
+            "precioPorNoche": 700.0,
+            "numeroHabitacion": "605",
+            "imagen": "suite-premium-605.jpg"
+        }
+    ]
+}
+
+// DEPARTAMENTOS
+POST /api/v1/departamentos
+{
+    "capacidad": 4,
+    "precioPorNoche": 250.0,
+    "numeroDepartamento": "A101",
+    "descripcion": "Departamento moderno en zona céntrica",
+    "direccion": "Calle 25 de Mayo 123",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "imagenCrear": [
+        {
+            "url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/4QBaRXhpZgAATU0AKgAAAAgABQMBAAUAAAABAAAASgMDAAEAAAABAAAAAFEQAAEAAAABAQAAAFERAAQAAAABAAAOxFESAAQAAAABAAAOxAAAAAAAAYagAACxj//bAEMAAgEBAgEBAgICAgICAgIDBQMDAwMDBgQEAwUHBgcHBwYHBwgJCwkICAoIBwcKDQoKCwwMDAwHCQ4PDQwOCwwMDP/bAEMBAgICAwMDBgMDBgwIBwgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDP/AABEIAQABAAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj5OXm5+jp6vHy8/T19vf4+fr/2gAMAwEAAhEDEQA/AP38ooooAKKKKAP/2Q==",
+            "descripcion": "Vista principal"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 2,
+    "precioPorNoche": 180.0,
+    "numeroDepartamento": "B202",
+    "descripcion": "Acogedor departamento para parejas",
+    "direccion": "Av. Corrientes 456",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 2,
+    "imagenCrear": [
+        {
+            "url": "depto-b202-1.jpg",
+            "descripcion": "Vista sala"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 6,
+    "precioPorNoche": 350.0,
+    "numeroDepartamento": "C303",
+    "descripcion": "Amplio departamento familiar",
+    "direccion": "Av. Santa Fe 789",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 1,
+    "imagenCrear": [
+        {
+            "url": "depto-c303-1.jpg",
+            "descripcion": "Vista completa"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 3,
+    "precioPorNoche": 200.0,
+    "numeroDepartamento": "D404",
+    "descripcion": "Departamento con vista a la ciudad",
+    "direccion": "Av. Libertador 1010",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 2,
+    "imagenCrear": [
+        {
+            "url": "depto-d404-1.jpg",
+            "descripcion": "Vista panorámica"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 5,
+    "precioPorNoche": 300.0,
+    "numeroDepartamento": "E505",
+    "descripcion": "Departamento de lujo con terraza",
+    "direccion": "Calle Florida 222",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "imagenCrear": [
+        {
+            "url": "depto-e505-1.jpg",
+            "descripcion": "Vista terraza"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 4,
+    "precioPorNoche": 280.0,
+    "numeroDepartamento": "F606",
+    "descripcion": "Departamento moderno con amenities",
+    "direccion": "Av. Belgrano 333",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 2,
+    "imagenCrear": [
+        {
+            "url": "depto-f606-1.jpg",
+            "descripcion": "Vista piscina"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 2,
+    "precioPorNoche": 190.0,
+    "numeroDepartamento": "G707",
+    "descripcion": "Departamento ejecutivo céntrico",
+    "direccion": "Calle Lavalle 444",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "imagenCrear": [
+        {
+            "url": "depto-g707-1.jpg",
+            "descripcion": "Vista oficina"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 3,
+    "precioPorNoche": 220.0,
+    "numeroDepartamento": "H808",
+    "descripcion": "Departamento con vista al río",
+    "direccion": "Av. Costanera 555",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 2,
+    "imagenCrear": [
+        {
+            "url": "depto-h808-1.jpg",
+            "descripcion": "Vista río"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 4,
+    "precioPorNoche": 260.0,
+    "numeroDepartamento": "I909",
+    "descripcion": "Departamento en zona residencial",
+    "direccion": "Calle Callao 666",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 1,
+    "categoriaId": 1,
+    "imagenCrear": [
+        {
+            "url": "depto-i909-1.jpg",
+            "descripcion": "Vista jardín"
+        }
+    ]
+}
+
+POST /api/v1/departamentos
+{
+    "capacidad": 5,
+    "precioPorNoche": 320.0,
+    "numeroDepartamento": "J1010",
+    "descripcion": "Departamento premium con servicios",
+    "direccion": "Av. del Libertador 777",
+    "ciudad": "Buenos Aires",
+    "pais": "Argentina",
+    "gestorId": 2,
+    "categoriaId": 2,
+    "imagenCrear": [
+        {
+            "url": "depto-j1010-1.jpg",
+            "descripcion": "Vista completa"
+        }
+    ]
+}
