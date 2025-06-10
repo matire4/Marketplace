@@ -51,7 +51,8 @@ public class HotelServiceImpl implements HotelService {
                         String pais,
                         Long gestorId,
                         Long categoriaId,
-                        List<HabitacionDTO> habitaciones) throws HotelDuplicateException, GestorNotFoundException,
+                        List<Long> habitaciones,
+                        List<HabitacionDTO> habitacionesCrear) throws HotelDuplicateException, GestorNotFoundException,
                         CategoriaNotFoundException {
 
                 List<Hotel> hoteles = hotelRepository.findByEmail(email);
@@ -62,19 +63,11 @@ public class HotelServiceImpl implements HotelService {
                         Categoria categoria = categoriaRepository.findById(categoriaId)
                                         .orElseThrow(() -> new CategoriaNotFoundException());
 
-                        Hotel hotel = new Hotel(
-                                        nombre,
-                                        telefono,
-                                        email,
-                                        description,
-                                        direccion,
-                                        ciudad,
-                                        pais,
-                                        gestor,
-                                        categoria);
+                        Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, categoria,
+                                        nombre, telefono, email);
 
-                        if (habitaciones != null) {
-                                habitaciones.forEach(habitacion -> {
+                        if (habitacionesCrear != null) {
+                                habitacionesCrear.forEach(habitacion -> {
                                         Habitacion newHabitacion = new Habitacion(
                                                         habitacion.getTipoHabitacion(),
                                                         habitacion.getCapacidad(),
@@ -105,17 +98,17 @@ public class HotelServiceImpl implements HotelService {
                 hotelDTO.setCiudad(hotel.getCiudad());
                 hotelDTO.setPais(hotel.getPais());
                 if (hotel.getHabitaciones() != null)
-                        hotelDTO.setHabitacionesIds(hotel.getHabitaciones()
+                        hotelDTO.setHabitaciones(hotel.getHabitaciones()
                                         .stream()
                                         .map(habitacion -> habitacion.getId())
                                         .toList());
                 if (hotel.getReviews() != null)
-                        hotelDTO.setReviewsIds(hotel.getReviews()
+                        hotelDTO.setReviews(hotel.getReviews()
                                         .stream()
                                         .map(review -> review.getId())
                                         .toList());
                 if (hotel.getPreguntas() != null)
-                        hotelDTO.setPreguntasIds(hotel.getPreguntas()
+                        hotelDTO.setPreguntas(hotel.getPreguntas()
                                         .stream()
                                         .map(pregunta -> pregunta.getId())
                                         .toList());

@@ -14,12 +14,13 @@ public class HotelDTO {
     private String direccion;
     private String ciudad;
     private String pais;
-    private List<Long> habitacionesIds;
 
-    private List<HabitacionDTO> habitacionesParaCrear;
+    private List<Long> habitaciones;
+    private List<HabitacionDTO> habitacionCrear;
+    private List<Long> imagenes;
 
-    private List<Long> reviewsIds;
-    private List<Long> preguntasIds;
+    private List<Long> reviews;
+    private List<Long> preguntas;
     private Long gestorId;
     private Long categoriaId;
 }

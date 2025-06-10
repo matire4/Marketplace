@@ -26,7 +26,8 @@ public interface HotelService {
                         String pais,
                         Long gestorId,
                         Long categoriaId,
-                        List<HabitacionDTO> habitaciones)
+                        List<Long> habitaciones,
+                        List<HabitacionDTO> habitacionesCrear)
                         throws HotelDuplicateException,
                         GestorNotFoundException,
                         CategoriaNotFoundException;

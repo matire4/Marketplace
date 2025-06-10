@@ -11,17 +11,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DepartamentoDTO {
+public class AlojamientoDTO {
     private Long id;
-    private int capacidad;
-    private double precioPorNoche;
-    private String numeroDepartamento;
     private String descripcion;
     private String direccion;
     private String ciudad;
     private String pais;
-    private List<Long> imagenes;
-    private List<ImagenDTO> imagenesNuevas;
     private Long gestorId;
     private Long categoriaId;
+    private List<Long> reviews;
+    private List<Long> preguntas;
+    private List<Long> imagenes;
 }

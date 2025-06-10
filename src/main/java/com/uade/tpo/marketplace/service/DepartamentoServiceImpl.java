@@ -9,13 +9,16 @@ import org.springframework.stereotype.Service;
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.Gestor;
+import com.uade.tpo.marketplace.entities.Imagen;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
+import com.uade.tpo.marketplace.entities.dto.ImagenDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.DepartamentoRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
+import com.uade.tpo.marketplace.repository.ImagenRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -28,6 +31,8 @@ public class DepartamentoServiceImpl implements DepartamentoService {
     private GestorRepository gestorRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private ImagenRepository imagenRepository;
 
     @Override
     public List<DepartamentoDTO> getDepartamentos() {
@@ -46,9 +51,12 @@ public class DepartamentoServiceImpl implements DepartamentoService {
             int capacidad,
             double precioPorNoche,
             String numeroDepartamento,
+            String ciudad,
+            String pais,
             String descripcion,
             String direccion,
-            String imagen,
+            List<Long> imagenes,
+            List<ImagenDTO> imagenCrear,
             Long gestorId,
             Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException {
 
@@ -57,16 +65,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new CategoriaNotFoundException());
 
-        Departamento departamento = Departamento.builder()
-                .capacidad(capacidad)
-                .precioPorNoche(precioPorNoche)
-                .numeroDepartamento(numeroDepartamento)
-                .descripcion(descripcion)
-                .direccion(direccion)
-                .imagen(imagen)
-                .gestor(gestor)
-                .categoria(categoria)
-                .build();
+        Departamento departamento = new Departamento( descripcion, direccion, ciudad, pais, gestor, categoria, capacidad, precioPorNoche, numeroDepartamento);
 
         return departamentoRepository.save(departamento);
     }
@@ -82,13 +81,17 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .orElseThrow(() -> new GestorNotFoundException());
         Categoria categoria = categoriaRepository.findById(departamentoDTO.getCategoriaId())
                 .orElseThrow(() -> new CategoriaNotFoundException());
+        List<Imagen> imagenes = departamentoDTO.getImagenesNuevas().stream()
+                .map(imagenDTO -> imagenRepository.findById(imagenDTO.getId())
+                        .orElseThrow(() -> new RuntimeException()))
+                .toList();
 
         departamento.setCapacidad(departamentoDTO.getCapacidad());
         departamento.setPrecioPorNoche(departamentoDTO.getPrecioPorNoche());
         departamento.setNumeroDepartamento(departamentoDTO.getNumeroDepartamento());
         departamento.setDescripcion(departamentoDTO.getDescripcion());
         departamento.setDireccion(departamentoDTO.getDireccion());
-        departamento.setImagen(departamentoDTO.getImagen());
+        departamento.setImagenes(imagenes);
         departamento.setGestor(gestor);
         departamento.setCategoria(categoria);
 
@@ -112,7 +115,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .numeroDepartamento(departamento.getNumeroDepartamento())
                 .descripcion(departamento.getDescripcion())
                 .direccion(departamento.getDireccion())
-                .imagen(departamento.getImagen())
+                .imagenes(departamento.getImagenes().stream().map(i -> i.getId()).toList())
                 .gestorId(departamento.getGestor().getId())
                 .categoriaId(departamento.getCategoria().getId())
                 .build();

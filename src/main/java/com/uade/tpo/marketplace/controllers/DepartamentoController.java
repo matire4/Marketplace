@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
@@ -36,13 +37,16 @@ public class DepartamentoController {
     @PostMapping
     public ResponseEntity<DepartamentoDTO> createDepartamento(@RequestBody DepartamentoDTO departamentoRequest)
             throws GestorNotFoundException, CategoriaNotFoundException {
-        var result = departamentoService.createDepartamento(
+        Departamento result = departamentoService.createDepartamento(
                 departamentoRequest.getCapacidad(),
                 departamentoRequest.getPrecioPorNoche(),
                 departamentoRequest.getNumeroDepartamento(),
+                departamentoRequest.getCiudad(),
+                departamentoRequest.getPais(),
                 departamentoRequest.getDescripcion(),
                 departamentoRequest.getDireccion(),
-                departamentoRequest.getImagen(),
+                departamentoRequest.getImagenes(),
+                departamentoRequest.getImagenesNuevas(),
                 departamentoRequest.getGestorId(),
                 departamentoRequest.getCategoriaId());
 
