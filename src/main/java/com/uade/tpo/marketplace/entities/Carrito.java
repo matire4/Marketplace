@@ -25,6 +25,8 @@ public class Carrito {
     private Usuario usuario;
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarritoHabitacion> carritoHabitacions;
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CarritoDepartamento> carritoDepartamentos;
 
     public Carrito() {
     }

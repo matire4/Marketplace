@@ -36,30 +36,6 @@ public class HotelController {
         return ResponseEntity.ok(hotelService.getHotels());
     }
 
-    @GetMapping("/departamentos") // esto despues se movera a su controller
-    public ResponseEntity<List<DepartamentoDTO>> getDepartamentos() {
-        return ResponseEntity.ok(departamentoService.getDepartamentos());
-    }
-
-    @PostMapping("/departamentos") // esto despues se movera a su controller
-    public ResponseEntity<DepartamentoDTO> createDepartamento(@RequestBody DepartamentoDTO departamentoRequest)
-            throws GestorNotFoundException, CategoriaNotFoundException {
-        var result = departamentoService.createDepartamento(
-                departamentoRequest.getCapacidad(),
-                departamentoRequest.getPrecioPorNoche(),
-                departamentoRequest.getNumeroDepartamento(),
-                departamentoRequest.getDescripcion(),
-                departamentoRequest.getDireccion(),
-                departamentoRequest.getImagen(),
-                departamentoRequest.getGestorId(),
-                departamentoRequest.getCategoriaId());
-
-        return ResponseEntity.created(null).body(null); // URI.create("/departamentos/" + result.getId()))
-                // .body(departamentoService.departamentoToDepartamentoDTO(result));
-
-            //cuando tenga su controller se corrige
-    }
-
     @GetMapping("/{hotelId}")
     public ResponseEntity<HotelDTO> getHotelById(@PathVariable Long hotelId)
             throws HotelNotFoundException {

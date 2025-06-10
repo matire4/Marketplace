@@ -29,6 +29,8 @@ public class Reserva {
     // En Reserva.java
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservaHabitacion> ReservasHabitacion;
+    @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReservaDepartamento> ReservasDepartamento;
     @ManyToOne
     @JoinColumn(name = "usuario_id") // esta columna va a estar en la tabla Reserva
     private Usuario usuario;

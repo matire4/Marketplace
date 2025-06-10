@@ -1,4 +1,4 @@
-package com.uade.tpo.marketplace.service.impl;
+package com.uade.tpo.marketplace.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,6 @@ import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.DepartamentoRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
-import com.uade.tpo.marketplace.service.DepartamentoService;
 
 import jakarta.transaction.Transactional;
 
@@ -117,5 +116,10 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .gestorId(departamento.getGestor().getId())
                 .categoriaId(departamento.getCategoria().getId())
                 .build();
+    }
+
+    @Override
+    public List<DepartamentoDTO> getDepartamentosDisponibles() {
+        return departamentoRepository.findByDisponibleTrue();
     }
 }
