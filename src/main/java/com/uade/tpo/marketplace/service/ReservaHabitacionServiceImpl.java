@@ -3,12 +3,14 @@ package com.uade.tpo.marketplace.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
+@Service
 public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     @Autowired
     private ReservaHabitacionRepository reservaHabitacionRepository;

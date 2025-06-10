@@ -28,7 +28,7 @@ public class ReservaServiceImpl implements ReservaService {
     @Autowired
     private HabitacionService habitacionService;
     @Autowired
-    private ReservaHabitacionService res;
+    private ReservaHabitacionService reservaHabitacionService;
 
     @Override
     public List<ReservaDTO> getReservas() {
@@ -98,7 +98,7 @@ public class ReservaServiceImpl implements ReservaService {
         reservaDTO.setUsuarioDTO(usuarioService.usuarioToUsuarioDTO(reserva.getUsuario()));
         reservaDTO.setHabitaciones(
             reserva.getReservasHabitacion().stream()
-            .map(reservaHabitacion -> res.reservaHabitacionToReservaHabitacionDTO(reservaHabitacion))
+            .map(reservaHabitacion -> reservaHabitacionService.reservaHabitacionToReservaHabitacionDTO(reservaHabitacion))
             .toList()
         );
         return reservaDTO;

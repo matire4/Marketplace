@@ -29,12 +29,12 @@ public class Departamento extends Alojamiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
+    
+    @Column(nullable = false)
     int capacidad;
-    @Column
+    @Column(nullable = false)
     double precioPorNoche;
-    @Column
+    @Column(nullable = false)
     String numeroDepartamento;
 
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -53,4 +53,4 @@ public class Departamento extends Alojamiento {
         this.precioPorNoche = precioPorNoche;
         this.numeroDepartamento = numeroDepartamento;
     }
-}       
+}

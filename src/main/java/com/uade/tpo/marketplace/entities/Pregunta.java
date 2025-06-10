@@ -21,15 +21,16 @@ public class Pregunta {
     @Column
     private String respuesta;
 
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
-    private Hotel hotel;
+    
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
     @ManyToOne
-    @JoinColumn(name = "habitacion_id", nullable = true)
+    @JoinColumn(name = "habitacion_id", nullable = false)
     private Habitacion habitacion;
+    @ManyToOne
+    @JoinColumn(name = "alojamiento_id", nullable = false)
+    private Alojamiento alojamiento;
 
     public Pregunta() {
     }

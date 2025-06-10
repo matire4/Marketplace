@@ -54,11 +54,6 @@ public class DepartamentoController {
                 .body(departamentoService.departamentoToDepartamentoDTO(result));
     }
 
-    @GetMapping("/disponibles")
-    public ResponseEntity<List<DepartamentoDTO>> getDepartamentosDisponibles() {
-        return ResponseEntity.ok(departamentoService.getDepartamentosDisponibles());
-    }
-
     @DeleteMapping("/{departamentoId}")
     public ResponseEntity<Void> deleteDepartamento(@PathVariable Long departamentoId) throws DepartamentoNotFoundException {
         departamentoService.deleteDepartamento(departamentoId);

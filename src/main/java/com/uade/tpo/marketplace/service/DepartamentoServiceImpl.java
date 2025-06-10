@@ -120,9 +120,4 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .categoriaId(departamento.getCategoria().getId())
                 .build();
     }
-
-    @Override
-    public List<DepartamentoDTO> getDepartamentosDisponibles() {
-        return departamentoRepository.findByDisponibleTrue();
-    }
 }

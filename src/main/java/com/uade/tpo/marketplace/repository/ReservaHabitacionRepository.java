@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
+import com.uade.tpo.marketplace.enums.Estado;
 
 @Repository
 public interface ReservaHabitacionRepository extends JpaRepository<ReservaHabitacion, Long> {
     List<ReservaHabitacion> findByReservaId(Long reservaId);
     List<ReservaHabitacion> findByHabitacionId(Long habitacionId);
     List<ReservaHabitacion> findByReservaIdAndHabitacionId(Long reservaId, Long habitacionId);
-    List<ReservaHabitacion> findByEstado(String estado);
+    List<ReservaHabitacion> findByEstado(Estado estado);
 }

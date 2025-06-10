@@ -35,6 +35,4 @@ public interface DepartamentoService {
     void deleteDepartamento(Long departamentoId) throws DepartamentoNotFoundException;
     
     DepartamentoDTO departamentoToDepartamentoDTO(Departamento departamento);
-
-    List<DepartamentoDTO> getDepartamentosDisponibles();
 }

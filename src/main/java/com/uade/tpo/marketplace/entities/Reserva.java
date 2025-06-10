@@ -28,7 +28,7 @@ public class Reserva {
 
     // En Reserva.java
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservaHabitacion> ReservasHabitacion;
+    private List<ReservaHabitacion> reservasHabitacion; // El nombre debe coincidir
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservaDepartamento> ReservasDepartamento;
     @ManyToOne
@@ -38,10 +38,10 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Date fecha, List<ReservaHabitacion> ReservasHabitacion, Usuario usuario) {
+    public Reserva(Date fecha, List<ReservaHabitacion> reservasHabitacion, Usuario usuario) {
         this.fecha = fecha;
-        this.ReservasHabitacion = ReservasHabitacion;
+        this.reservasHabitacion = reservasHabitacion; // Actualizar aquí también
         this.usuario = usuario;
-        this.precio = ReservasHabitacion.stream().mapToDouble(ReservaHabitacion::getPrecio).sum();
+        this.precio = reservasHabitacion.stream().mapToDouble(ReservaHabitacion::getPrecio).sum();
     }
 }

@@ -25,8 +25,8 @@ public class Review {
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
     @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
-    private Hotel hotel;
+    @JoinColumn(name = "alojamiento_id", nullable = false)
+    private Alojamiento alojamiento;
 
     public Review() {
     }

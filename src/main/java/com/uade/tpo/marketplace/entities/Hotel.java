@@ -41,4 +41,7 @@ public class Hotel extends Alojamiento {
         this.telefono = telefono;
         this.email = email;
     }
+    public Hotel() {
+        super();
+    }
 }

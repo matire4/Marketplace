@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,8 +12,6 @@ import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
-    List<Reserva> findById(String id);
-    List<Reserva> findByReservasHabitacion(ReservaHabitacion reservasHabitacion);
+    List<Reserva> findByReservasHabitacion(ReservaHabitacion reservaHabitacion);
     List<Reserva> findByUsuarioId(Long usuarioId);
-    List<Reserva> findByEstado(String estado);
 }
