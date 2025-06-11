@@ -1,5 +1,7 @@
 package com.uade.tpo.marketplace.controllers.auth;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,12 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request) throws UsuarioNotFoundException,GestorNotFoundException{
+            @RequestBody AuthenticationRequest request) throws UsuarioNotFoundException, GestorNotFoundException {
         return ResponseEntity.ok(service.authenticate(request));
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyToken() {
+        return ResponseEntity.ok().build(); // Si llega acá, el token es válido
     }
 }
