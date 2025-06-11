@@ -56,7 +56,7 @@ public class HotelController {
                 hotelRequest.getGestorId(),
                 hotelRequest.getCategoriaId(),
                 hotelRequest.getHabitaciones(),
-                hotelRequest.getHabitacionCrear());
+                hotelRequest.getHabitacionesParaCrear());
 
         return ResponseEntity.created(URI.create("/hoteles" + result.getId()))
                 .body(hotelService.hotelToHotelDTO(result));

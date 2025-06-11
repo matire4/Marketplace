@@ -52,7 +52,7 @@ public class HotelServiceImpl implements HotelService {
                         Long gestorId,
                         Long categoriaId,
                         List<Long> habitaciones,
-                        List<HabitacionDTO> habitacionesCrear) throws HotelDuplicateException, GestorNotFoundException,
+                        List<HabitacionDTO> habitacionesParaCrear) throws HotelDuplicateException, GestorNotFoundException,
                         CategoriaNotFoundException {
 
                 List<Hotel> hoteles = hotelRepository.findByEmail(email);
@@ -66,8 +66,8 @@ public class HotelServiceImpl implements HotelService {
                         Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, categoria,
                                         nombre, telefono, email);
 
-                        if (habitacionesCrear != null) {
-                                habitacionesCrear.forEach(habitacion -> {
+                        if (habitacionesParaCrear != null) {
+                                habitacionesParaCrear.forEach(habitacion -> {
                                         Habitacion newHabitacion = new Habitacion(
                                                         habitacion.getTipoHabitacion(),
                                                         habitacion.getCapacidad(),

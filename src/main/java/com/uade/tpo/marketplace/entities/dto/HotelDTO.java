@@ -16,7 +16,7 @@ public class HotelDTO {
     private String pais;
 
     private List<Long> habitaciones;
-    private List<HabitacionDTO> habitacionCrear;
+    private List<HabitacionDTO> habitacionesParaCrear;
     private List<Long> imagenes;
 
     private List<Long> reviews;

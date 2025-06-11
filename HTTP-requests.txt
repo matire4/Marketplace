@@ -1,11 +1,11 @@
 POST /api/v1/gestores
 {
-    "username": "mbanchero",
+    "name": "mbanchero",
     "password": "123",
     "email": "mbanchero@gmail.com",
-    "telefono": "2317452869",
-    "nombre": "Manuel Banchero",
-    "cuil": "123456789"
+    "phone": "2317452869",
+    "cuil": "123456789",
+    "role": "GESTOR"
 }
 
 POST /api/v1/categorias
@@ -81,45 +81,45 @@ POST /api/v1/auth/authenticate      obviamente remplazar con datos que ya exista
 POST /api/v1/hoteles
 {
     "nombre": "Grand Plaza Hotel",
-    "telefono": "555-123-456",
+    "telefono": "5525-123-456",
     "email": "info@grandplaza.com",
     "descripcion": "Lujoso hotel 5 estrellas en el centro",
     "direccion": "Av. Corrientes 1234",
     "ciudad": "Buenos Aires",
     "pais": "Argentina",
-    "gestorId": 1,
+    "gestorId": 2,
     "categoriaId": 1,
     "habitacionesParaCrear": [
         {
-            "tipoHabitacion": "SUITE",
+            "tipoHabitacion": "doble",
             "capacidad": 4,
             "precioPorNoche": 350.0,
             "numeroHabitacion": "501",
             "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
         },
         {
-            "tipoHabitacion": "DOBLE",
+            "tipoHabitacion": "compartida",
             "capacidad": 2,
             "precioPorNoche": 250.0,
             "numeroHabitacion": "502",
             "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
         },
         {
-            "tipoHabitacion": "FAMILIAR",
+            "tipoHabitacion": "individual",
             "capacidad": 6,
             "precioPorNoche": 450.0,
             "numeroHabitacion": "503",
             "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
         },
         {
-            "tipoHabitacion": "INDIVIDUAL",
+            "tipoHabitacion": "triple",
             "capacidad": 1,
             "precioPorNoche": 150.0,
             "numeroHabitacion": "504",
             "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/..."
         },
         {
-            "tipoHabitacion": "SUITE_PREMIUM",
+            "tipoHabitacion": "suite",
             "capacidad": 3,
             "precioPorNoche": 550.0,
             "numeroHabitacion": "505",
