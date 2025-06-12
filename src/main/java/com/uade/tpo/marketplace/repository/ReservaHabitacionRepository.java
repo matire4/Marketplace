@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,8 @@ public interface ReservaHabitacionRepository extends JpaRepository<ReservaHabita
     List<ReservaHabitacion> findByHabitacionId(Long habitacionId);
     List<ReservaHabitacion> findByReservaIdAndHabitacionId(Long reservaId, Long habitacionId);
     List<ReservaHabitacion> findByEstado(Estado estado);
+    List<ReservaHabitacion> findByFechaDesde(Date fechaDesde);
+    List<ReservaHabitacion> findByFechaHasta(Date fechaHasta);
+    List<ReservaHabitacion> findByPrecio(double precio);
+    List<ReservaHabitacion> findByCantidadPersona(int cantidadPersonas);
 }

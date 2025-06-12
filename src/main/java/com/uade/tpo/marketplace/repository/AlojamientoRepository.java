@@ -12,4 +12,7 @@ public interface AlojamientoRepository extends JpaRepository<Alojamiento, Long> 
     List<Alojamiento> findByCiudad(String ciudad);
     List<Alojamiento> findByCategoriaId(Long categoriaId);
     List<Alojamiento> findByGestorId(Long gestorId);
+    List<Alojamiento> findByPais(Long pais);
+    List<Alojamiento> findByReviews(Long reviews);
+    List<Alojamiento> findByPreguntas(Long preguntas);
 }
