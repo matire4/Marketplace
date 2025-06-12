@@ -1,0 +1,62 @@
+.rent-card {
+    width: 310px;
+    font-size: 0.875rem;
+    margin-top: 20px;
+}
+
+.rent-card .img-container {
+    width: 290px;
+    height: 290px;
+    background-color: gainsboro;
+    border-radius: 10px;
+}
+
+.rent-card .img-container img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.rent-card .info {
+    padding-left: 2px;
+}
+
+.rent-card .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 0.75em;
+}
+
+.rent-card .row p {
+    font-weight: 600;
+    margin: 0;
+}
+
+.rent-card .row span {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.rent-card .row .icon {
+    font-size: 14px;
+}
+
+.rent-card .type,
+.rent-card .amenities {
+    margin-top: 0.3125em;
+    color: rgb(125, 125, 125);
+}
+
+.rent-card .price {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.rent-card .price span {
+    font-weight: 400;
+}

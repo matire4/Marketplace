@@ -1,0 +1,92 @@
+.login {
+    color: #161616;
+}
+
+.login .two-cols .first-col h1 {
+    color: #161616;
+    font-weight: 500;
+}
+
+.login .two-cols {
+    display: flex;
+
+    height: 100dvh;
+    width: 100dvw;
+}
+
+.login .second-col {
+    background-color: var(--mainColor);
+    width: 50%;
+}
+
+.login .first-col {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #161616;
+}
+
+.login .logo {
+    flex: none;
+}
+
+.login-form {
+    background-color: var(--subSecondaryColor);
+    padding: 2em 3em;
+    margin-top: 30px;
+}
+
+.login-form h1 {
+    font-size: 2rem;
+    margin-top: 0;
+    text-align: center;
+}
+
+.login-form form .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login form .input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.login form label {
+    color: #161616;
+    font-weight: 500;
+}
+
+.login form input {
+    width: 400px;
+    height: 35px;
+    border: none;
+    background-color: inherit;
+    border-bottom: 1px solid var(--mainColor);
+    font-family: inherit;
+}
+
+.login form input:focus {
+    outline: none;
+    border-bottom: 3px solid var(--mainColor);
+}
+
+.login form button {
+    border: none;
+    background-color: var(--mainColor);
+    padding: .75em;
+    font-size: 1rem;
+    color: var(--subSecondaryColor);
+    font-weight: 600;
+    border-radius: 5px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.login a {
+    color: var(--mainColor);
+    font-weight: 400;
+}
