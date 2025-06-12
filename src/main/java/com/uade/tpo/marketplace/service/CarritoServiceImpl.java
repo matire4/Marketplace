@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.tpo.marketplace.entities.Carrito;
 import com.uade.tpo.marketplace.entities.CarritoHabitacion;
@@ -15,8 +16,6 @@ import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.repository.CarritoRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class CarritoServiceImpl implements CarritoService {
@@ -30,15 +29,22 @@ public class CarritoServiceImpl implements CarritoService {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private HabitacionService habitacionService;
+
+    @Autowired
+    private DepartamentoService departamentoService;
+
     @Override
-    public CarritoDTO getCarritoByUsuario(Long usuarioId) throws CarritoNotFoundException, UsuarioNotFoundException {
-        Usuario usuario = usuarioService.getUsuarioById(usuarioId)
+    @Transactional(readOnly = true)
+    public CarritoDTO getCarritoByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException {
+        Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
-                
-        Carrito carrito = carritoRepository.findByUsuario(usuario)
+
+        Carrito carrito = carritoRepository.findByUsuario(u)
                 .orElseGet(() -> {
                     Carrito newCarrito = new Carrito();
-                    newCarrito.setUsuario(usuario);
+                    newCarrito.setUsuario(u);
                     newCarrito.setCarritoHabitacions(new ArrayList<>());
                     return carritoRepository.save(newCarrito);
                 });
@@ -48,18 +54,18 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public Carrito addHabitacionToCarrito(Long usuarioId, Long habitacionId, String nombreReserva) 
+    public Carrito addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        Usuario usuario = usuarioService.getUsuarioById(usuarioId)
+        Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
                 
         Habitacion habitacion = habitacionRepository.findById(habitacionId)
                 .orElseThrow(() -> new HabitacionNotFoundException());
                 
-        Carrito carrito = carritoRepository.findByUsuario(usuario)
+        Carrito carrito = carritoRepository.findByUsuario(u)
                 .orElseGet(() -> {
                     Carrito newCarrito = new Carrito();
-                    newCarrito.setUsuario(usuario);
+                    newCarrito.setUsuario(u);
                     newCarrito.setCarritoHabitacions(new ArrayList<>());
                     return carritoRepository.save(newCarrito);
                 });
@@ -79,12 +85,12 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public void removeHabitacionFromCarrito(Long usuarioId, Long habitacionId) 
+    public void removeHabitacionFromCarrito(String usuario, Long habitacionId) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        Usuario usuario = usuarioService.getUsuarioById(usuarioId)
+        Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
-                
-        Carrito carrito = carritoRepository.findByUsuario(usuario)
+
+        Carrito carrito = carritoRepository.findByUsuario(u)
                 .orElseThrow(() -> new CarritoNotFoundException());
                 
         carrito.getCarritoHabitacions().removeIf(ch -> ch.getHabitacion().getId().equals(habitacionId));
@@ -93,11 +99,11 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public void clearCarrito(Long usuarioId) throws CarritoNotFoundException, UsuarioNotFoundException {
-        Usuario usuario = usuarioService.getUsuarioById(usuarioId)
+    public void clearCarrito(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException {
+        Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
-                
-        Carrito carrito = carritoRepository.findByUsuario(usuario)
+
+        Carrito carrito = carritoRepository.findByUsuario(u)
                 .orElseThrow(() -> new CarritoNotFoundException());
                 
         carrito.getCarritoHabitacions().clear();
@@ -105,19 +111,24 @@ public class CarritoServiceImpl implements CarritoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CarritoDTO carritoToCarritoDTO(Carrito carrito) {
         CarritoDTO carritoDTO = new CarritoDTO();
         carritoDTO.setId(carrito.getId());
         carritoDTO.setUsuarioId(carrito.getUsuario().getId());
-        
-        if (carrito.getCarritoHabitacions() != null) {
-            carritoDTO.setHabitacionesIds(
-                carrito.getCarritoHabitacions().stream()
-                    .map(ch -> ch.getHabitacion().getId())
-                    .toList()
-            );
-        }
-        
+
+        if (carrito.getCarritoHabitacions() != null)
+            carritoDTO.setHabitaciones(carrito.getCarritoHabitacions()
+                            .stream()
+                            .map(habitacion -> habitacionService.habitacionToHabitacionDTO(habitacion.getHabitacion()))
+                            .toList());
+
+        if (carrito.getCarritoDepartamentos() != null)
+            carritoDTO.setDepartamentos(carrito.getCarritoDepartamentos()
+                            .stream()
+                            .map(departamento -> departamentoService.departamentoToDepartamentoDTO(departamento.getDepartamento()))
+                            .toList());
+
         return carritoDTO;
     }
 }

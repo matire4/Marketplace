@@ -18,5 +18,4 @@ public interface ReservaHabitacionRepository extends JpaRepository<ReservaHabita
     List<ReservaHabitacion> findByFechaDesde(Date fechaDesde);
     List<ReservaHabitacion> findByFechaHasta(Date fechaHasta);
     List<ReservaHabitacion> findByPrecio(double precio);
-    List<ReservaHabitacion> findByCantidadPersona(int cantidadPersonas);
 }

@@ -18,35 +18,35 @@ public class CarritoController {
     @Autowired
     private CarritoService carritoService;
     
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<CarritoDTO> getCarritoByUsuario(@PathVariable Long usuarioId) 
+    @GetMapping("/usuario/{usuario}")
+    public ResponseEntity<CarritoDTO> getCarritoByUsuario(@PathVariable String usuario) 
             throws CarritoNotFoundException, UsuarioNotFoundException {
-        return ResponseEntity.ok(carritoService.getCarritoByUsuario(usuarioId));
+        return ResponseEntity.ok(carritoService.getCarritoByUsuario(usuario));
     }
     
-    @PostMapping("/usuario/{usuarioId}/habitacion/{habitacionId}")
+    @PostMapping("/usuario/{usuario}/habitacion/{habitacionId}")
     public ResponseEntity<CarritoDTO> addHabitacionToCarrito(
-            @PathVariable Long usuarioId,
+            @PathVariable String usuario,
             @PathVariable Long habitacionId,
             @RequestParam String nombreReserva) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        Carrito carrito = carritoService.addHabitacionToCarrito(usuarioId, habitacionId, nombreReserva);
+        Carrito carrito = carritoService.addHabitacionToCarrito(usuario, habitacionId, nombreReserva);
         return ResponseEntity.ok(carritoService.carritoToCarritoDTO(carrito));
     }
     
-    @DeleteMapping("/usuario/{usuarioId}/habitacion/{habitacionId}")
+    @DeleteMapping("/usuario/{usuario}/habitacion/{habitacionId}")
     public ResponseEntity<Void> removeHabitacionFromCarrito(
-            @PathVariable Long usuarioId,
+            @PathVariable String usuario,
             @PathVariable Long habitacionId) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        carritoService.removeHabitacionFromCarrito(usuarioId, habitacionId);
+        carritoService.removeHabitacionFromCarrito(usuario, habitacionId);
         return ResponseEntity.noContent().build();
     }
-    
-    @DeleteMapping("/usuario/{usuarioId}")
-    public ResponseEntity<Void> clearCarrito(@PathVariable Long usuarioId) 
+
+    @DeleteMapping("/usuario/{usuario}")
+    public ResponseEntity<Void> clearCarrito(@PathVariable String usuario) 
             throws CarritoNotFoundException, UsuarioNotFoundException {
-        carritoService.clearCarrito(usuarioId);
+        carritoService.clearCarrito(usuario);
         return ResponseEntity.noContent().build();
     }
 }

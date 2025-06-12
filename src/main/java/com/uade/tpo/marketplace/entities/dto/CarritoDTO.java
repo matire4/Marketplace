@@ -8,5 +8,6 @@ import lombok.Data;
 public class CarritoDTO {
     private Long id;
     private Long usuarioId;
-    private List<Long> habitacionesIds;
+    private List<HabitacionDTO> habitaciones;
+    private List<DepartamentoDTO> departamentos;
 }

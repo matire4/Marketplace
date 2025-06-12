@@ -14,6 +14,9 @@ public interface UsuarioService {
 
         public Optional<Usuario> getUsuarioById(Long usuarioId)
                         throws UsuarioNotFoundException;
+        
+        public Optional<Usuario> getUsuarioByUsername(String username)
+                        throws UsuarioNotFoundException;
 
         public Usuario createUsuario(
                         String nombre,

@@ -31,6 +31,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public Optional<Usuario> getUsuarioByUsername(String username) throws UsuarioNotFoundException {
+        return Optional.ofNullable(usuarioRepository.findByUsername(username));
+    }
+
+    @Override
     public Usuario createUsuario(String nombre,
             String apellido,
             Role rolUsuario,

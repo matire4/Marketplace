@@ -11,8 +11,6 @@ import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
-    List<Reserva> findByReservasHabitacion(ReservaHabitacion reservaHabitacion);
-
     List<Reserva> findByUsuarioId(Long usuarioId);
 
     List<Reserva> findByFecha(Date fecha);
