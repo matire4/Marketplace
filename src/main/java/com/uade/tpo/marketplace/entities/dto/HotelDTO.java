@@ -21,6 +21,6 @@ public class HotelDTO {
 
     private List<Long> reviews;
     private List<Long> preguntas;
-    private Long gestorId;
-    private Long categoriaId;
+    private String username;
+    private String categoria;
 }

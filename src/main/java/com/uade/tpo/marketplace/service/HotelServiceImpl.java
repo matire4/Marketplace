@@ -39,9 +39,9 @@ public class HotelServiceImpl implements HotelService {
                 return hoteles.stream().map(hotel -> this.hotelToHotelDTO(hotel)).toList();
         }
 
-        public Optional<Hotel> getHotelById(Long hotelId)
+        public Optional<Hotel> getHotelByNombre(String nombre)
                         throws HotelNotFoundException {
-                return hotelRepository.findById(hotelId);
+                return hotelRepository.findByNombre(nombre);
         }
 
         @Transactional
@@ -52,8 +52,8 @@ public class HotelServiceImpl implements HotelService {
                         String direccion,
                         String ciudad,
                         String pais,
-                        Long gestorId,
-                        Long categoriaId,
+                        String username,
+                        String categoria,
                         List<Long> habitaciones,
                         List<HabitacionDTO> habitacionesParaCrear) throws HotelDuplicateException, GestorNotFoundException,
                         CategoriaNotFoundException {
@@ -61,12 +61,12 @@ public class HotelServiceImpl implements HotelService {
                 List<Hotel> hoteles = hotelRepository.findByEmail(email);
                 if (hoteles.isEmpty()) {
 
-                        Gestor gestor = gestorRepository.findById(gestorId)
+                        Gestor gestor = gestorRepository.findByUsername(username)
                                         .orElseThrow(() -> new GestorNotFoundException());
-                        Categoria categoria = categoriaRepository.findById(categoriaId)
+                        Categoria c = categoriaRepository.findByNombre(categoria)
                                         .orElseThrow(() -> new CategoriaNotFoundException());
 
-                        Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, categoria,
+                        Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, c,
                                         nombre, telefono, email);
 
                         if (habitacionesParaCrear != null) {
@@ -78,7 +78,7 @@ public class HotelServiceImpl implements HotelService {
                                                         habitacion.getNumeroHabitacion(),
                                                         imagenRepository.findAllById(habitacion.getImagenes()),
                                                         gestor,
-                                                        categoria);
+                                                        c);
                                         newHabitacion.setHotel(hotel);
                                         hotel.getHabitaciones().add(newHabitacion);
                                 });
@@ -115,8 +115,8 @@ public class HotelServiceImpl implements HotelService {
                                         .stream()
                                         .map(pregunta -> pregunta.getId())
                                         .toList());
-                hotelDTO.setGestorId(hotel.getGestor().getId());
-                hotelDTO.setCategoriaId(hotel.getCategoria().getId());
+                hotelDTO.setUsername(hotel.getGestor().getUsername());
+                hotelDTO.setCategoria(hotel.getCategoria().getNombre());
 
                 return hotelDTO;
         }

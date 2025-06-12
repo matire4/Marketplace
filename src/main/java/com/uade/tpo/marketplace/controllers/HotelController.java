@@ -32,10 +32,10 @@ public class HotelController {
         return ResponseEntity.ok(hotelService.getHotels());
     }
 
-    @GetMapping("/{hotelId}")
-    public ResponseEntity<HotelDTO> getHotelById(@PathVariable Long hotelId)
+    @GetMapping("/{nombre}")
+    public ResponseEntity<HotelDTO> getHotelByNombre(@PathVariable String nombre)
             throws HotelNotFoundException {
-        Optional<Hotel> result = hotelService.getHotelById(hotelId);
+        Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
         if (result.isPresent())
             return ResponseEntity.ok(hotelService.hotelToHotelDTO(result.get()));
         return ResponseEntity.noContent().build();
@@ -53,8 +53,8 @@ public class HotelController {
                 hotelRequest.getDireccion(),
                 hotelRequest.getCiudad(),
                 hotelRequest.getPais(),
-                hotelRequest.getGestorId(),
-                hotelRequest.getCategoriaId(),
+                hotelRequest.getUsername(),
+                hotelRequest.getCategoria(),
                 hotelRequest.getHabitaciones(),
                 hotelRequest.getHabitacionesParaCrear());
 

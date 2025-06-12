@@ -14,7 +14,7 @@ import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 public interface HotelService {
         public List<HotelDTO> getHotels();
 
-        public Optional<Hotel> getHotelById(Long hotelId)
+        public Optional<Hotel> getHotelByNombre(String nombre)
                         throws HotelNotFoundException;
 
         public Hotel createHotel(String nombre,
@@ -24,8 +24,8 @@ public interface HotelService {
                         String direccion,
                         String ciudad,
                         String pais,
-                        Long gestorId,
-                        Long categoriaId,
+                        String username,
+                        String categoria,
                         List<Long> habitaciones,
                         List<HabitacionDTO> habitacionesParaCrear)
                         throws HotelDuplicateException,
