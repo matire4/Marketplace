@@ -24,9 +24,12 @@ public class Imagen {
 
     @Column(columnDefinition = "TEXT")
     String imagen;
-    
 
     @ManyToOne
-    @JoinColumn(name = "alojamiento_id", nullable = false)
+    @JoinColumn(name = "alojamiento_id", nullable = true)
     private Alojamiento alojamiento;
+
+    @ManyToOne
+    @JoinColumn(name = "habitacion_id", nullable = true)
+    private Habitacion habitacion;
 }
