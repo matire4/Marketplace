@@ -12,6 +12,10 @@ public class HabitacionDTO {
     private int capacidad;
     private double precioPorNoche;
     private String numeroHabitacion;
+    private int ambientes;
+    private int banos;
+    private int dormitorios;
+    private int camas;
     private List<Long> imagenes;
     private Long hotelId;
     private List<Long> reservasIds;
