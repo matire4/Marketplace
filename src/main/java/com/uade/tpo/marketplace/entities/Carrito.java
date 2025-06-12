@@ -2,6 +2,7 @@ package com.uade.tpo.marketplace.entities;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -25,9 +26,9 @@ public class Carrito {
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
     private Usuario usuario;
     @OneToMany(mappedBy = "carrito", fetch = FetchType.EAGER)
-    private List<CarritoHabitacion> carritoHabitacions;
+    private List<CarritoHabitacion> carritoHabitacions = new ArrayList<>();
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarritoDepartamento> carritoDepartamentos;
+    private List<CarritoDepartamento> carritoDepartamentos = new ArrayList<>();
 
     public Carrito() {
     }

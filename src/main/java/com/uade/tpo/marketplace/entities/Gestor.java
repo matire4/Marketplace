@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class Gestor extends Cuenta{
     @OneToMany(mappedBy = "gestor")
     private List<Hotel> hoteles;
     @OneToMany(mappedBy = "gestor")
-    private List<Departamento> departamentos;
+    private List<Departamento> departamentos = new ArrayList<>();
 
     public Gestor() {
     }

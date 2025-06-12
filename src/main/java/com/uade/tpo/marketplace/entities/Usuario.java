@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.entities;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -31,9 +32,9 @@ public class Usuario extends Cuenta {
     Role role;
 
     @OneToMany(mappedBy = "usuario")
-    private List<Reserva> reservas;
+    private List<Reserva> reservas = new ArrayList<>();
     @OneToMany(mappedBy = "usuario")
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
     @OneToOne
     private Carrito carrito;

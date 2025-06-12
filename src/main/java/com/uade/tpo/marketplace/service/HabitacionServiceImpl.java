@@ -131,6 +131,7 @@ public class HabitacionServiceImpl implements HabitacionService{
     }
 
     @Override
+    @Transactional
     public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException {
         Habitacion habitacion = habitacionRepository.findByHotelAndNumeroHabitacion(hotelRepository.findByNombre(nombreHotel)
                 .orElseThrow(() -> new HabitacionNotFoundException()), numeroHabitacion)
@@ -139,6 +140,7 @@ public class HabitacionServiceImpl implements HabitacionService{
     }
 
     @Override
+    @Transactional
     public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
             throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException , ImagenNotFoundException {
 

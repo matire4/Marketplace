@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -21,7 +22,7 @@ public class Categoria {
     private String nombre;
 
     @OneToMany(mappedBy = "categoria")
-    List<Hotel> hoteles;
+    List<Hotel> hoteles = new ArrayList<>();
 
     public Categoria() {
     }

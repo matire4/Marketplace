@@ -77,6 +77,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
     }
 
     @Override
+    @Transactional
     public Departamento updateDepartamento(Long departamentoId, DepartamentoDTO departamentoDTO)
             throws DepartamentoNotFoundException, GestorNotFoundException, CategoriaNotFoundException {
         
@@ -92,7 +93,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                     .map(imagenDTO -> imagenRepository.findById(imagenDTO.getId())
                             .orElseThrow(() -> new RuntimeException()))
                     .toList();
-            departamento.setImagenes(imagenes);
+                departamento.setImagenes(new ArrayList<>(imagenes));
         }
 
         departamento.setCapacidad(departamentoDTO.getCapacidad());
@@ -107,6 +108,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
     }
 
     @Override
+    @Transactional
     public void deleteDepartamento(Long departamentoId) throws DepartamentoNotFoundException {
         if (!departamentoRepository.existsById(departamentoId)) {
             throw new DepartamentoNotFoundException();

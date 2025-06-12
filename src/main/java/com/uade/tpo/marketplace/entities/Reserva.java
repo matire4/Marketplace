@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.entities;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -28,9 +29,9 @@ public class Reserva {
 
     // En Reserva.java
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservaHabitacion> reservasHabitacion; // El nombre debe coincidir
+    private List<ReservaHabitacion> reservasHabitacion = new ArrayList<>(); // El nombre debe coincidir
     @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservaDepartamento> ReservasDepartamento;
+    private List<ReservaDepartamento> reservasDepartamento = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "usuario_id") // esta columna va a estar en la tabla Reserva
     private Usuario usuario;

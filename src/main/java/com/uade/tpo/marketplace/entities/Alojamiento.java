@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -39,11 +40,11 @@ public abstract class Alojamiento {
     private String pais;
 
     @OneToMany(mappedBy = "alojamiento")
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
     @OneToMany(mappedBy = "alojamiento")
-    private List<Pregunta> preguntas;
+    private List<Pregunta> preguntas = new ArrayList<>();
     @OneToMany(mappedBy = "alojamiento")
-    private List<Imagen> imagenes;
+    private List<Imagen> imagenes = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "gestor_id", nullable = false)

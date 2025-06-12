@@ -1,9 +1,8 @@
 package com.uade.tpo.marketplace.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
-import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 
 import jakarta.persistence.CascadeType;
@@ -46,11 +45,11 @@ public class Habitacion {
     private Hotel hotel;
 
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReservaHabitacion> reservasHabitacion;
+    private List<ReservaHabitacion> reservasHabitacion = new ArrayList<>();
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CarritoHabitacion> carritoHabitacion;
+    private List<CarritoHabitacion> carritoHabitacion = new ArrayList<>();
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Imagen> imagenesHabitacion;
+    private List<Imagen> imagenesHabitacion = new ArrayList<>();
 
 
     @ManyToOne
