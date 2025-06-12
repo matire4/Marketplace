@@ -17,6 +17,11 @@ public class DepartamentoDTO {
     private double precioPorNoche;
     private String numeroDepartamento;
     private String descripcion;
+    private int ambientes;
+    private int banos;  
+    private int dormitorios;
+    private int camas;
+    private String breveDescripcion;
     private String direccion;
     private String ciudad;
     private String pais;
