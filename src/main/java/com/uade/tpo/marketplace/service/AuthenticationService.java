@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-        private final UsuarioRepository usuarioRepository; // aca iria un cuenta repository
+        private final UsuarioRepository usuarioRepository; 
         private final CuentaRepository cuentaRepository;
         private final GestorRepository gestorRepository;
         private final PasswordEncoder passwordEncoder;
@@ -45,6 +45,7 @@ public class AuthenticationService {
                         var jwtToken = jwtService.generateToken(user);
                         return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
+                                .username(user.getUsername())
                                 .build(); 
                 }
                 else {
@@ -59,6 +60,7 @@ public class AuthenticationService {
                         var jwtToken = jwtService.generateToken(gestor);
                         return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
+                                .username(gestor.getUsername())
                                 .build(); 
                 }
                 
