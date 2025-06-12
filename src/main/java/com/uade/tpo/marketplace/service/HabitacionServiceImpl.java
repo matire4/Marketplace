@@ -3,6 +3,8 @@ package com.uade.tpo.marketplace.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Hibernate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,6 @@ import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
 import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 public class HabitacionServiceImpl implements HabitacionService{
@@ -114,20 +114,30 @@ public class HabitacionServiceImpl implements HabitacionService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion) {
-        HabitacionDTO habitacionDTO = new HabitacionDTO();
+    if (habitacion == null) {
+        return null;
+    }
 
-        habitacionDTO.setTipoHabitacion(habitacion.getTipoHabitacion());
-        habitacionDTO.setCapacidad(habitacion.getCapacidad());
-        habitacionDTO.setPrecioPorNoche(habitacion.getPrecioPorNoche());
-        habitacionDTO.setNumeroHabitacion(habitacion.getNumeroHabitacion());
-        habitacionDTO.setImagenes(habitacion.getImagenesHabitacion().stream()
-                .map(imagen -> imagen.getId())
-                .toList());
-        habitacionDTO.setGestor(habitacion.getGestor().getUsername());
-        habitacionDTO.setCategoria(habitacion.getCategoria().getNombre());
-
-        return habitacionDTO;
+    return HabitacionDTO.builder()
+            .tipoHabitacion(habitacion.getTipoHabitacion())
+            .capacidad(habitacion.getCapacidad())
+            .precioPorNoche(habitacion.getPrecioPorNoche())
+            .numeroHabitacion(habitacion.getNumeroHabitacion())
+            .ambientes(habitacion.getAmbientes())
+            .banos(habitacion.getBanos())
+            .dormitorios(habitacion.getDormitorios())
+            .camas(habitacion.getCamas())
+            .imagenes(habitacion.getImagenesHabitacion() != null && Hibernate.isInitialized(habitacion.getImagenesHabitacion()) 
+                    ? habitacion.getImagenesHabitacion().stream()
+                            .map(imagen -> imagen.getId())
+                            .toList() 
+                    : null)
+            .gestor(habitacion.getGestor() != null ? habitacion.getGestor().getUsername() : null)
+            .categoria(habitacion.getCategoria() != null ? habitacion.getCategoria().getNombre() : null)
+            .hotel(habitacion.getHotel() != null ? habitacion.getHotel().getNombre() : null)
+            .build();
     }
 
     @Override

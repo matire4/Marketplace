@@ -5,10 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.uade.tpo.marketplace.entities.Carrito;
+import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
+import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
+import com.uade.tpo.marketplace.service.CarritoHabitacionService;
 import com.uade.tpo.marketplace.service.CarritoService;
 
 @RestController
@@ -17,6 +20,8 @@ public class CarritoController {
     
     @Autowired
     private CarritoService carritoService;
+    @Autowired
+    private CarritoHabitacionService carritoHabitacionService;
     
     @GetMapping("/usuario/{usuario}")
     public ResponseEntity<CarritoDTO> getCarritoByUsuario(@PathVariable String usuario) 
@@ -25,13 +30,13 @@ public class CarritoController {
     }
     
     @PostMapping("/usuario/{usuario}/habitacion/{habitacionId}")
-    public ResponseEntity<CarritoDTO> addHabitacionToCarrito(
+    public ResponseEntity<CarritoHabitacionDTO> addHabitacionToCarrito(
             @PathVariable String usuario,
             @PathVariable Long habitacionId,
             @RequestParam String nombreReserva) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        Carrito carrito = carritoService.addHabitacionToCarrito(usuario, habitacionId, nombreReserva);
-        return ResponseEntity.ok(carritoService.carritoToCarritoDTO(carrito));
+        CarritoHabitacion carrito = carritoService.addHabitacionToCarrito(usuario, habitacionId, nombreReserva);
+        return ResponseEntity.ok(carritoHabitacionService.carritoHabitacionToDTO(carrito));
     }
     
     @DeleteMapping("/usuario/{usuario}/habitacion/{habitacionId}")

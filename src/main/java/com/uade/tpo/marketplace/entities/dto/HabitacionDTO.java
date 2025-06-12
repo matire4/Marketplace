@@ -4,9 +4,11 @@ import java.util.List;
 
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class HabitacionDTO {
     private TipoHabitacion tipoHabitacion;
     private int capacidad;

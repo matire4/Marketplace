@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,11 @@ import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
+import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
+import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
 import com.uade.tpo.marketplace.repository.CarritoRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
 
@@ -22,6 +25,9 @@ public class CarritoServiceImpl implements CarritoService {
     
     @Autowired
     private CarritoRepository carritoRepository;
+
+    @Autowired
+    private CarritoHabitacionRepository carritoHabitacionRepository;
     
     @Autowired
     private HabitacionRepository habitacionRepository;
@@ -54,7 +60,7 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public Carrito addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva) 
+    public CarritoHabitacion addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
         Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
@@ -77,10 +83,10 @@ public class CarritoServiceImpl implements CarritoService {
         if (!habitacionExists) {
             CarritoHabitacion carritoHabitacion = new CarritoHabitacion(nombreReserva, carrito, habitacion);
             carrito.getCarritoHabitacions().add(carritoHabitacion);
-            return carritoRepository.save(carrito);
+            return carritoHabitacionRepository.save(carritoHabitacion);
         }
         
-        return carrito;
+        return null;
     }
 
     @Override
@@ -113,22 +119,25 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
     @Transactional(readOnly = true)
     public CarritoDTO carritoToCarritoDTO(Carrito carrito) {
-        CarritoDTO carritoDTO = new CarritoDTO();
-        carritoDTO.setId(carrito.getId());
+        if (carrito == null) {
+        return null;
+    }
+
+    CarritoDTO carritoDTO = new CarritoDTO();
+    carritoDTO.setId(carrito.getId());
+    
+    if (carrito.getUsuario() != null) {
         carritoDTO.setUsuarioId(carrito.getUsuario().getId());
+    }
 
-        if (carrito.getCarritoHabitacions() != null)
-            carritoDTO.setHabitaciones(carrito.getCarritoHabitacions()
-                            .stream()
-                            .map(habitacion -> habitacionService.habitacionToHabitacionDTO(habitacion.getHabitacion()))
-                            .toList());
+    if (carrito.getCarritoHabitacions() != null) {
+        List<HabitacionDTO> habitacionesDTO = carrito.getCarritoHabitacions().stream()
+                .map(CarritoHabitacion::getHabitacion)
+                .map(habitacionService::habitacionToHabitacionDTO)
+                .toList();
+        carritoDTO.setHabitaciones(habitacionesDTO);
+    }
 
-        if (carrito.getCarritoDepartamentos() != null)
-            carritoDTO.setDepartamentos(carrito.getCarritoDepartamentos()
-                            .stream()
-                            .map(departamento -> departamentoService.departamentoToDepartamentoDTO(departamento.getDepartamento()))
-                            .toList());
-
-        return carritoDTO;
+    return carritoDTO;
     }
 }
