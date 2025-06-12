@@ -22,4 +22,5 @@ public class AlojamientoDTO {
     private List<Long> reviews;
     private List<Long> preguntas;
     private List<Long> imagenes;
+    private String tipoAlojamiento;
 }

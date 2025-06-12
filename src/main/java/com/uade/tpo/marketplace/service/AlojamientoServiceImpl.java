@@ -3,13 +3,21 @@ package com.uade.tpo.marketplace.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.transaction.annotation.Transactional;
+import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.Departamento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.marketplace.controllers.HotelController;
 import com.uade.tpo.marketplace.entities.Alojamiento;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
+import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
+import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
+import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.AlojamientoRepository;
 
 @Service
@@ -48,7 +56,14 @@ public class AlojamientoServiceImpl implements AlojamientoService {
 
     @Override
     public AlojamientoDTO alojamientoToAlojamientoDTO(Alojamiento alojamiento) {
+        String tipo = "";
+        if (alojamiento instanceof Hotel) {
+            tipo = "hotel";
+        } else if (alojamiento instanceof Departamento) {
+            tipo = "departamento";
+        }
         return AlojamientoDTO.builder()
+                .tipoAlojamiento(tipo)
                 .id(alojamiento.getId())
                 .descripcion(alojamiento.getDescripcion())
                 .direccion(alojamiento.getDireccion())
@@ -67,5 +82,106 @@ public class AlojamientoServiceImpl implements AlojamientoService {
         return alojamientoRepository.findByGestor(gestorService.getGestorByUsername(usuario).get()).stream()
                 .map(this::alojamientoToAlojamientoDTO)
                 .toList();
+    }
+
+    @Override
+@Transactional(readOnly = true)
+public HotelDTO getHotelById(Long alojamientoId) throws HotelNotFoundException {
+    Alojamiento alojamiento = alojamientoRepository.findById(alojamientoId)
+            .orElseThrow(() -> new HotelNotFoundException());
+            
+    if (!(alojamiento instanceof Hotel)) {
+        throw new IllegalArgumentException("El alojamiento no es un hotel");
+    }
+    
+    Hotel hotel = (Hotel) alojamiento;
+    HotelDTO hotelDTO = new HotelDTO();
+    
+    hotelDTO.setId(hotel.getId());
+    hotelDTO.setNombre(hotel.getNombre());
+    hotelDTO.setTelefono(hotel.getTelefono());
+    hotelDTO.setEmail(hotel.getEmail());
+    hotelDTO.setDescripcion(hotel.getDescripcion());
+    hotelDTO.setDireccion(hotel.getDireccion());
+    hotelDTO.setCiudad(hotel.getCiudad());
+    hotelDTO.setPais(hotel.getPais());
+    
+    if (hotel.getHabitaciones() != null) {
+        hotelDTO.setHabitaciones(hotel.getHabitaciones().stream()
+                .map(h -> h.getId())
+                .toList());
+    }
+    
+    if (hotel.getImagenes() != null) {
+        hotelDTO.setImagenes(hotel.getImagenes().stream()
+                .map(i -> i.getId())
+                .toList());
+    }
+    
+    if (hotel.getReviews() != null) {
+        hotelDTO.setReviews(hotel.getReviews().stream()
+                .map(r -> r.getId())
+                .toList());
+    }
+    
+    if (hotel.getPreguntas() != null) {
+        hotelDTO.setPreguntas(hotel.getPreguntas().stream()
+                .map(p -> p.getId())
+                .toList());
+    }
+    
+    if (hotel.getGestor() != null) {
+        hotelDTO.setUsername(hotel.getGestor().getUsername());
+    }
+    
+    if (hotel.getCategoria() != null) {
+        hotelDTO.setCategoria(hotel.getCategoria().getNombre());
+    }
+    
+    return hotelDTO;
+}
+
+    @Override
+    @Transactional(readOnly = true)
+    public DepartamentoDTO getDepartamentoById(Long alojamientoId) throws DepartamentoNotFoundException{
+        Alojamiento alojamiento = alojamientoRepository.findById(alojamientoId)
+                .orElseThrow(() -> new DepartamentoNotFoundException());
+                
+        if (!(alojamiento instanceof Departamento)) {
+            throw new IllegalArgumentException("El alojamiento no es un departamento");
+        }
+        
+        Departamento departamento = (Departamento) alojamiento;
+        DepartamentoDTO departamentoDTO = new DepartamentoDTO();
+        
+        departamentoDTO.setId(departamento.getId());
+        departamentoDTO.setCapacidad(departamento.getCapacidad());
+        departamentoDTO.setPrecioPorNoche(departamento.getPrecioPorNoche());
+        departamentoDTO.setNumeroDepartamento(departamento.getNumeroDepartamento());
+        departamentoDTO.setDescripcion(departamento.getDescripcion());
+        departamentoDTO.setAmbientes(departamento.getAmbientes());
+        departamentoDTO.setBanos(departamento.getBanos());
+        departamentoDTO.setDormitorios(departamento.getDormitorios());
+        departamentoDTO.setCamas(departamento.getCamas());
+        departamentoDTO.setBreveDescripcion(departamento.getBreveDescripcion());
+        departamentoDTO.setDireccion(departamento.getDireccion());
+        departamentoDTO.setCiudad(departamento.getCiudad());
+        departamentoDTO.setPais(departamento.getPais());
+        
+        if (departamento.getImagenes() != null) {
+            departamentoDTO.setImagenes(departamento.getImagenes().stream()
+                    .map(i -> i.getId())
+                    .toList());
+        }
+        
+        if (departamento.getGestor() != null) {
+            departamentoDTO.setUsername(departamento.getGestor().getUsername());
+        }
+        
+        if (departamento.getCategoria() != null) {
+            departamentoDTO.setCategoria(departamento.getCategoria().getNombre());
+        }
+        
+        return departamentoDTO;
     }
 }
