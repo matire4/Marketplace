@@ -14,6 +14,10 @@ import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     @Autowired
     private ReservaHabitacionRepository reservaHabitacionRepository;
+    @Autowired
+    private ReservaService reservaService;
+    @Autowired
+    private HabitacionService habitacionService;
 
     @Override
     public List<ReservaHabitacionDTO> getReservasHabitacionesByReservaId(Long reservaId) throws ReservaNotFounException {
@@ -56,8 +60,8 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     public ReservaHabitacionDTO reservaHabitacionToReservaHabitacionDTO(ReservaHabitacion reservaHabitacion) {
         ReservaHabitacionDTO reservaHabitacionDTO = new ReservaHabitacionDTO();
         reservaHabitacionDTO.setNombreReserva(reservaHabitacion.getNombreReserva());
-        reservaHabitacionDTO.setReservaId(reservaHabitacion.getReserva().getId());
-        reservaHabitacionDTO.setHabitacionId(reservaHabitacion.getHabitacion().getId());
+        reservaHabitacionDTO.setReservaHabitacion(reservaService.reservaToReservaDTO(reservaHabitacion.getReserva()));
+        reservaHabitacionDTO.setHabitacionReserva(habitacionService.habitacionToHabitacionDTO(reservaHabitacion.getHabitacion()));
         reservaHabitacionDTO.setEstado(reservaHabitacion.getEstado());
         return reservaHabitacionDTO;
     }

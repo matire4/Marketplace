@@ -38,17 +38,22 @@ public class DepartamentoController {
     public ResponseEntity<DepartamentoDTO> createDepartamento(@RequestBody DepartamentoDTO departamentoRequest)
             throws GestorNotFoundException, CategoriaNotFoundException {
         Departamento result = departamentoService.createDepartamento(
-                departamentoRequest.getCapacidad(),
-                departamentoRequest.getPrecioPorNoche(),
-                departamentoRequest.getNumeroDepartamento(),
-                departamentoRequest.getCiudad(),
-                departamentoRequest.getPais(),
-                departamentoRequest.getDescripcion(),
-                departamentoRequest.getDireccion(),
-                departamentoRequest.getImagenes(),
-                departamentoRequest.getImagenesNuevas(),
-                departamentoRequest.getUsername(),
-                departamentoRequest.getCategoria());
+            departamentoRequest.getCapacidad(),
+            departamentoRequest.getPrecioPorNoche(),
+            departamentoRequest.getNumeroDepartamento(),
+            departamentoRequest.getCiudad(),
+            departamentoRequest.getPais(),
+            departamentoRequest.getBreveDescripcion(),
+            departamentoRequest.getDescripcion(),
+            departamentoRequest.getDireccion(),
+            departamentoRequest.getAmbientes(),
+            departamentoRequest.getBanos(),
+            departamentoRequest.getDormitorios(),
+            departamentoRequest.getCamas(),
+            departamentoRequest.getImagenes(),
+            departamentoRequest.getImagenesNuevas(),
+            departamentoRequest.getUsername(),
+            departamentoRequest.getCategoria());
 
         return ResponseEntity.created(URI.create("/api/v1/departamentos/" + result.getId()))
                 .body(departamentoService.departamentoToDepartamentoDTO(result));

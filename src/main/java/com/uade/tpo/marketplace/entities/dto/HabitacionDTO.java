@@ -17,9 +17,9 @@ public class HabitacionDTO {
     private int dormitorios;
     private int camas;
     private List<Long> imagenes;
-    private Long hotelId;
+    private String hotelNombre;
     private List<Long> reservasIds;
     private List<Long> carritosIds;
-    private Long gestorId;
-    private Long categoriaId;
+    private GestorDTO gestor;
+    private CategoriaDTO categoria;
 }

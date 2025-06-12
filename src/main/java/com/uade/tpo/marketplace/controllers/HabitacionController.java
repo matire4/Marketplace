@@ -35,33 +35,38 @@ public class HabitacionController {
     public ResponseEntity<List<HabitacionDTO>> getHabitacion() {
         return ResponseEntity.ok(habitacionService.getHabitaciones());
     }
+
+    @GetMapping("/{nombreHotel}")
+    public ResponseEntity<List<HabitacionDTO>> getHabitacionByHotel(@PathVariable String nombreHotel) throws HabitacionNotFoundException {
+        return ResponseEntity.ok(habitacionService.getHabitacionesByHotel(nombreHotel));
+    }
     
-    @GetMapping("/{habitacionId}")
-    public ResponseEntity<HabitacionDTO> getHabitacionById(@PathVariable Long habitacionId)
+    @GetMapping("/{nombreHotel}/{numeroHabitacion}")
+    public ResponseEntity<HabitacionDTO> getHabitacionById(@PathVariable String nombreHotel, @PathVariable String numeroHabitacion)
             throws HabitacionNotFoundException {
-        Optional<Habitacion> result = habitacionService.getHabitacionById(habitacionId);
+        Optional<Habitacion> result = habitacionService.getHabitacionByNombreHotelAndNumeroHabitacion(nombreHotel, numeroHabitacion);
         if (result.isPresent())
             return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result.get()));
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{habitacionId}")
-    public ResponseEntity<Void> deleteHabitacion(@PathVariable Long habitacionId)
+    @DeleteMapping("/{nombreHotel}/{numeroHabitacion}")
+    public ResponseEntity<Void> deleteHabitacion(@PathVariable String nombreHotel, @PathVariable String numeroHabitacion)
             throws HabitacionNotFoundException {
-        Optional<Habitacion> result = habitacionService.getHabitacionById(habitacionId);
+        Optional<Habitacion> result = habitacionService.getHabitacionByNombreHotelAndNumeroHabitacion(nombreHotel, numeroHabitacion);
         if (result.isPresent()) {
-            habitacionService.deleteHabitacion(habitacionId);
+            habitacionService.deleteHabitacion(nombreHotel, numeroHabitacion);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{habitacionId}")
-    public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable Long habitacionId,
+    @PutMapping("/{nombreHotel}/{numeroHabitacion}")
+    public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable String nombreHotel, @PathVariable String numeroHabitacion,
             @RequestBody HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
             CategoriaNotFoundException,ImagenNotFoundException {
-        Habitacion result = habitacionService.updateHabitacion(habitacionId,habitacionRequest);
+        Habitacion result = habitacionService.updateHabitacion(nombreHotel, numeroHabitacion, habitacionRequest);
         return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result));
     }
 
@@ -75,8 +80,8 @@ public class HabitacionController {
                 habitacionRequest.getPrecioPorNoche(),
                 habitacionRequest.getNumeroHabitacion(),
                 habitacionRequest.getImagenes(),
-                habitacionRequest.getGestorId(),
-                habitacionRequest.getCategoriaId());
+                habitacionRequest.getGestor().getUsername(),
+                habitacionRequest.getCategoria().getNombre());
 
         return ResponseEntity.created(URI.create("/habitaciones" + result.getId()))
                 .body(habitacionService.habitacionToHabitacionDTO(result));

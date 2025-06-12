@@ -53,8 +53,13 @@ public class DepartamentoServiceImpl implements DepartamentoService {
             String numeroDepartamento,
             String ciudad,
             String pais,
+            String breveDescripcion,
             String descripcion,
             String direccion,
+            int ambientes,
+            int banos,
+            int dormitorios,
+            int camas,
             List<Long> imagenes,
             List<ImagenDTO> imagenCrear,
             String username,
@@ -65,7 +70,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         Categoria c = categoriaRepository.findByNombre(categoria)
                 .orElseThrow(() -> new CategoriaNotFoundException());
 
-        Departamento departamento = new Departamento( descripcion, direccion, ciudad, pais, gestor, c, capacidad, precioPorNoche, numeroDepartamento);
+        Departamento departamento = new Departamento(breveDescripcion, descripcion, direccion, ciudad, pais, gestor, c, capacidad, precioPorNoche, numeroDepartamento, ambientes, banos, dormitorios, camas);
 
         return departamentoRepository.save(departamento);
     }

@@ -8,8 +8,8 @@ import lombok.Data;
 
 @Data
 public class ReservaHabitacionDTO {
-    private Long habitacionId;
-    private Long reservaId;
+    private HabitacionDTO habitacionReserva;
+    private ReservaDTO reservaHabitacion;
     private String nombreReserva;
     private Date fechaDesde;
     private Date fechaHasta;

@@ -59,10 +59,15 @@ public class Departamento extends Alojamiento {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
-    public Departamento(String descripcion, String direccion, String ciudad, String pais, Gestor gestor, Categoria categoria, int capacidad, double precioPorNoche, String numeroDepartamento) {
+    public Departamento(String breveDescripcion, String descripcion, String direccion, String ciudad, String pais, Gestor gestor, Categoria categoria, int capacidad, double precioPorNoche, String numeroDepartamento, int ambientes, int banos, int dormitorios, int camas) {
         super(descripcion, direccion, ciudad, pais, gestor, categoria);
+        this.breveDescripcion = breveDescripcion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;
         this.numeroDepartamento = numeroDepartamento;
+        this.ambientes = ambientes;
+        this.banos = banos;
+        this.dormitorios = dormitorios;
+        this.camas = camas;
     }
 }

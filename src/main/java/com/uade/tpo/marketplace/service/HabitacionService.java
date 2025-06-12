@@ -14,7 +14,9 @@ import com.uade.tpo.marketplace.exceptions.ImagenNotFoundException;
 public interface HabitacionService {
         public List<HabitacionDTO> getHabitaciones();
 
-        public Optional<Habitacion> getHabitacionById(long habitacionId)
+        public List<HabitacionDTO> getHabitacionesByHotel(String nombreHotel) throws HabitacionNotFoundException;
+
+        public Optional<Habitacion> getHabitacionByNombreHotelAndNumeroHabitacion(String nombreHotel, String numeroHabitacion)
                         throws HabitacionNotFoundException;
 
         public Habitacion createHabitacion(TipoHabitacion tipoHabitacion,
@@ -22,13 +24,13 @@ public interface HabitacionService {
                         double precioPorNoche,
                         String numeroHabitacion,
                         List<Long> imagenes,
-                        Long gestorId,
-                        Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException;
+                        String username,
+                        String categoria) throws GestorNotFoundException, CategoriaNotFoundException;
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 
-        public void deleteHabitacion(Long habitacionId) throws HabitacionNotFoundException;
+        public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException;
 
-        public Habitacion updateHabitacion(Long habitacionId, HabitacionDTO habitacionRequest)
+        public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
                         throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException, ImagenNotFoundException;
 }

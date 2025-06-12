@@ -63,7 +63,7 @@ public class ReservaServiceImpl implements ReservaService {
                         .fechaDesde(reservaHabitacionDTO.getFechaDesde())
                         .fechaHasta(reservaHabitacionDTO.getFechaHasta())
                         .estado(reservaHabitacionDTO.getEstado())
-                        .habitacion(habitacionService.getHabitacionById(reservaHabitacionDTO.getHabitacionId()).get())
+                        .habitacion(habitacionService.getHabitacionByNombreHotelAndNumeroHabitacion(reservaHabitacionDTO.getHabitacionReserva().getHotelNombre(), reservaHabitacionDTO.getHabitacionReserva().getNumeroHabitacion()).get())
                         .cantidadPersonas(reservaHabitacionDTO.getCantidadPersonas())
                         .precio(reservaHabitacionDTO.getPrecio())
                         .build();
