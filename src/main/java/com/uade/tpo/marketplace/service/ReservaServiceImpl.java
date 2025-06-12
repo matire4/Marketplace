@@ -37,8 +37,8 @@ public class ReservaServiceImpl implements ReservaService {
     }
 
     @Override
-    public List<ReservaDTO> getReservasByUsuario(Long usuarioId) throws ReservaNotFounException, UsuarioNotFoundException {
-        Optional<Usuario> optionalUsuario = usuarioService.getUsuarioById(usuarioId);
+    public List<ReservaDTO> getReservasByUsuario(String usuario) throws ReservaNotFounException, UsuarioNotFoundException {
+        Optional<Usuario> optionalUsuario = usuarioService.getUsuarioByUsername(usuario);
         if (optionalUsuario.isEmpty()) {
             throw new UsuarioNotFoundException();
         }

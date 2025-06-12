@@ -14,7 +14,7 @@ import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 public interface ReservaService {
     List<ReservaDTO> getReservas();
 
-    List<ReservaDTO> getReservasByUsuario(Long usuarioId) throws ReservaNotFounException, UsuarioNotFoundException;
+    List<ReservaDTO> getReservasByUsuario(String usuario) throws ReservaNotFounException, UsuarioNotFoundException;
 
     Optional<Reserva> getReservaById(Long reservaId) throws ReservaNotFounException;
 

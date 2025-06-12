@@ -34,10 +34,10 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getReservas());
     }
     
-    @GetMapping("/user/{usuarioId}")
-    public ResponseEntity<List<ReservaDTO>> getReservasByUsuario(@PathVariable Long usuarioId)
+    @GetMapping("/user/{usuario}")
+    public ResponseEntity<List<ReservaDTO>> getReservasByUsuario(@PathVariable String usuario)
             throws ReservaNotFounException, UsuarioNotFoundException {
-        List<ReservaDTO> result = reservaService.getReservasByUsuario(usuarioId);
+        List<ReservaDTO> result = reservaService.getReservasByUsuario(usuario);
         if (result != null && !result.isEmpty()) 
             return ResponseEntity.ok(result);
         return ResponseEntity.notFound().build();
