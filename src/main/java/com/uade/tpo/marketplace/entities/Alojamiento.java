@@ -27,9 +27,7 @@ import lombok.NoArgsConstructor;
 public abstract class Alojamiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
+    private Long id;    @Column(nullable = false, columnDefinition = "TEXT")
     private String descripcion;
     @Column(nullable = false)
     private String direccion;

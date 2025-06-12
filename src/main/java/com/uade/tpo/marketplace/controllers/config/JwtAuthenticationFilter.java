@@ -28,6 +28,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain)
             throws ServletException, IOException {
+                String path = request.getServletPath();
+                
+                if (path.startsWith("/api/v1/auth") || path.startsWith("/api/hotelbeds")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;

@@ -65,33 +65,40 @@ public class HabitacionServiceImpl implements HabitacionService{
 
         return habitacionRepository.save(habitacion);
     }
-
-
-    public HabitacionDTO habitacionHabitacionDTO(Habitacion habitacion) {
-        HabitacionDTO habitacionDTO = new HabitacionDTO();
-
-        habitacionDTO.setTipoHabitacion(habitacion.getTipoHabitacion());
-        habitacionDTO.setCapacidad(habitacion.getCapacidad());
-        habitacionDTO.setPrecioPorNoche(habitacion.getPrecioPorNoche());
-        habitacionDTO.setNumeroHabitacion(habitacion.getNumeroHabitacion());
-        habitacionDTO.setImagen(habitacion.getImagen());
-        habitacionDTO.setGestorId(habitacion.getGestor().getId());
-        habitacionDTO.setCategoriaId(habitacion.getCategoria().getId());
-
-        return habitacionDTO;
-    }
-
     @Override
     public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion) {
         HabitacionDTO habitacionDTO = new HabitacionDTO();
 
+        // Datos básicos
         habitacionDTO.setTipoHabitacion(habitacion.getTipoHabitacion());
         habitacionDTO.setCapacidad(habitacion.getCapacidad());
         habitacionDTO.setPrecioPorNoche(habitacion.getPrecioPorNoche());
         habitacionDTO.setNumeroHabitacion(habitacion.getNumeroHabitacion());
         habitacionDTO.setImagen(habitacion.getImagen());
+        
+        // Referencias
         habitacionDTO.setGestorId(habitacion.getGestor().getId());
         habitacionDTO.setCategoriaId(habitacion.getCategoria().getId());
+        if (habitacion.getHotel() != null) {
+            habitacionDTO.setHotelId(habitacion.getHotel().getId());
+        }
+        
+        // Listas de IDs
+        if (habitacion.getReservasHabitacion() != null) {
+            habitacionDTO.setReservasIds(
+                habitacion.getReservasHabitacion().stream()
+                    .map(reserva -> reserva.getId())
+                    .toList()
+            );
+        }
+        
+        if (habitacion.getCarritoHabitacion() != null) {
+            habitacionDTO.setCarritosIds(
+                habitacion.getCarritoHabitacion().stream()
+                    .map(carrito -> carrito.getId())
+                    .toList()
+            );
+        }
 
         return habitacionDTO;
     }
