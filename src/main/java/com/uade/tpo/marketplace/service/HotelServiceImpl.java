@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ import com.uade.tpo.marketplace.repository.HotelRepository;
 import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
+import io.jsonwebtoken.lang.Objects;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -78,28 +80,44 @@ public class HotelServiceImpl implements HotelService {
                                         nombre, telefono, email);
 
                         if (habitacionesParaCrear != null) {
-                                habitacionesParaCrear.forEach(habitacion -> {
-                                                List<ReservaHabitacion> r = habitacion.getReservas().stream().map(reserva -> reservaHabitacionRepository.findById(reserva.getId()).get()).toList();
+                habitacionesParaCrear.forEach(habitacion -> {
+                        List<ReservaHabitacion> r = new ArrayList<>();
+                        List<CarritoHabitacion> carr = new ArrayList<>();
 
-                                                List<CarritoHabitacion> carr = habitacion.getCarritos().stream().map(carrito -> carritoHabitacionRepository.findById(carrito.getId()).get()).toList();
-                                        Habitacion newHabitacion = new Habitacion(
-                                        habitacion.getTipoHabitacion(),
-                                        habitacion.getCapacidad(),
-                                        habitacion.getPrecioPorNoche(),
-                                        habitacion.getNumeroHabitacion(),
-                                        gestor,
-                                        c,
-                                        habitacion.getAmbientes(),
-                                        habitacion.getBanos(),
-                                        habitacion.getDormitorios(),
-                                        habitacion.getCamas(),
-                                        hotel,
-                                        r,
-                                        carr);
-                                        newHabitacion.setHotel(hotel);
-                                        hotel.getHabitaciones().add(newHabitacion);
-                                });
+                        // Manejar reservas si existen
+                        if (habitacion.getReservas() != null) {
+                            r = habitacion.getReservas().stream()
+                                .map(reserva -> reservaHabitacionRepository.findById(reserva.getId())
+                                    .orElse(null))
+                                .toList();
                         }
+
+                        // Manejar carritos si existen
+                        if (habitacion.getCarritos() != null) {
+                            carr = habitacion.getCarritos().stream()
+                                .map(carrito -> carritoHabitacionRepository.findById(carrito.getId())
+                                    .orElse(null))
+                                .toList();
+                        }
+
+                        Habitacion newHabitacion = new Habitacion(
+                                habitacion.getTipoHabitacion(),
+                                habitacion.getCapacidad(),
+                                habitacion.getPrecioPorNoche(),
+                                habitacion.getNumeroHabitacion(),
+                                gestor,
+                                c,
+                                habitacion.getAmbientes(),
+                                habitacion.getBanos(),
+                                habitacion.getDormitorios(),
+                                habitacion.getCamas(),
+                                hotel,
+                                r,
+                                carr);
+                        newHabitacion.setHotel(hotel);
+                        hotel.getHabitaciones().add(newHabitacion);
+                });
+        }
 
                         return hotelRepository.save(hotel);
                 }
