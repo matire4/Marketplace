@@ -57,15 +57,15 @@ public class DepartamentoServiceImpl implements DepartamentoService {
             String direccion,
             List<Long> imagenes,
             List<ImagenDTO> imagenCrear,
-            Long gestorId,
-            Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException {
+            String username,
+            String categoria) throws GestorNotFoundException, CategoriaNotFoundException {
 
-        Gestor gestor = gestorRepository.findById(gestorId)
+        Gestor gestor = gestorRepository.findByUsername(username)
                 .orElseThrow(() -> new GestorNotFoundException());
-        Categoria categoria = categoriaRepository.findById(categoriaId)
+        Categoria c = categoriaRepository.findByNombre(categoria)
                 .orElseThrow(() -> new CategoriaNotFoundException());
 
-        Departamento departamento = new Departamento( descripcion, direccion, ciudad, pais, gestor, categoria, capacidad, precioPorNoche, numeroDepartamento);
+        Departamento departamento = new Departamento( descripcion, direccion, ciudad, pais, gestor, c, capacidad, precioPorNoche, numeroDepartamento);
 
         return departamentoRepository.save(departamento);
     }
@@ -77,9 +77,9 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         Departamento departamento = departamentoRepository.findById(departamentoId)
                 .orElseThrow(() -> new DepartamentoNotFoundException());
 
-        Gestor gestor = gestorRepository.findById(departamentoDTO.getGestorId())
+        Gestor gestor = gestorRepository.findByUsername(departamentoDTO.getUsername())
                 .orElseThrow(() -> new GestorNotFoundException());
-        Categoria categoria = categoriaRepository.findById(departamentoDTO.getCategoriaId())
+        Categoria categoria = categoriaRepository.findByNombre(departamentoDTO.getCategoria())
                 .orElseThrow(() -> new CategoriaNotFoundException());
         List<Imagen> imagenes = departamentoDTO.getImagenesNuevas().stream()
                 .map(imagenDTO -> imagenRepository.findById(imagenDTO.getId())
@@ -116,8 +116,8 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .descripcion(departamento.getDescripcion())
                 .direccion(departamento.getDireccion())
                 .imagenes(departamento.getImagenes().stream().map(i -> i.getId()).toList())
-                .gestorId(departamento.getGestor().getId())
-                .categoriaId(departamento.getCategoria().getId())
+                .username(departamento.getGestor().getUsername())
+                .categoria(departamento.getCategoria().getNombre())
                 .build();
     }
 }

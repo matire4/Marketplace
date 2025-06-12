@@ -27,6 +27,6 @@ public class DepartamentoDTO {
     private String pais;
     private List<Long> imagenes;
     private List<ImagenDTO> imagenesNuevas;
-    private Long gestorId;
-    private Long categoriaId;
+    private String username;
+    private String categoria;
 }

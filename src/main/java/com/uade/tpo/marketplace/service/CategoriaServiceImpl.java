@@ -30,7 +30,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public Categoria createCategoria(String nombre) {
-        if (categoriaRepository.existsByNombre(nombre)) {
+        if (categoriaRepository.findByNombre(nombre).isPresent()) {
             throw new IllegalArgumentException("La categoría con el nombre '" + nombre + "' ya existe.");
         }
         Categoria categoria = new Categoria(nombre);

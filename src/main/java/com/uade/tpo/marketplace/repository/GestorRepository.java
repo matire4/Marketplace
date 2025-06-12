@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.uade.tpo.marketplace.entities.Gestor;
 
-import io.jsonwebtoken.security.Jwks.OP;
-
 @Repository
 public interface GestorRepository extends JpaRepository<Gestor, Long> {
     List<Gestor> findByCuil(String cuil);

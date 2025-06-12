@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
 import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;

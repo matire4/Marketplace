@@ -47,8 +47,8 @@ public class DepartamentoController {
                 departamentoRequest.getDireccion(),
                 departamentoRequest.getImagenes(),
                 departamentoRequest.getImagenesNuevas(),
-                departamentoRequest.getGestorId(),
-                departamentoRequest.getCategoriaId());
+                departamentoRequest.getUsername(),
+                departamentoRequest.getCategoria());
 
         return ResponseEntity.created(URI.create("/api/v1/departamentos/" + result.getId()))
                 .body(departamentoService.departamentoToDepartamentoDTO(result));

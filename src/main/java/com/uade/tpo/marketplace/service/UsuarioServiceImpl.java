@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.marketplace.entities.Usuario;
+import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.enums.Role;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
@@ -104,4 +105,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return usuarioDTO;
     }
+
+    // @Override
+    // public GestorDTO convertogestor(String username) throws UsuarioNotFoundException {
+    //     Usuario usuario = usuarioRepository.findByUsername(username);
+    //     if (usuario == null) {
+    //         throw new UsuarioNotFoundException();
+    //     }
+    //     usuario.setRole(Role.GESTOR);
+    //     usuarioRepository.save(usuario);
+
+    //     return new GestorDTO(usuario.getId(), usuario.getNombre(), usuario.getApellido(), usuario.getUsername());
+    // }
 }

@@ -25,9 +25,9 @@ public interface DepartamentoService {
             String direccion,
             List<Long> imagenes,
             List<ImagenDTO> imagenCrear,
-            Long gestorId,
-            Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException;
-    
+            String username,
+            String categoria) throws GestorNotFoundException, CategoriaNotFoundException;
+
     Departamento updateDepartamento(
             Long departamentoId,
             DepartamentoDTO departamentoDTO) throws DepartamentoNotFoundException, GestorNotFoundException, CategoriaNotFoundException;

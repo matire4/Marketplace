@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Usuario;
+import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.service.UsuarioService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -48,4 +51,19 @@ public class UsuarioController {
         return ResponseEntity.created(URI.create("/usuarios" + usuario.getId()))
                 .body(usuarioService.usuarioToUsuarioDTO(usuario));
     }
+
+    @PutMapping("/{usuario}")
+    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long id, @RequestBody UsuarioDTO usuarioDTO)
+            throws UsuarioNotFoundException, UsuarioDuplicateException {
+        Usuario usuario = usuarioService.updateUsuario(id, usuarioDTO.getNombre(),
+                usuarioDTO.getApellido(), usuarioDTO.getRolUsuario(), usuarioDTO.getUsername(),
+                usuarioDTO.getPassword(), usuarioDTO.getEmail(), usuarioDTO.getTelefono());
+        return ResponseEntity.ok(usuarioService.usuarioToUsuarioDTO(usuario));
+    }
+
+    // @PutMapping("/convertogestor/{usuario}")
+    // public ResponseEntity<GestorDTO> convertToGestor(@PathVariable String usuario) throws UsuarioNotFoundException {
+    //     GestorDTO gestorDTO = usuarioService.convertogestor(usuario);
+    //     return ResponseEntity.ok(gestorDTO);
+    // }
 }
