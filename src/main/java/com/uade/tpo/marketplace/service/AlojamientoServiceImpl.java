@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.Departamento;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,27 +55,51 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                 .toList();
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public AlojamientoDTO alojamientoToAlojamientoDTO(Alojamiento alojamiento) {
-        String tipo = "";
-        if (alojamiento instanceof Hotel) {
-            tipo = "hotel";
-        } else if (alojamiento instanceof Departamento) {
-            tipo = "departamento";
-        }
-        return AlojamientoDTO.builder()
-                .tipoAlojamiento(tipo)
-                .id(alojamiento.getId())
-                .descripcion(alojamiento.getDescripcion())
-                .direccion(alojamiento.getDireccion())
-                .ciudad(alojamiento.getCiudad())
-                .pais(alojamiento.getPais())
-                .gestorId(alojamiento.getGestor().getId())
-                .categoriaId(alojamiento.getCategoria().getId())
-                .reviews(alojamiento.getReviews().stream().map(review -> review.getId()).toList())
-                .preguntas(alojamiento.getPreguntas().stream().map(pregunta -> pregunta.getId()).toList())
-                .imagenes(alojamiento.getImagenes().stream().map(imagen -> imagen.getId()).toList())
-                .build();
+    if (alojamiento == null) {
+        return null;
+    }
+
+    String tipo = (alojamiento instanceof Hotel) ? "HOTEL" : 
+                 (alojamiento instanceof Departamento) ? "DEPARTAMENTO" : "";
+
+    AlojamientoDTO.AlojamientoDTOBuilder builder = AlojamientoDTO.builder()
+            .tipoAlojamiento(tipo)
+            .id(alojamiento.getId())
+            .descripcion(alojamiento.getDescripcion())
+            .direccion(alojamiento.getDireccion())
+            .ciudad(alojamiento.getCiudad())
+            .pais(alojamiento.getPais());
+
+    if (alojamiento.getGestor() != null) {
+        builder.gestorId(alojamiento.getGestor().getId());
+    }
+
+    if (alojamiento.getCategoria() != null) {
+        builder.categoriaId(alojamiento.getCategoria().getId());
+    }
+
+    if (alojamiento.getReviews() != null && Hibernate.isInitialized(alojamiento.getReviews())) {
+        builder.reviews(alojamiento.getReviews().stream()
+                .map(review -> review.getId())
+                .toList());
+    }
+
+    if (alojamiento.getPreguntas() != null && Hibernate.isInitialized(alojamiento.getPreguntas())) {
+        builder.preguntas(alojamiento.getPreguntas().stream()
+                .map(pregunta -> pregunta.getId())
+                .toList());
+    }
+
+    if (alojamiento.getImagenes() != null && Hibernate.isInitialized(alojamiento.getImagenes())) {
+        builder.imagenes(alojamiento.getImagenes().stream()
+                .map(imagen -> imagen.getId())
+                .toList());
+    }
+
+    return builder.build();
+
     }
 
     @Override
