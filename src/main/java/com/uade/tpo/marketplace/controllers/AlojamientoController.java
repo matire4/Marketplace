@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
 import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.service.AlojamientoService;
 
 @RestController
@@ -30,9 +32,9 @@ public class AlojamientoController {
                 .orElseThrow(() -> new AlojamientoNotFoundException("Alojamiento no encontrado")));
     }
 
-    @GetMapping("/ciudad/{ciudad}")
-    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosByCiudad(@PathVariable String ciudad) {
-        return ResponseEntity.ok(alojamientoService.getAlojamientosByCiudad(ciudad));
+    @GetMapping("/gestor/{usuario}")
+    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosByGestor(@PathVariable String usuario) throws GestorNotFoundException {
+        return ResponseEntity.ok(alojamientoService.getAlojamientosByGestor(usuario));
     }
 
     @GetMapping("/categoria/{categoriaId}")

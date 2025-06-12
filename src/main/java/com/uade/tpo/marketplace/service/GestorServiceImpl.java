@@ -34,7 +34,7 @@ public class GestorServiceImpl implements GestorService {
     public Gestor createGestor(String username, String password, String email, String telefono, String nombre,
             String cuil)
             throws GestorDuplicateException {
-        if (gestorRepository.existsByUsername(username))
+        if (gestorRepository.findByUsername(username).isPresent())
             throw new GestorDuplicateException();
 
         if (gestorRepository.existsByEmail(email))
@@ -86,6 +86,13 @@ public class GestorServiceImpl implements GestorService {
         gestorDTO.setNombre(gestor.getNombre());
         gestorDTO.setCuil(gestor.getCuil());
         return gestorDTO;
+    }
+
+    @Override
+    public Optional<Gestor> getGestorByUsername(String username) throws GestorNotFoundException {
+        return Optional.ofNullable(
+                gestorRepository.findByUsername(username)
+                        .orElseThrow(() -> new GestorNotFoundException()));
     }
 }
 

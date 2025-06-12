@@ -1,7 +1,5 @@
 package com.uade.tpo.marketplace.service;
 
-import java.io.StringBufferInputStream;
-
 import com.uade.tpo.marketplace.entities.Carrito;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;

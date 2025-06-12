@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.uade.tpo.marketplace.entities.Alojamiento;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
 import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 
 public interface AlojamientoService {
     List<AlojamientoDTO> getAlojamientos();
@@ -15,6 +16,8 @@ public interface AlojamientoService {
     List<AlojamientoDTO> getAlojamientosByCiudad(String ciudad);
     
     List<AlojamientoDTO> getAlojamientosByCategoria(Long categoriaId);
+
+    List<AlojamientoDTO> getAlojamientosByGestor(String usuario) throws GestorNotFoundException;
     
     AlojamientoDTO alojamientoToAlojamientoDTO(Alojamiento alojamiento);
 }

@@ -14,6 +14,8 @@ public interface GestorService {
 
         public Optional<Gestor> getGestorById(Long gestorId) throws GestorNotFoundException;
 
+        public Optional<Gestor> getGestorByUsername(String username) throws GestorNotFoundException;
+
         public Gestor createGestor(String username, String password, String email, String telefono, String nombre,
                         String cuil)
                         throws GestorDuplicateException;
