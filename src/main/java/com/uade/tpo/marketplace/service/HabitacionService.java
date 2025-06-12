@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
+import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
+import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
-import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
-import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
-import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
-import com.uade.tpo.marketplace.exceptions.ImagenNotFoundException;
+import com.uade.tpo.marketplace.exceptions.*;
 
 public interface HabitacionService {
         public List<HabitacionDTO> getHabitaciones();
@@ -19,13 +19,21 @@ public interface HabitacionService {
         public Optional<Habitacion> getHabitacionByNombreHotelAndNumeroHabitacion(String nombreHotel, String numeroHabitacion)
                         throws HabitacionNotFoundException;
 
-        public Habitacion createHabitacion(TipoHabitacion tipoHabitacion,
+        public Habitacion createHabitacion(
+                        TipoHabitacion tipoHabitacion,
                         int capacidad, 
                         double precioPorNoche,
                         String numeroHabitacion,
                         List<Long> imagenes,
                         String username,
-                        String categoria) throws GestorNotFoundException, CategoriaNotFoundException;
+                        String categoria,
+                        int ambientes,
+                        int banos,
+                        int dormitorios,
+                        int camas,
+                        String hotel,
+                        List<ReservaHabitacionDTO> reservas,
+                        List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException, HotelNotFoundException, HabitacionDuplicateException;
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 

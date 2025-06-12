@@ -60,5 +60,6 @@ public abstract class Alojamiento {
         this.ciudad = ciudad;
         this.pais = pais;
         this.categoria = categoria;
+        this.imagenes = new java.util.ArrayList<>();
     }
 }

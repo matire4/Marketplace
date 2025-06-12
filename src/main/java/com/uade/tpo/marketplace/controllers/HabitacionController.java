@@ -18,7 +18,9 @@ import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
+import com.uade.tpo.marketplace.exceptions.HabitacionDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
+import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ImagenNotFoundException;
 import com.uade.tpo.marketplace.service.HabitacionService;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -73,15 +75,22 @@ public class HabitacionController {
     @PostMapping
     public ResponseEntity<HabitacionDTO> createHabitacion(@RequestBody HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
-            CategoriaNotFoundException {
+            CategoriaNotFoundException, HotelNotFoundException, HabitacionDuplicateException {
         Habitacion result = habitacionService.createHabitacion(
                 habitacionRequest.getTipoHabitacion(),
                 habitacionRequest.getCapacidad(),
                 habitacionRequest.getPrecioPorNoche(),
                 habitacionRequest.getNumeroHabitacion(),
                 habitacionRequest.getImagenes(),
-                habitacionRequest.getGestor().getUsername(),
-                habitacionRequest.getCategoria().getNombre());
+                habitacionRequest.getGestor(),
+                habitacionRequest.getCategoria(),
+                habitacionRequest.getAmbientes(),
+                habitacionRequest.getBanos(),
+                habitacionRequest.getDormitorios(),
+                habitacionRequest.getCamas(),
+                habitacionRequest.getHotel(),
+                habitacionRequest.getReservas(),
+                habitacionRequest.getCarritos());
 
         return ResponseEntity.created(URI.create("/habitaciones" + result.getId()))
                 .body(habitacionService.habitacionToHabitacionDTO(result));

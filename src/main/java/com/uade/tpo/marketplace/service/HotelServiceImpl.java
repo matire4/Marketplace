@@ -6,20 +6,24 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
+import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
 import com.uade.tpo.marketplace.repository.ImagenRepository;
+import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -33,6 +37,10 @@ public class HotelServiceImpl implements HotelService {
         private CategoriaRepository categoriaRepository;
         @Autowired
         private ImagenRepository imagenRepository;
+        @Autowired
+        private ReservaHabitacionRepository reservaHabitacionRepository;
+        @Autowired
+        private CarritoHabitacionRepository carritoHabitacionRepository;
 
         public List<HotelDTO> getHotels() {
                 List<Hotel> hoteles = hotelRepository.findAll();
@@ -71,14 +79,23 @@ public class HotelServiceImpl implements HotelService {
 
                         if (habitacionesParaCrear != null) {
                                 habitacionesParaCrear.forEach(habitacion -> {
+                                                List<ReservaHabitacion> r = habitacion.getReservas().stream().map(reserva -> reservaHabitacionRepository.findById(reserva.getId()).get()).toList();
+
+                                                List<CarritoHabitacion> carr = habitacion.getCarritos().stream().map(carrito -> carritoHabitacionRepository.findById(carrito.getId()).get()).toList();
                                         Habitacion newHabitacion = new Habitacion(
-                                                        habitacion.getTipoHabitacion(),
-                                                        habitacion.getCapacidad(),
-                                                        habitacion.getPrecioPorNoche(),
-                                                        habitacion.getNumeroHabitacion(),
-                                                        imagenRepository.findAllById(habitacion.getImagenes()),
-                                                        gestor,
-                                                        c);
+                                        habitacion.getTipoHabitacion(),
+                                        habitacion.getCapacidad(),
+                                        habitacion.getPrecioPorNoche(),
+                                        habitacion.getNumeroHabitacion(),
+                                        gestor,
+                                        c,
+                                        habitacion.getAmbientes(),
+                                        habitacion.getBanos(),
+                                        habitacion.getDormitorios(),
+                                        habitacion.getCamas(),
+                                        hotel,
+                                        r,
+                                        carr);
                                         newHabitacion.setHotel(hotel);
                                         hotel.getHabitaciones().add(newHabitacion);
                                 });

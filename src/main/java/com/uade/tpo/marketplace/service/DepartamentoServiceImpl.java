@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -86,17 +87,19 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .orElseThrow(() -> new GestorNotFoundException());
         Categoria categoria = categoriaRepository.findByNombre(departamentoDTO.getCategoria())
                 .orElseThrow(() -> new CategoriaNotFoundException());
-        List<Imagen> imagenes = departamentoDTO.getImagenesNuevas().stream()
-                .map(imagenDTO -> imagenRepository.findById(imagenDTO.getId())
-                        .orElseThrow(() -> new RuntimeException()))
-                .toList();
+        if (departamentoDTO.getImagenesNuevas() != null) {
+            List<Imagen> imagenes = departamentoDTO.getImagenesNuevas().stream()
+                    .map(imagenDTO -> imagenRepository.findById(imagenDTO.getId())
+                            .orElseThrow(() -> new RuntimeException()))
+                    .toList();
+            departamento.setImagenes(imagenes);
+        }
 
         departamento.setCapacidad(departamentoDTO.getCapacidad());
         departamento.setPrecioPorNoche(departamentoDTO.getPrecioPorNoche());
         departamento.setNumeroDepartamento(departamentoDTO.getNumeroDepartamento());
         departamento.setDescripcion(departamentoDTO.getDescripcion());
         departamento.setDireccion(departamentoDTO.getDireccion());
-        departamento.setImagenes(imagenes);
         departamento.setGestor(gestor);
         departamento.setCategoria(categoria);
 

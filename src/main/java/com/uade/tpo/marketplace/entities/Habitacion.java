@@ -2,6 +2,8 @@ package com.uade.tpo.marketplace.entities;
 
 import java.util.List;
 
+import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
+import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 
 import jakarta.persistence.CascadeType;
@@ -61,14 +63,22 @@ public class Habitacion {
     public Habitacion() {
     }
 
-    public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHabitacion,
-            List<Imagen> imagenesHabitacion, Gestor gestor, Categoria categoria) {
+    public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHabitacion, Gestor gestor, Categoria categoria, int ambientes, int banos,
+            int dormitorios, int camas, Hotel hotel, List<ReservaHabitacion> reservas,
+            List<CarritoHabitacion> carritos) {
         this.tipoHabitacion = tipoHabitacion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;
         this.numeroHabitacion = numeroHabitacion;
-        this.imagenesHabitacion = imagenesHabitacion;
+        this.imagenesHabitacion = new java.util.ArrayList<>();
         this.gestor = gestor;
         this.categoria = categoria;
+        this.ambientes = ambientes;
+        this.banos = banos;
+        this.dormitorios = dormitorios;
+        this.camas = camas;
+        this.hotel = hotel;
+        this.reservasHabitacion = reservas;
+        this.carritoHabitacion = carritos;
     }
 }

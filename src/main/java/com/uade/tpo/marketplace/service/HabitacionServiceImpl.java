@@ -6,21 +6,29 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.ReservaHabitacion;
+import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
+import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
+import com.uade.tpo.marketplace.exceptions.HabitacionDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
+import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ImagenNotFoundException;
+import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
 import com.uade.tpo.marketplace.repository.ImagenRepository;
+import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -40,6 +48,10 @@ public class HabitacionServiceImpl implements HabitacionService{
     GestorService gestorService;
     @Autowired
     CategoriaService categoriaService;
+    @Autowired
+    ReservaHabitacionRepository reservaHabitacionRepository;
+    @Autowired
+    CarritoHabitacionRepository carritoHabitacionRepository;
 
     @Override
     public List<HabitacionDTO> getHabitaciones() {
@@ -55,27 +67,48 @@ public class HabitacionServiceImpl implements HabitacionService{
     }
 
     @Transactional
-    public Habitacion createHabitacion(TipoHabitacion tipoHabitacion,
+    public Habitacion createHabitacion(
+                        TipoHabitacion tipoHabitacion,
                         int capacidad, 
                         double precioPorNoche,
                         String numeroHabitacion,
                         List<Long> imagenes,
                         String username,
-                        String categoria) throws GestorNotFoundException, CategoriaNotFoundException{
+                        String categoria,
+                        int ambientes,
+                        int banos,
+                        int dormitorios,
+                        int camas,
+                        String hotel,
+                        List<ReservaHabitacionDTO> reservas,
+                        List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException, HotelNotFoundException, HabitacionDuplicateException {
 
         Gestor gestor = gestorRepository.findByUsername(username)
                         .orElseThrow(() -> new GestorNotFoundException());
-        Categoria c = categoriaRepository.findByNombre(categoria)
+        Categoria cate = categoriaRepository.findByNombre(categoria)
                         .orElseThrow(() -> new CategoriaNotFoundException());
+        Hotel h = hotelRepository.findByNombre(hotel)
+                        .orElseThrow(() -> new HotelNotFoundException());
+        List<ReservaHabitacion> r = reservas.stream().map(reserva -> reservaHabitacionRepository.findById(reserva.getId()).get()).toList();
 
+        List<CarritoHabitacion> carr = carritos.stream().map(carrito -> carritoHabitacionRepository.findById(carrito.getId()).get()).toList();
+        if (habitacionRepository.findByHotelAndNumeroHabitacion(h, numeroHabitacion).isPresent()) {
+            throw new HabitacionDuplicateException();
+        }
         Habitacion habitacion = new Habitacion(
             tipoHabitacion,
             capacidad,
             precioPorNoche,
             numeroHabitacion,
-            imagenRepository.findAllById(imagenes),
             gestor,
-            c);
+            cate,
+            ambientes,
+            banos,
+            dormitorios,
+            camas,
+            h,
+            r,
+            carr);
 
         return habitacionRepository.save(habitacion);
     }
@@ -91,8 +124,8 @@ public class HabitacionServiceImpl implements HabitacionService{
         habitacionDTO.setImagenes(habitacion.getImagenesHabitacion().stream()
                 .map(imagen -> imagen.getId())
                 .toList());
-        habitacionDTO.setGestor(gestorService.gestorToGestorDTO(habitacion.getGestor()));
-        habitacionDTO.setCategoria(categoriaService.categoriaToCategoriaDTO(habitacion.getCategoria()));
+        habitacionDTO.setGestor(habitacion.getGestor().getUsername());
+        habitacionDTO.setCategoria(habitacion.getCategoria().getNombre());
 
         return habitacionDTO;
     }
@@ -112,9 +145,9 @@ public class HabitacionServiceImpl implements HabitacionService{
         Habitacion habitacion = habitacionRepository.findByHotelAndNumeroHabitacion(hotelRepository.findByNombre(nombreHotel)
                 .orElseThrow(() -> new HabitacionNotFoundException()), numeroHabitacion)
                 .orElseThrow(() -> new HabitacionNotFoundException());
-        Gestor gestor = gestorRepository.findById(habitacionRequest.getGestor().getId())
+        Gestor gestor = gestorRepository.findByUsername(habitacionRequest.getGestor())
                 .orElseThrow(() -> new GestorNotFoundException());
-        Categoria categoria = categoriaRepository.findById(habitacionRequest.getCategoria().getId())
+        Categoria categoria = categoriaRepository.findByNombre(habitacionRequest.getCategoria())
                 .orElseThrow(() -> new CategoriaNotFoundException());
         habitacion.setTipoHabitacion(habitacionRequest.getTipoHabitacion());
         habitacion.setCapacidad(habitacionRequest.getCapacidad());
