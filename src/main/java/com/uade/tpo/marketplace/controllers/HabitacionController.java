@@ -19,6 +19,7 @@ import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
+import com.uade.tpo.marketplace.exceptions.ImagenNotFoundException;
 import com.uade.tpo.marketplace.service.HabitacionService;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -59,7 +60,7 @@ public class HabitacionController {
     public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable Long habitacionId,
             @RequestBody HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
-            CategoriaNotFoundException {
+            CategoriaNotFoundException,ImagenNotFoundException {
         Habitacion result = habitacionService.updateHabitacion(habitacionId,habitacionRequest);
         return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result));
     }
@@ -73,7 +74,7 @@ public class HabitacionController {
                 habitacionRequest.getCapacidad(),
                 habitacionRequest.getPrecioPorNoche(),
                 habitacionRequest.getNumeroHabitacion(),
-                habitacionRequest.getImagen(),
+                habitacionRequest.getImagenes(),
                 habitacionRequest.getGestorId(),
                 habitacionRequest.getCategoriaId());
 

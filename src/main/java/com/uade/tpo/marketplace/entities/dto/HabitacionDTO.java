@@ -12,7 +12,7 @@ public class HabitacionDTO {
     private int capacidad;
     private double precioPorNoche;
     private String numeroHabitacion;
-    private String imagen;
+    private List<Long> imagenes;
     private Long hotelId;
     private List<Long> reservasIds;
     private List<Long> carritosIds;

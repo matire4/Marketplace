@@ -33,6 +33,16 @@ public class Departamento extends Alojamiento {
     @Column(nullable = false)
     int capacidad;
     @Column(nullable = false)
+    private int ambientes;
+    @Column(nullable = false)
+    private int banos;
+    @Column(nullable = false)
+    private int dormitorios;
+    @Column(nullable = false)
+    private int camas;
+    @Column(nullable = false)
+    private String breveDescripcion;
+    @Column(nullable = false)
     double precioPorNoche;
     @Column(nullable = false)
     String numeroDepartamento;

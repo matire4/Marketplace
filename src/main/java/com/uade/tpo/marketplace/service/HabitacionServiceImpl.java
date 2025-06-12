@@ -17,6 +17,7 @@ import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
+import com.uade.tpo.marketplace.repository.ImagenRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -28,6 +29,8 @@ public class HabitacionServiceImpl implements HabitacionService{
     private GestorRepository gestorRepository;
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private ImagenRepository imagenRepository;
 
     @Override
     public List<HabitacionDTO> getHabitaciones() {
@@ -45,7 +48,7 @@ public class HabitacionServiceImpl implements HabitacionService{
                         int capacidad, 
                         double precioPorNoche,
                         String numeroHabitacion,
-                        String imagen,
+                        List<Long> imagenes,
                         Long gestorId,
                         Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException{
 
@@ -59,7 +62,7 @@ public class HabitacionServiceImpl implements HabitacionService{
             capacidad,
             precioPorNoche,
             numeroHabitacion,
-            imagen,
+            imagenRepository.findAllById(imagenes),
             gestor,
             categoria);
 
@@ -74,7 +77,9 @@ public class HabitacionServiceImpl implements HabitacionService{
         habitacionDTO.setCapacidad(habitacion.getCapacidad());
         habitacionDTO.setPrecioPorNoche(habitacion.getPrecioPorNoche());
         habitacionDTO.setNumeroHabitacion(habitacion.getNumeroHabitacion());
-        habitacionDTO.setImagen(habitacion.getImagen());
+        habitacionDTO.setImagenes(habitacion.getImagenesHabitacion().stream()
+                .map(imagen -> imagen.getId())
+                .toList());
         habitacionDTO.setGestorId(habitacion.getGestor().getId());
         habitacionDTO.setCategoriaId(habitacion.getCategoria().getId());
 
@@ -89,7 +94,9 @@ public class HabitacionServiceImpl implements HabitacionService{
         habitacionDTO.setCapacidad(habitacion.getCapacidad());
         habitacionDTO.setPrecioPorNoche(habitacion.getPrecioPorNoche());
         habitacionDTO.setNumeroHabitacion(habitacion.getNumeroHabitacion());
-        habitacionDTO.setImagen(habitacion.getImagen());
+        habitacionDTO.setImagenes(habitacion.getImagenesHabitacion().stream()
+                .map(imagen -> imagen.getId())
+                .toList());
         habitacionDTO.setGestorId(habitacion.getGestor().getId());
         habitacionDTO.setCategoriaId(habitacion.getCategoria().getId());
 
@@ -107,19 +114,18 @@ public class HabitacionServiceImpl implements HabitacionService{
     @Override
     public Habitacion updateHabitacion(Long habitacionId, HabitacionDTO habitacionRequest)
             throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException {
+
         Habitacion habitacion = habitacionRepository.findById(habitacionId)
                 .orElseThrow(() -> new HabitacionNotFoundException());
-
         Gestor gestor = gestorRepository.findById(habitacionRequest.getGestorId())
                 .orElseThrow(() -> new GestorNotFoundException());
         Categoria categoria = categoriaRepository.findById(habitacionRequest.getCategoriaId())
                 .orElseThrow(() -> new CategoriaNotFoundException());
-
         habitacion.setTipoHabitacion(habitacionRequest.getTipoHabitacion());
         habitacion.setCapacidad(habitacionRequest.getCapacidad());
         habitacion.setPrecioPorNoche(habitacionRequest.getPrecioPorNoche());
         habitacion.setNumeroHabitacion(habitacionRequest.getNumeroHabitacion());
-        habitacion.setImagen(habitacionRequest.getImagen());
+        habitacion.setImagenesHabitacion(imagenRepository.findAllById(habitacionRequest.getImagenes()));
         habitacion.setGestor(gestor);
         habitacion.setCategoria(categoria);
 

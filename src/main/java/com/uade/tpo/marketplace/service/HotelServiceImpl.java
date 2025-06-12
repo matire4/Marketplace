@@ -19,6 +19,7 @@ import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
+import com.uade.tpo.marketplace.repository.ImagenRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -30,6 +31,8 @@ public class HotelServiceImpl implements HotelService {
         private GestorRepository gestorRepository;
         @Autowired
         private CategoriaRepository categoriaRepository;
+        @Autowired
+        private ImagenRepository imagenRepository;
 
         public List<HotelDTO> getHotels() {
                 List<Hotel> hoteles = hotelRepository.findAll();
@@ -73,7 +76,7 @@ public class HotelServiceImpl implements HotelService {
                                                         habitacion.getCapacidad(),
                                                         habitacion.getPrecioPorNoche(),
                                                         habitacion.getNumeroHabitacion(),
-                                                        habitacion.getImagen(),
+                                                        imagenRepository.findAllById(habitacion.getImagenes()),
                                                         gestor,
                                                         categoria);
                                         newHabitacion.setHotel(hotel);

@@ -9,6 +9,7 @@ import com.uade.tpo.marketplace.enums.TipoHabitacion;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
+import com.uade.tpo.marketplace.exceptions.ImagenNotFoundException;
 
 public interface HabitacionService {
         public List<HabitacionDTO> getHabitaciones();
@@ -20,7 +21,7 @@ public interface HabitacionService {
                         int capacidad, 
                         double precioPorNoche,
                         String numeroHabitacion,
-                        String imagen,
+                        List<Long> imagenes,
                         Long gestorId,
                         Long categoriaId) throws GestorNotFoundException, CategoriaNotFoundException;
 
@@ -29,5 +30,5 @@ public interface HabitacionService {
         public void deleteHabitacion(Long habitacionId) throws HabitacionNotFoundException;
 
         public Habitacion updateHabitacion(Long habitacionId, HabitacionDTO habitacionRequest)
-                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException;
+                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException, ImagenNotFoundException;
 }

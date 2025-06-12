@@ -24,14 +24,20 @@ public class Habitacion {
 
     @Column
     TipoHabitacion tipoHabitacion;
-    @Column
+    @Column(nullable = false)
+    private int ambientes;
+    @Column(nullable = false)
+    private int banos;
+    @Column(nullable = false)
+    private int dormitorios;
+    @Column(nullable = false)
+    private int camas;
+    @Column(nullable = false)  
     int capacidad;
-    @Column
+    @Column(nullable = false)
     double precioPorNoche;
-    @Column
+    @Column(nullable = false)
     String numeroHabitacion;
-    @Column
-    String imagen;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
@@ -41,6 +47,9 @@ public class Habitacion {
     private List<ReservaHabitacion> reservasHabitacion;
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarritoHabitacion> carritoHabitacion;
+    @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Imagen> imagenesHabitacion;
+
 
     @ManyToOne
     @JoinColumn(name = "gestor_id", nullable = false)
@@ -53,12 +62,12 @@ public class Habitacion {
     }
 
     public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHabitacion,
-            String imagen, Gestor gestor, Categoria categoria) {
+            List<Imagen> imagenesHabitacion, Gestor gestor, Categoria categoria) {
         this.tipoHabitacion = tipoHabitacion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;
         this.numeroHabitacion = numeroHabitacion;
-        this.imagen = imagen;
+        this.imagenesHabitacion = imagenesHabitacion;
         this.gestor = gestor;
         this.categoria = categoria;
     }

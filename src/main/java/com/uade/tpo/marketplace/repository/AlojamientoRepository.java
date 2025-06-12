@@ -11,4 +11,5 @@ import com.uade.tpo.marketplace.entities.Alojamiento;
 public interface AlojamientoRepository extends JpaRepository<Alojamiento, Long> {
     List<Alojamiento> findByCiudad(String ciudad);
     List<Alojamiento> findByCategoriaId(Long categoriaId);
+    List<Alojamiento> findByGestorId(Long gestorId);
 }
