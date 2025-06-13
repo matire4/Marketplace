@@ -57,48 +57,48 @@ public class AlojamientoServiceImpl implements AlojamientoService {
 
     @Transactional(readOnly = true)
     public AlojamientoDTO alojamientoToAlojamientoDTO(Alojamiento alojamiento) {
-    if (alojamiento == null) {
-        return null;
-    }
+        if (alojamiento == null) {
+            return null;
+        }
 
-    String tipo = (alojamiento instanceof Hotel) ? "HOTEL" : 
-                 (alojamiento instanceof Departamento) ? "DEPARTAMENTO" : "";
+        String tipo = (alojamiento instanceof Hotel) ? "HOTEL"
+                : (alojamiento instanceof Departamento) ? "DEPARTAMENTO" : "";
 
-    AlojamientoDTO.AlojamientoDTOBuilder builder = AlojamientoDTO.builder()
-            .tipoAlojamiento(tipo)
-            .id(alojamiento.getId())
-            .descripcion(alojamiento.getDescripcion())
-            .direccion(alojamiento.getDireccion())
-            .ciudad(alojamiento.getCiudad())
-            .pais(alojamiento.getPais());
+        AlojamientoDTO.AlojamientoDTOBuilder builder = AlojamientoDTO.builder()
+                .tipoAlojamiento(tipo)
+                .id(alojamiento.getId())
+                .descripcion(alojamiento.getDescripcion())
+                .direccion(alojamiento.getDireccion())
+                .ciudad(alojamiento.getCiudad())
+                .pais(alojamiento.getPais());
 
-    if (alojamiento.getGestor() != null) {
-        builder.gestorId(alojamiento.getGestor().getId());
-    }
+        if (alojamiento.getGestor() != null) {
+            builder.gestorId(alojamiento.getGestor().getId());
+        }
 
-    if (alojamiento.getCategoria() != null) {
-        builder.categoriaId(alojamiento.getCategoria().getId());
-    }
+        if (alojamiento.getCategoria() != null) {
+            builder.categoriaId(alojamiento.getCategoria().getId());
+        }
 
-    if (alojamiento.getReviews() != null && Hibernate.isInitialized(alojamiento.getReviews())) {
-        builder.reviews(alojamiento.getReviews().stream()
-                .map(review -> review.getId())
-                .toList());
-    }
+        if (alojamiento.getReviews() != null && Hibernate.isInitialized(alojamiento.getReviews())) {
+            builder.reviews(alojamiento.getReviews().stream()
+                    .map(review -> review.getId())
+                    .toList());
+        }
 
-    if (alojamiento.getPreguntas() != null && Hibernate.isInitialized(alojamiento.getPreguntas())) {
-        builder.preguntas(alojamiento.getPreguntas().stream()
-                .map(pregunta -> pregunta.getId())
-                .toList());
-    }
+        if (alojamiento.getPreguntas() != null && Hibernate.isInitialized(alojamiento.getPreguntas())) {
+            builder.preguntas(alojamiento.getPreguntas().stream()
+                    .map(pregunta -> pregunta.getId())
+                    .toList());
+        }
 
-    if (alojamiento.getImagenes() != null && Hibernate.isInitialized(alojamiento.getImagenes())) {
-        builder.imagenes(alojamiento.getImagenes().stream()
-                .map(imagen -> imagen.getId())
-                .toList());
-    }
+        if (alojamiento.getImagenes() != null && Hibernate.isInitialized(alojamiento.getImagenes())) {
+            builder.imagenes(alojamiento.getImagenes().stream()
+                    .map(imagen -> imagen.getId())
+                    .toList());
+        }
 
-    return builder.build();
+        return builder.build();
 
     }
 
@@ -110,75 +110,75 @@ public class AlojamientoServiceImpl implements AlojamientoService {
     }
 
     @Override
-@Transactional(readOnly = true)
-public HotelDTO getHotelById(Long alojamientoId) throws HotelNotFoundException {
-    Alojamiento alojamiento = alojamientoRepository.findById(alojamientoId)
-            .orElseThrow(() -> new HotelNotFoundException());
-            
-    if (!(alojamiento instanceof Hotel)) {
-        throw new IllegalArgumentException("El alojamiento no es un hotel");
+    @Transactional(readOnly = true)
+    public HotelDTO getHotelById(Long alojamientoId) throws HotelNotFoundException {
+        Alojamiento alojamiento = alojamientoRepository.findById(alojamientoId)
+                .orElseThrow(() -> new HotelNotFoundException());
+
+        if (!(alojamiento instanceof Hotel)) {
+            throw new IllegalArgumentException("El alojamiento no es un hotel");
+        }
+
+        Hotel hotel = (Hotel) alojamiento;
+        HotelDTO hotelDTO = new HotelDTO();
+
+        hotelDTO.setId(hotel.getId());
+        hotelDTO.setNombre(hotel.getNombre());
+        hotelDTO.setTelefono(hotel.getTelefono());
+        hotelDTO.setEmail(hotel.getEmail());
+        hotelDTO.setDescripcion(hotel.getDescripcion());
+        hotelDTO.setDireccion(hotel.getDireccion());
+        hotelDTO.setCiudad(hotel.getCiudad());
+        hotelDTO.setPais(hotel.getPais());
+
+        if (hotel.getHabitaciones() != null) {
+            hotelDTO.setHabitaciones(hotel.getHabitaciones().stream()
+                    .map(h -> h.getId())
+                    .toList());
+        }
+
+        if (hotel.getImagenes() != null) {
+            hotelDTO.setImagenes(hotel.getImagenes().stream()
+                    .map(i -> i.getId())
+                    .toList());
+        }
+
+        if (hotel.getReviews() != null) {
+            hotelDTO.setReviews(hotel.getReviews().stream()
+                    .map(r -> r.getId())
+                    .toList());
+        }
+
+        if (hotel.getPreguntas() != null) {
+            hotelDTO.setPreguntas(hotel.getPreguntas().stream()
+                    .map(p -> p.getId())
+                    .toList());
+        }
+
+        if (hotel.getGestor() != null) {
+            hotelDTO.setUsername(hotel.getGestor().getUsername());
+        }
+
+        if (hotel.getCategoria() != null) {
+            hotelDTO.setCategoria(hotel.getCategoria().getNombre());
+        }
+
+        return hotelDTO;
     }
-    
-    Hotel hotel = (Hotel) alojamiento;
-    HotelDTO hotelDTO = new HotelDTO();
-    
-    hotelDTO.setId(hotel.getId());
-    hotelDTO.setNombre(hotel.getNombre());
-    hotelDTO.setTelefono(hotel.getTelefono());
-    hotelDTO.setEmail(hotel.getEmail());
-    hotelDTO.setDescripcion(hotel.getDescripcion());
-    hotelDTO.setDireccion(hotel.getDireccion());
-    hotelDTO.setCiudad(hotel.getCiudad());
-    hotelDTO.setPais(hotel.getPais());
-    
-    if (hotel.getHabitaciones() != null) {
-        hotelDTO.setHabitaciones(hotel.getHabitaciones().stream()
-                .map(h -> h.getId())
-                .toList());
-    }
-    
-    if (hotel.getImagenes() != null) {
-        hotelDTO.setImagenes(hotel.getImagenes().stream()
-                .map(i -> i.getId())
-                .toList());
-    }
-    
-    if (hotel.getReviews() != null) {
-        hotelDTO.setReviews(hotel.getReviews().stream()
-                .map(r -> r.getId())
-                .toList());
-    }
-    
-    if (hotel.getPreguntas() != null) {
-        hotelDTO.setPreguntas(hotel.getPreguntas().stream()
-                .map(p -> p.getId())
-                .toList());
-    }
-    
-    if (hotel.getGestor() != null) {
-        hotelDTO.setUsername(hotel.getGestor().getUsername());
-    }
-    
-    if (hotel.getCategoria() != null) {
-        hotelDTO.setCategoria(hotel.getCategoria().getNombre());
-    }
-    
-    return hotelDTO;
-}
 
     @Override
     @Transactional(readOnly = true)
-    public DepartamentoDTO getDepartamentoById(Long alojamientoId) throws DepartamentoNotFoundException{
+    public DepartamentoDTO getDepartamentoById(Long alojamientoId) throws DepartamentoNotFoundException {
         Alojamiento alojamiento = alojamientoRepository.findById(alojamientoId)
                 .orElseThrow(() -> new DepartamentoNotFoundException());
-                
+
         if (!(alojamiento instanceof Departamento)) {
             throw new IllegalArgumentException("El alojamiento no es un departamento");
         }
-        
+
         Departamento departamento = (Departamento) alojamiento;
         DepartamentoDTO departamentoDTO = new DepartamentoDTO();
-        
+
         departamentoDTO.setId(departamento.getId());
         departamentoDTO.setCapacidad(departamento.getCapacidad());
         departamentoDTO.setPrecioPorNoche(departamento.getPrecioPorNoche());
@@ -192,21 +192,21 @@ public HotelDTO getHotelById(Long alojamientoId) throws HotelNotFoundException {
         departamentoDTO.setDireccion(departamento.getDireccion());
         departamentoDTO.setCiudad(departamento.getCiudad());
         departamentoDTO.setPais(departamento.getPais());
-        
+
         if (departamento.getImagenes() != null) {
             departamentoDTO.setImagenes(departamento.getImagenes().stream()
                     .map(i -> i.getId())
                     .toList());
         }
-        
+
         if (departamento.getGestor() != null) {
             departamentoDTO.setUsername(departamento.getGestor().getUsername());
         }
-        
+
         if (departamento.getCategoria() != null) {
             departamentoDTO.setCategoria(departamento.getCategoria().getNombre());
         }
-        
+
         return departamentoDTO;
     }
 }

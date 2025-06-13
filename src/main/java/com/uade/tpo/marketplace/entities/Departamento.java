@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("departamento")
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Departamento extends Alojamiento {    
+public class Departamento extends Alojamiento {
     @Column(nullable = false)
     int capacidad;
     @Column(nullable = false)
@@ -42,7 +42,9 @@ public class Departamento extends Alojamiento {
     @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReservaDepartamento> reservasDepartamento = new ArrayList<>();
 
-    public Departamento(String breveDescripcion, String descripcion, String direccion, String ciudad, String pais, Gestor gestor, Categoria categoria, int capacidad, double precioPorNoche, String numeroDepartamento, int ambientes, int banos, int dormitorios, int camas) {
+    public Departamento(String breveDescripcion, String descripcion, String direccion, String ciudad, String pais,
+            Gestor gestor, Categoria categoria, int capacidad, double precioPorNoche, String numeroDepartamento,
+            int ambientes, int banos, int dormitorios, int camas) {
         super(descripcion, direccion, ciudad, pais, gestor, categoria);
         this.breveDescripcion = breveDescripcion;
         this.capacidad = capacidad;
