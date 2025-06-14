@@ -70,7 +70,8 @@ public class HotelServiceImpl implements HotelService {
                         String username,
                         String categoria,
                         List<Long> habitaciones,
-                        List<HabitacionDTO> habitacionesParaCrear) throws HotelDuplicateException, GestorNotFoundException,
+                        List<HabitacionDTO> habitacionesParaCrear)
+                        throws HotelDuplicateException, GestorNotFoundException,
                         CategoriaNotFoundException {
 
                 List<Hotel> hoteles = hotelRepository.findByEmail(email);
@@ -85,44 +86,46 @@ public class HotelServiceImpl implements HotelService {
                                         nombre, telefono, email);
 
                         if (habitacionesParaCrear != null) {
-                habitacionesParaCrear.forEach(habitacion -> {
-                        List<ReservaHabitacion> r = new ArrayList<>();
-                        List<CarritoHabitacion> carr = new ArrayList<>();
+                                habitacionesParaCrear.forEach(habitacion -> {
+                                        List<ReservaHabitacion> r = new ArrayList<>();
+                                        List<CarritoHabitacion> carr = new ArrayList<>();
 
-                        // Manejar reservas si existen
-                        if (habitacion.getReservas() != null) {
-                            r = habitacion.getReservas().stream()
-                                .map(reserva -> reservaHabitacionRepository.findById(reserva.getId())
-                                    .orElse(null))
-                                .toList();
+                                        // Manejar reservas si existen
+                                        if (habitacion.getReservas() != null) {
+                                                r = habitacion.getReservas().stream()
+                                                                .map(reserva -> reservaHabitacionRepository
+                                                                                .findById(reserva.getId())
+                                                                                .orElse(null))
+                                                                .toList();
+                                        }
+
+                                        // Manejar carritos si existen
+                                        if (habitacion.getCarritos() != null) {
+                                                carr = habitacion.getCarritos().stream()
+                                                                .map(carrito -> carritoHabitacionRepository
+                                                                                .findById(carrito.getId())
+                                                                                .orElse(null))
+                                                                .toList();
+                                        }
+
+                                        Habitacion newHabitacion = new Habitacion(
+                                                        habitacion.getTipoHabitacion(),
+                                                        habitacion.getCapacidad(),
+                                                        habitacion.getPrecioPorNoche(),
+                                                        habitacion.getNumeroHabitacion(),
+                                                        gestor,
+                                                        c,
+                                                        habitacion.getAmbientes(),
+                                                        habitacion.getBanos(),
+                                                        habitacion.getDormitorios(),
+                                                        habitacion.getCamas(),
+                                                        hotel,
+                                                        r,
+                                                        carr);
+                                        newHabitacion.setHotel(hotel);
+                                        hotel.getHabitaciones().add(newHabitacion);
+                                });
                         }
-
-                        // Manejar carritos si existen
-                        if (habitacion.getCarritos() != null) {
-                            carr = habitacion.getCarritos().stream()
-                                .map(carrito -> carritoHabitacionRepository.findById(carrito.getId())
-                                    .orElse(null))
-                                .toList();
-                        }
-
-                        Habitacion newHabitacion = new Habitacion(
-                                habitacion.getTipoHabitacion(),
-                                habitacion.getCapacidad(),
-                                habitacion.getPrecioPorNoche(),
-                                habitacion.getNumeroHabitacion(),
-                                gestor,
-                                c,
-                                habitacion.getAmbientes(),
-                                habitacion.getBanos(),
-                                habitacion.getDormitorios(),
-                                habitacion.getCamas(),
-                                hotel,
-                                r,
-                                carr);
-                        newHabitacion.setHotel(hotel);
-                        hotel.getHabitaciones().add(newHabitacion);
-                });
-        }
 
                         return hotelRepository.save(hotel);
                 }
@@ -163,13 +166,14 @@ public class HotelServiceImpl implements HotelService {
 
         @Override
         @Transactional
-        public void deleteHotel(String nombre) throws HotelNotFoundException{
+        public void deleteHotel(String nombre) throws HotelNotFoundException {
                 Hotel hotel = hotelRepository.findByNombre(nombre).get();
                 hotelRepository.delete(hotel);
         }
 
         @Override
-        public HotelDTO updateHotel(String nombre, HotelDTO hotel) throws HotelNotFoundException, HotelDuplicateException {
+        public HotelDTO updateHotel(String nombre, HotelDTO hotel)
+                        throws HotelNotFoundException, HotelDuplicateException {
                 Hotel h = hotelRepository.findByNombre(nombre).orElseThrow(() -> new HotelNotFoundException());
                 h.setCategoria(categoriaRepository.findByNombre(hotel.getCategoria()).get());
                 h.setCiudad(hotel.getCiudad());
@@ -178,16 +182,16 @@ public class HotelServiceImpl implements HotelService {
                 h.setPais(hotel.getPais());
                 h.setTelefono(hotel.getTelefono());
                 h.setEmail(hotel.getEmail());
-                if (hotelRepository.findByNombre(nombre).isPresent())
-                {
-                        throw new HotelDuplicateException();
-                }
+
                 h.setNombre(hotel.getNombre());
-                hotel.getHabitacionesParaCrear().forEach(habitacion ->
-                {
+                hotel.getHabitacionesParaCrear().forEach(habitacion -> {
                         hotel.addHabitacion(habitacion);
                 });
-                h.setHabitaciones(hotel.getHabitaciones().stream().map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
+
+                if (!hotel.getHabitaciones().isEmpty()) {
+                        h.setHabitaciones(hotel.getHabitaciones().stream()
+                                        .map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
+                }
 
                 hotelRepository.save(h);
                 return hotelToHotelDTO(h);
