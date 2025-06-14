@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,10 @@ import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.service.HotelService;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 @RestController
 @RequestMapping("/api/v1/hoteles")
@@ -61,4 +66,25 @@ public class HotelController {
         return ResponseEntity.created(URI.create("/hoteles" + result.getId()))
                 .body(hotelService.hotelToHotelDTO(result));
     }
+
+    @DeleteMapping("/{hotel}")
+    public ResponseEntity<Void> deleteHotel(@PathVariable String nombre) throws HotelNotFoundException
+    {
+        Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
+        if (result.isPresent()) {
+            hotelService.deleteHotel(nombre);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{hotel}")
+    public ResponseEntity<HotelDTO> updateHotel(@PathVariable String nombre, @RequestBody HotelDTO hotel)throws HotelNotFoundException, HotelDuplicateException {
+        Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
+        if (result.isPresent()) {
+            return ResponseEntity.ok(hotelService.updateHotel(nombre,hotel));
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
 }

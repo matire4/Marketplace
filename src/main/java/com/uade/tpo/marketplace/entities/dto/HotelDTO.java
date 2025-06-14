@@ -23,4 +23,9 @@ public class HotelDTO {
     private List<Long> preguntas;
     private String username;
     private String categoria;
+
+    public void addHabitacion(HabitacionDTO h)
+    {
+        habitaciones.add(h.getId());
+    }
 }

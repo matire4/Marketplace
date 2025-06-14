@@ -22,6 +22,7 @@ import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
 import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
+import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
 import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
@@ -39,6 +40,8 @@ public class HotelServiceImpl implements HotelService {
         private CategoriaRepository categoriaRepository;
         @Autowired
         private ImagenRepository imagenRepository;
+        @Autowired
+        private HabitacionRepository habitacionRepository;
         @Autowired
         private ReservaHabitacionRepository reservaHabitacionRepository;
         @Autowired
@@ -154,5 +157,37 @@ public class HotelServiceImpl implements HotelService {
                 hotelDTO.setCategoria(hotel.getCategoria().getNombre());
 
                 return hotelDTO;
+        }
+
+        @Override
+        @Transactional
+        public void deleteHotel(String nombre) throws HotelNotFoundException{
+                Hotel hotel = hotelRepository.findByNombre(nombre).get();
+                hotelRepository.delete(hotel);
+        }
+
+        @Override
+        public HotelDTO updateHotel(String nombre, HotelDTO hotel) throws HotelNotFoundException, HotelDuplicateException {
+                Hotel h = hotelRepository.findByNombre(nombre).orElseThrow(() -> new HotelNotFoundException());
+                h.setCategoria(categoriaRepository.findByNombre(hotel.getCategoria()).get());
+                h.setCiudad(hotel.getCiudad());
+                h.setDescripcion(hotel.getDescripcion());
+                h.setDireccion(hotel.getDireccion());
+                h.setPais(hotel.getPais());
+                h.setTelefono(hotel.getTelefono());
+                h.setEmail(hotel.getEmail());
+                if (hotelRepository.findByNombre(nombre).isPresent())
+                {
+                        throw new HotelDuplicateException();
+                }
+                h.setNombre(hotel.getNombre());
+                hotel.getHabitacionesParaCrear().forEach(habitacion ->
+                {
+                        hotel.addHabitacion(habitacion);
+                });
+                h.setHabitaciones(habitacionRepository.findAllById(hotel.getHabitaciones()));
+
+                hotelRepository.save(h);
+                return hotelToHotelDTO(h);
         }
 }

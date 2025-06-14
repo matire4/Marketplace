@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 @Builder
 public class HabitacionDTO {
+    private Long id;
     private TipoHabitacion tipoHabitacion;
     private int capacidad;
     private double precioPorNoche;
