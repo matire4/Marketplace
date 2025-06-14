@@ -43,6 +43,8 @@ public class HotelServiceImpl implements HotelService {
         @Autowired
         private HabitacionRepository habitacionRepository;
         @Autowired
+        private HabitacionService habitacionService;
+        @Autowired
         private ReservaHabitacionRepository reservaHabitacionRepository;
         @Autowired
         private CarritoHabitacionRepository carritoHabitacionRepository;
@@ -141,7 +143,7 @@ public class HotelServiceImpl implements HotelService {
                 if (hotel.getHabitaciones() != null)
                         hotelDTO.setHabitaciones(hotel.getHabitaciones()
                                         .stream()
-                                        .map(habitacion -> habitacion.getId())
+                                        .map(habitacion -> habitacionService.habitacionToHabitacionDTO(habitacion))
                                         .toList());
                 if (hotel.getReviews() != null)
                         hotelDTO.setReviews(hotel.getReviews()
@@ -185,7 +187,7 @@ public class HotelServiceImpl implements HotelService {
                 {
                         hotel.addHabitacion(habitacion);
                 });
-                h.setHabitaciones(habitacionRepository.findAllById(hotel.getHabitaciones()));
+                h.setHabitaciones(hotel.getHabitaciones().stream().map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
 
                 hotelRepository.save(h);
                 return hotelToHotelDTO(h);

@@ -20,14 +20,26 @@ import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.AlojamientoRepository;
+import com.uade.tpo.marketplace.repository.HabitacionRepository;
+import com.uade.tpo.marketplace.repository.HotelRepository;
 
 @Service
 public class AlojamientoServiceImpl implements AlojamientoService {
+
+    private final HabitacionRepository habitacionRepository;
 
     @Autowired
     private AlojamientoRepository alojamientoRepository;
     @Autowired
     private GestorService gestorService;
+    @Autowired 
+    private HotelRepository hotelRepository;
+    @Autowired
+    private HabitacionService habitacionService;
+
+    AlojamientoServiceImpl(HabitacionRepository habitacionRepository) {
+        this.habitacionRepository = habitacionRepository;
+    }
 
     @Override
     public List<AlojamientoDTO> getAlojamientos() {
@@ -60,10 +72,8 @@ public class AlojamientoServiceImpl implements AlojamientoService {
         if (alojamiento == null) {
             return null;
         }
-
-        String tipo = (alojamiento instanceof Hotel) ? "HOTEL"
-                : (alojamiento instanceof Departamento) ? "DEPARTAMENTO" : "";
-
+        String tipo = (alojamiento instanceof Hotel) ? "hotel"
+                : (alojamiento instanceof Departamento) ? "departamento" : "";
         AlojamientoDTO.AlojamientoDTOBuilder builder = AlojamientoDTO.builder()
                 .tipoAlojamiento(tipo)
                 .id(alojamiento.getId())
@@ -71,33 +81,38 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                 .direccion(alojamiento.getDireccion())
                 .ciudad(alojamiento.getCiudad())
                 .pais(alojamiento.getPais());
-
+        if (tipo == "hotel")
+        {
+            Hotel h = hotelRepository.findById(alojamiento.getId()).get();
+            int i = 99999999; // revsar xd
+            h.getHabitaciones().forEach(hab ->{            
+                if(hab.getPrecioPorNoche() < i)
+                {
+                    builder.precio(i);
+                }     
+            });
+        }
         if (alojamiento.getGestor() != null) {
             builder.gestorId(alojamiento.getGestor().getId());
         }
-
         if (alojamiento.getCategoria() != null) {
             builder.categoriaId(alojamiento.getCategoria().getId());
         }
-
         if (alojamiento.getReviews() != null && Hibernate.isInitialized(alojamiento.getReviews())) {
             builder.reviews(alojamiento.getReviews().stream()
                     .map(review -> review.getId())
                     .toList());
         }
-
         if (alojamiento.getPreguntas() != null && Hibernate.isInitialized(alojamiento.getPreguntas())) {
             builder.preguntas(alojamiento.getPreguntas().stream()
                     .map(pregunta -> pregunta.getId())
                     .toList());
         }
-
         if (alojamiento.getImagenes() != null && Hibernate.isInitialized(alojamiento.getImagenes())) {
             builder.imagenes(alojamiento.getImagenes().stream()
                     .map(imagen -> imagen.getId())
                     .toList());
         }
-
         return builder.build();
 
     }
@@ -133,7 +148,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
 
         if (hotel.getHabitaciones() != null) {
             hotelDTO.setHabitaciones(hotel.getHabitaciones().stream()
-                    .map(h -> h.getId())
+                    .map(h -> habitacionService.habitacionToHabitacionDTO(h))
                     .toList());
         }
 

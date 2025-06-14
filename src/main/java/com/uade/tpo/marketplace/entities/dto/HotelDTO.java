@@ -15,7 +15,7 @@ public class HotelDTO {
     private String ciudad;
     private String pais;
 
-    private List<Long> habitaciones;
+    private List<HabitacionDTO> habitaciones;
     private List<HabitacionDTO> habitacionesParaCrear;
     private List<Long> imagenes;
 
@@ -26,6 +26,6 @@ public class HotelDTO {
 
     public void addHabitacion(HabitacionDTO h)
     {
-        habitaciones.add(h.getId());
+        habitaciones.add(h);
     }
 }

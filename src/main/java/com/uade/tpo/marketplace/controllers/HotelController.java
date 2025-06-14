@@ -36,7 +36,7 @@ public class HotelController {
     public ResponseEntity<List<HotelDTO>> getHotels() {
         return ResponseEntity.ok(hotelService.getHotels());
     }
-
+    
     @GetMapping("/{nombre}")
     public ResponseEntity<HotelDTO> getHotelByNombre(@PathVariable String nombre)
             throws HotelNotFoundException {
@@ -60,7 +60,7 @@ public class HotelController {
                 hotelRequest.getPais(),
                 hotelRequest.getUsername(),
                 hotelRequest.getCategoria(),
-                hotelRequest.getHabitaciones(),
+                hotelRequest.getHabitaciones().stream().map(h -> h.getId()).toList(),
                 hotelRequest.getHabitacionesParaCrear());
 
         return ResponseEntity.created(URI.create("/hoteles" + result.getId()))

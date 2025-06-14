@@ -13,10 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AlojamientoDTO {
     private Long id;
+    private String nombre;
     private String descripcion;
     private String direccion;
     private String ciudad;
     private String pais;
+    private double precio;
     private Long gestorId;
     private Long categoriaId;
     private List<Long> reviews;
