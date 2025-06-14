@@ -172,8 +172,20 @@ public class HabitacionServiceImpl implements HabitacionService {
         habitacion.setTipoHabitacion(habitacionRequest.getTipoHabitacion());
         habitacion.setCapacidad(habitacionRequest.getCapacidad());
         habitacion.setPrecioPorNoche(habitacionRequest.getPrecioPorNoche());
-        habitacion.setNumeroHabitacion(habitacionRequest.getNumeroHabitacion());
-        habitacion.setImagenesHabitacion(imagenRepository.findAllById(habitacionRequest.getImagenes()));
+        // Do not update numeroHabitacion as it is a unique identifier
+
+        // Control de código para la lista de imágenes
+        List<Long> imagenIds = habitacionRequest.getImagenes();
+        if (imagenIds != null && !imagenIds.isEmpty()) {
+            List<com.uade.tpo.marketplace.entities.Imagen> imagenes = imagenRepository.findAllById(imagenIds);
+            if (imagenes.size() != imagenIds.size()) {
+                throw new ImagenNotFoundException();
+            }
+            habitacion.setImagenesHabitacion(imagenes);
+        } else {
+            habitacion.setImagenesHabitacion(null);
+        }
+
         habitacion.setGestor(gestor);
         habitacion.setCategoria(categoria);
 
