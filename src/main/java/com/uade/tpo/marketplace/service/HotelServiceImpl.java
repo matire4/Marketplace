@@ -184,13 +184,15 @@ public class HotelServiceImpl implements HotelService {
                 h.setEmail(hotel.getEmail());
 
                 h.setNombre(hotel.getNombre());
-                hotel.getHabitacionesParaCrear().forEach(habitacion -> {
-                        hotel.addHabitacion(habitacion);
-                });
+                if (hotel.getHabitacionesParaCrear() != null) {
+                        hotel.getHabitacionesParaCrear().forEach(habitacion -> {
+                                hotel.addHabitacion(habitacion);
+                        });
 
-                if (!hotel.getHabitaciones().isEmpty()) {
-                        h.setHabitaciones(hotel.getHabitaciones().stream()
-                                        .map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
+                        if (!hotel.getHabitaciones().isEmpty()) {
+                                h.setHabitaciones(hotel.getHabitaciones().stream()
+                                                .map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
+                        }
                 }
 
                 hotelRepository.save(h);

@@ -25,10 +25,10 @@ public class GestorController {
         return ResponseEntity.ok(gestorService.getGestores());
     }
 
-    @GetMapping("/{gestorId}")
-    public ResponseEntity<GestorDTO> getGestorById(@PathVariable Long gestorId)
+    @GetMapping("/{gestorUsername}")
+    public ResponseEntity<GestorDTO> getGestorById(@PathVariable String gestorUsername)
             throws GestorNotFoundException {
-        Optional<Gestor> result = gestorService.getGestorById(gestorId);
+        Optional<Gestor> result = gestorService.getGestorByUsername(gestorUsername);
         if (result.isPresent())
             return ResponseEntity.ok(gestorService.gestorToGestorDTO(result.get()));
         return ResponseEntity.noContent().build();
