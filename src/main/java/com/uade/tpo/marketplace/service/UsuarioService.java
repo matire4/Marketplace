@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Usuario;
-import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.enums.Role;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
@@ -15,7 +14,7 @@ public interface UsuarioService {
 
         public Optional<Usuario> getUsuarioById(Long usuarioId)
                         throws UsuarioNotFoundException;
-        
+
         public Optional<Usuario> getUsuarioByUsername(String username)
                         throws UsuarioNotFoundException;
 
@@ -43,5 +42,6 @@ public interface UsuarioService {
 
         public UsuarioDTO usuarioToUsuarioDTO(Usuario usuario);
 
-        // public GestorDTO convertogestor(String username) throws UsuarioNotFoundException;
+        // public GestorDTO convertogestor(String username) throws
+        // UsuarioNotFoundException;
 }

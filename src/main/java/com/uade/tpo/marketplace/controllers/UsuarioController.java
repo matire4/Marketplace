@@ -14,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Usuario;
-import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.service.UsuarioService;
 import org.springframework.web.bind.annotation.PutMapping;
-
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -62,8 +60,9 @@ public class UsuarioController {
     }
 
     // @PutMapping("/convertogestor/{usuario}")
-    // public ResponseEntity<GestorDTO> convertToGestor(@PathVariable String usuario) throws UsuarioNotFoundException {
-    //     GestorDTO gestorDTO = usuarioService.convertogestor(usuario);
-    //     return ResponseEntity.ok(gestorDTO);
+    // public ResponseEntity<GestorDTO> convertToGestor(@PathVariable String
+    // usuario) throws UsuarioNotFoundException {
+    // GestorDTO gestorDTO = usuarioService.convertogestor(usuario);
+    // return ResponseEntity.ok(gestorDTO);
     // }
 }

@@ -1,6 +1,5 @@
 package com.uade.tpo.marketplace.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +13,6 @@ import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
-import com.uade.tpo.marketplace.entities.Imagen;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;

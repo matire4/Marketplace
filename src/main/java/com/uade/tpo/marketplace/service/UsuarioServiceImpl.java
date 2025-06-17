@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.marketplace.entities.Usuario;
-import com.uade.tpo.marketplace.entities.dto.GestorDTO;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.enums.Role;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
@@ -84,7 +83,6 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     }
 
-
     public void deleteUsuario(Long usuarioId) throws UsuarioNotFoundException {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNotFoundException());
@@ -107,14 +105,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     // @Override
-    // public GestorDTO convertogestor(String username) throws UsuarioNotFoundException {
-    //     Usuario usuario = usuarioRepository.findByUsername(username);
-    //     if (usuario == null) {
-    //         throw new UsuarioNotFoundException();
-    //     }
-    //     usuario.setRole(Role.GESTOR);
-    //     usuarioRepository.save(usuario);
+    // public GestorDTO convertogestor(String username) throws
+    // UsuarioNotFoundException {
+    // Usuario usuario = usuarioRepository.findByUsername(username);
+    // if (usuario == null) {
+    // throw new UsuarioNotFoundException();
+    // }
+    // usuario.setRole(Role.GESTOR);
+    // usuarioRepository.save(usuario);
 
-    //     return new GestorDTO(usuario.getId(), usuario.getNombre(), usuario.getApellido(), usuario.getUsername());
+    // return new GestorDTO(usuario.getId(), usuario.getNombre(),
+    // usuario.getApellido(), usuario.getUsername());
     // }
 }
