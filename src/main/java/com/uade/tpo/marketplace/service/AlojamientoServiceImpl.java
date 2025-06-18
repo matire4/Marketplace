@@ -2,6 +2,7 @@ package com.uade.tpo.marketplace.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 
 import org.springframework.transaction.annotation.Transactional;
 import com.uade.tpo.marketplace.entities.Hotel;
@@ -82,12 +83,13 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                 .pais(alojamiento.getPais());
         if (tipo == "hotel") {
             Hotel h = hotelRepository.findById(alojamiento.getId()).get();
-            int i = 99999999; // revsar xd
-            h.getHabitaciones().forEach(hab -> {
-                if (hab.getPrecioPorNoche() < i) {
-                    builder.precio(i);
-                }
-            });
+            OptionalDouble minPrecio = h.getHabitaciones().stream()
+                .mapToDouble(hab -> hab.getPrecioPorNoche())
+                .min();
+                
+            if (minPrecio.isPresent()) {
+                builder.precio(minPrecio.getAsDouble());
+            }
         }
         if (alojamiento.getGestor() != null) {
             builder.gestorId(alojamiento.getGestor().getId());
