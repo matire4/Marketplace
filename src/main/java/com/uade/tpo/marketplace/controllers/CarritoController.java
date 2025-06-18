@@ -30,16 +30,6 @@ public class CarritoController {
         return ResponseEntity.ok(carritoService.getCarritoByUsuario(usuario));
     }
     
-    @PostMapping("/usuario/{usuario}/habitacion/{habitacionId}")
-    public ResponseEntity<CarritoHabitacionDTO> addHabitacionToCarrito(
-            @PathVariable String usuario,
-            @PathVariable Long habitacionId,
-            @RequestParam String nombreReserva) 
-            throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        CarritoHabitacion carrito = carritoService.addHabitacionToCarrito(usuario, habitacionId, nombreReserva);
-        return ResponseEntity.ok(carritoHabitacionService.carritoHabitacionToDTO(carrito));
-    }
-    
     @DeleteMapping("/usuario/{usuario}/habitacion/{habitacionId}")
     public ResponseEntity<Void> removeHabitacionFromCarrito(
             @PathVariable String usuario,
