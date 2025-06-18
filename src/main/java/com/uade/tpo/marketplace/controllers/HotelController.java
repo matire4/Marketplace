@@ -21,10 +21,7 @@ import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelDuplicateException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.service.HotelService;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
 
 @RestController
 @RequestMapping("/api/v1/hoteles")
@@ -36,7 +33,7 @@ public class HotelController {
     public ResponseEntity<List<HotelDTO>> getHotels() {
         return ResponseEntity.ok(hotelService.getHotels());
     }
-    
+
     @GetMapping("/{nombre}")
     public ResponseEntity<HotelDTO> getHotelByNombre(@PathVariable String nombre)
             throws HotelNotFoundException {
@@ -67,9 +64,8 @@ public class HotelController {
                 .body(hotelService.hotelToHotelDTO(result));
     }
 
-    @DeleteMapping("/{hotel}")
-    public ResponseEntity<Void> deleteHotel(@PathVariable String nombre) throws HotelNotFoundException
-    {
+    @DeleteMapping("/{nombre}")
+    public ResponseEntity<Void> deleteHotel(@PathVariable String nombre) throws HotelNotFoundException {
         Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
         if (result.isPresent()) {
             hotelService.deleteHotel(nombre);
@@ -78,13 +74,14 @@ public class HotelController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{hotel}")
-    public ResponseEntity<HotelDTO> updateHotel(@PathVariable String nombre, @RequestBody HotelDTO hotel)throws HotelNotFoundException, HotelDuplicateException {
+    @PutMapping("/{nombre}")
+    public ResponseEntity<HotelDTO> updateHotel(@PathVariable String nombre, @RequestBody HotelDTO hotel)
+            throws HotelNotFoundException, HotelDuplicateException {
         Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
         if (result.isPresent()) {
-            return ResponseEntity.ok(hotelService.updateHotel(nombre,hotel));
+            return ResponseEntity.ok(hotelService.updateHotel(nombre, hotel));
         }
         return ResponseEntity.notFound().build();
     }
-    
+
 }

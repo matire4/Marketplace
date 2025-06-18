@@ -10,7 +10,6 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.uade.tpo.marketplace.controllers.HotelController;
 import com.uade.tpo.marketplace.entities.Alojamiento;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
@@ -32,7 +31,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
     private AlojamientoRepository alojamientoRepository;
     @Autowired
     private GestorService gestorService;
-    @Autowired 
+    @Autowired
     private HotelRepository hotelRepository;
     @Autowired
     private HabitacionService habitacionService;
@@ -81,15 +80,13 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                 .direccion(alojamiento.getDireccion())
                 .ciudad(alojamiento.getCiudad())
                 .pais(alojamiento.getPais());
-        if (tipo == "hotel")
-        {
+        if (tipo == "hotel") {
             Hotel h = hotelRepository.findById(alojamiento.getId()).get();
             int i = 99999999; // revsar xd
-            h.getHabitaciones().forEach(hab ->{            
-                if(hab.getPrecioPorNoche() < i)
-                {
+            h.getHabitaciones().forEach(hab -> {
+                if (hab.getPrecioPorNoche() < i) {
                     builder.precio(i);
-                }     
+                }
             });
         }
         if (alojamiento.getGestor() != null) {

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
-import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
@@ -16,12 +15,13 @@ public interface HabitacionService {
 
         public List<HabitacionDTO> getHabitacionesByHotel(String nombreHotel) throws HabitacionNotFoundException;
 
-        public Optional<Habitacion> getHabitacionByNombreHotelAndNumeroHabitacion(String nombreHotel, String numeroHabitacion)
+        public Optional<Habitacion> getHabitacionByNombreHotelAndNumeroHabitacion(String nombreHotel,
+                        String numeroHabitacion)
                         throws HabitacionNotFoundException;
 
         public Habitacion createHabitacion(
                         TipoHabitacion tipoHabitacion,
-                        int capacidad, 
+                        int capacidad,
                         double precioPorNoche,
                         String numeroHabitacion,
                         List<Long> imagenes,
@@ -33,12 +33,14 @@ public interface HabitacionService {
                         int camas,
                         String hotel,
                         List<ReservaHabitacionDTO> reservas,
-                        List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException, HotelNotFoundException, HabitacionDuplicateException;
+                        List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException,
+                        HotelNotFoundException, HabitacionDuplicateException;
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 
         public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException;
 
         public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
-                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException, ImagenNotFoundException;
+                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException,
+                        ImagenNotFoundException;
 }

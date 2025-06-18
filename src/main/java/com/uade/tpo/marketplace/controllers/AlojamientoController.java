@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
-import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
@@ -42,7 +41,8 @@ public class AlojamientoController {
     }
 
     @GetMapping("/gestor/{usuario}")
-    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosByGestor(@PathVariable String usuario) throws GestorNotFoundException {
+    public ResponseEntity<List<AlojamientoDTO>> getAlojamientosByGestor(@PathVariable String usuario)
+            throws GestorNotFoundException {
         return ResponseEntity.ok(alojamientoService.getAlojamientosByGestor(usuario));
     }
 
