@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import com.uade.tpo.marketplace.entities.Carrito;
 import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
+import com.uade.tpo.marketplace.entities.dto.CarritoDepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.service.CarritoHabitacionService;
@@ -29,15 +31,6 @@ public class CarritoController {
         return ResponseEntity.ok(carritoService.getCarritoByUsuario(usuario));
     }
     
-    @PostMapping("/usuario/{usuario}/habitacion/{habitacionId}")
-    public ResponseEntity<CarritoHabitacionDTO> addHabitacionToCarrito(
-            @PathVariable String usuario,
-            @PathVariable Long habitacionId,
-            @RequestParam String nombreReserva) 
-            throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        CarritoHabitacion carrito = carritoService.addHabitacionToCarrito(usuario, habitacionId, nombreReserva);
-        return ResponseEntity.ok(carritoHabitacionService.carritoHabitacionToDTO(carrito));
-    }
     
     @DeleteMapping("/usuario/{usuario}/habitacion/{habitacionId}")
     public ResponseEntity<Void> removeHabitacionFromCarrito(
@@ -53,5 +46,25 @@ public class CarritoController {
             throws CarritoNotFoundException, UsuarioNotFoundException {
         carritoService.clearCarrito(usuario);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/usuario/{usuario}/alojamiento")
+    public ResponseEntity<?> addToCarrito(
+            @PathVariable String usuario,
+            @RequestParam Long alojamientoId,
+            @RequestParam String tipo,
+            @RequestParam String nombreReserva)
+            throws CarritoNotFoundException, UsuarioNotFoundException, 
+                   HabitacionNotFoundException, DepartamentoNotFoundException {
+        
+        if ("HABITACION".equalsIgnoreCase(tipo)) {
+            CarritoHabitacionDTO result = carritoService.addHabitacionToCarrito(usuario, alojamientoId, nombreReserva);
+            return ResponseEntity.ok(result);
+        } else if ("DEPARTAMENTO".equalsIgnoreCase(tipo)) {
+            CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(usuario, alojamientoId, nombreReserva);
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body("Tipo de alojamiento no válido. Debe ser HABITACION o DEPARTAMENTO");
+        }
     }
 }

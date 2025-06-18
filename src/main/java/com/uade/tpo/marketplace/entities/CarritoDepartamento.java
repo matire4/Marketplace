@@ -1,33 +1,33 @@
 package com.uade.tpo.marketplace.entities;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@Table(name = "carrito_departamento")
+@Data
+@NoArgsConstructor
 public class CarritoDepartamento {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "departamento_id", nullable = false)
-    private Departamento departamento;
+    @Column(nullable = false)
+    private String nombreReserva;
 
     @ManyToOne
     @JoinColumn(name = "carrito_id", nullable = false)
     private Carrito carrito;
 
-    @Column(nullable = false)
-    private int cantidad;
-
-    @Column(nullable = false)
-    private double precioPorNoche;
-
-    @Column(nullable = false)
-    private int nochesReservadas;
+    @ManyToOne
+    @JoinColumn(name = "departamento_id", nullable = false)
+    private Departamento departamento;
 }
