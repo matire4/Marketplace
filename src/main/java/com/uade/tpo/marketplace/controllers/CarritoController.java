@@ -24,13 +24,13 @@ public class CarritoController {
     @Autowired
     private CarritoHabitacionService carritoHabitacionService;
 
-    @GetMapping("/usuario/{usuario}")
+    @GetMapping("/{usuario}")
     public ResponseEntity<CarritoDTO> getCarritoByUsuario(@PathVariable String usuario)
             throws CarritoNotFoundException, UsuarioNotFoundException {
         return ResponseEntity.ok(carritoService.getCarritoByUsuario(usuario));
     }
-    
-    @DeleteMapping("/usuario/{usuario}/habitacion/{habitacionId}")
+
+    @DeleteMapping("/{usuario}/habitacion/{habitacionId}")
     public ResponseEntity<Void> removeHabitacionFromCarrito(
             @PathVariable String usuario,
             @PathVariable Long habitacionId)
@@ -39,30 +39,32 @@ public class CarritoController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/usuario/{usuario}")
+    @DeleteMapping("/{usuario}")
     public ResponseEntity<Void> clearCarrito(@PathVariable String usuario)
             throws CarritoNotFoundException, UsuarioNotFoundException {
         carritoService.clearCarrito(usuario);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/usuario/{usuario}/alojamiento")
+    @PostMapping("/{usuario}/alojamiento")
     public ResponseEntity<?> addToCarrito(
             @PathVariable String usuario,
             @RequestParam Long alojamientoId,
             @RequestParam String tipo,
             @RequestParam String nombreReserva)
-            throws CarritoNotFoundException, UsuarioNotFoundException, 
-                   HabitacionNotFoundException, DepartamentoNotFoundException {
-        
+            throws CarritoNotFoundException, UsuarioNotFoundException,
+            HabitacionNotFoundException, DepartamentoNotFoundException {
+
         if ("HABITACION".equalsIgnoreCase(tipo)) {
             CarritoHabitacionDTO result = carritoService.addHabitacionToCarrito(usuario, alojamientoId, nombreReserva);
             return ResponseEntity.ok(result);
         } else if ("DEPARTAMENTO".equalsIgnoreCase(tipo)) {
-            CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(usuario, alojamientoId, nombreReserva);
+            CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(usuario, alojamientoId,
+                    nombreReserva);
             return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.badRequest().body("Tipo de alojamiento no válido. Debe ser HABITACION o DEPARTAMENTO");
+            return ResponseEntity.badRequest()
+                    .body("Tipo de alojamiento no válido. Debe ser HABITACION o DEPARTAMENTO");
         }
     }
 }
