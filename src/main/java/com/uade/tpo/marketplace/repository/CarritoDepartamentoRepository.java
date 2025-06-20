@@ -12,6 +12,6 @@ public interface CarritoDepartamentoRepository extends JpaRepository<CarritoDepa
     void deleteByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
     boolean existsByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
 
-    @Query("SELECT cd FROM CarritoDepartamento cd WHERE cd.carrito.usuario.username = ?1")
+    @Query("SELECT cd FROM CarritoDepartamento cd WHERE cd.carrito.usuario.id = ?1")
     void deleteByDepartamentoId(Long id);
 }
