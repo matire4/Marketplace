@@ -23,7 +23,7 @@ public interface CarritoService {
 
     CarritoDTO carritoToCarritoDTO(Carrito carrito);
 
-    CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva)
+    CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio)
             throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException;
 
     void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException;

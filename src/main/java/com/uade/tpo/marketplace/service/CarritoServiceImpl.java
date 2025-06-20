@@ -100,16 +100,13 @@ public class CarritoServiceImpl implements CarritoService {
                         return carritoRepository.save(newCarrito);
                     });
 
-            // Verificar si la habitación ya está en el carrito
             Optional<CarritoHabitacion> existingItem = carrito.getCarritoHabitacions().stream()
                     .filter(ch -> ch.getHabitacion().getId().equals(habitacionId))
                     .findFirst();
                     
             if (existingItem.isPresent()) {
-                // Si ya existe, devolver el DTO correspondiente
                 return carritoHabitacionService.carritoHabitacionToDTO(existingItem.get());
             } else {
-                // Convertir String a Date
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date checkInDate = null;
                 Date checkOutDate = null;
@@ -119,8 +116,6 @@ public class CarritoServiceImpl implements CarritoService {
                 } catch (ParseException e) {
                     throw new IllegalArgumentException("Formato de fecha inválido. Use yyyy-MM-dd");
                 }
-                
-                // Si no existe, crear nuevo
                 CarritoHabitacion carritoHabitacion = new CarritoHabitacion();
                 carritoHabitacion.setNombreReserva(nombreReserva);
                 carritoHabitacion.setCarrito(carrito);
@@ -145,9 +140,9 @@ public class CarritoServiceImpl implements CarritoService {
 
         Carrito carrito = carritoRepository.findByUsuario(u)
                 .orElseThrow(() -> new CarritoNotFoundException());
-                
-        carrito.getCarritoHabitacions().removeIf(ch -> ch.getHabitacion().getId().equals(habitacionId));
-        carritoRepository.save(carrito);
+        Habitacion habitacion = habitacionRepository.findById(habitacionId)
+                .orElseThrow(() -> new HabitacionNotFoundException());  
+        carritoHabitacionRepository.deleteByCarritoAndHabitacion(carrito, habitacion);
     }
 
     @Override
@@ -178,21 +173,35 @@ public class CarritoServiceImpl implements CarritoService {
         }
 
         if (carrito.getCarritoHabitacions() != null) {
-            List<HabitacionDTO> habitacionesDTO = carrito.getCarritoHabitacions().stream()
-                    .map(ch -> ch.getHabitacion())
-                    .filter(Objects::nonNull)
-                    .map(habitacionService::habitacionToHabitacionDTO)
+            List<CarritoHabitacionDTO> habitacionesDTO = carrito.getCarritoHabitacions().stream()
+                    .map(ch -> new CarritoHabitacionDTO(
+                            ch.getId(),
+                            ch.getNombreReserva(),
+                            ch.getCantidad(),
+                            ch.getCheckIn(),
+                            ch.getCheckOut(),
+                            ch.getHabitacion().getId(),
+                            ch.getCarrito().getId(),
+                            ch.getPrecio()
+                    ))
                     .filter(Objects::nonNull)
                     .toList();
             carritoDTO.setHabitaciones(habitacionesDTO);
         }
         
         if (carrito.getCarritoDepartamentos() != null) {
-            List<DepartamentoDTO> departamentosDTO = carrito.getCarritoDepartamentos().stream()
-                    .map(cd -> cd.getDepartamento())
-                    .filter(Objects::nonNull)
-                    .map(departamentoService::departamentoToDepartamentoDTO)
-                    .filter(Objects::nonNull)
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            List<CarritoDepartamentoDTO> departamentosDTO = carrito.getCarritoDepartamentos().stream()
+                    .map(cd -> new CarritoDepartamentoDTO(
+                            cd.getId(),
+                            cd.getNombreReserva(),
+                            cd.getCantidad(),
+                            cd.getCheckIn(),
+                            cd.getCheckOut(),
+                            cd.getCarrito().getId(),
+                            cd.getPrecio(),
+                            cd.getDepartamento().getId()
+                    ))
                     .toList();
             carritoDTO.setDepartamentos(departamentosDTO);
         }
@@ -202,42 +211,65 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
     @Transactional
-    public CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva) 
+    public CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, 
+            String checkIn, String checkOut, int cantidad, double precio) 
             throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException {
         
         Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
         
         Carrito carrito = carritoRepository.findByUsuario(u)
-                .orElseThrow(() -> new CarritoNotFoundException());
+                .orElseGet(() -> {
+                    Carrito newCarrito = new Carrito();
+                    newCarrito.setUsuario(u);
+                    newCarrito.setCarritoDepartamentos(new ArrayList<>());
+                    return carritoRepository.save(newCarrito);
+                });
         
         Departamento departamento = departamentoRepository.findById(departamentoId)
                 .orElseThrow(() -> new DepartamentoNotFoundException());
+        
+        // Convertir String a Date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date checkInDate = null;
+        Date checkOutDate = null;
+        try {
+            checkInDate = new Date(format.parse(checkIn).getTime());
+            checkOutDate = new Date(format.parse(checkOut).getTime());
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Formato de fecha inválido. Use yyyy-MM-dd");
+        }
         
         CarritoDepartamento carritoDepartamento = new CarritoDepartamento();
         carritoDepartamento.setNombreReserva(nombreReserva);
         carritoDepartamento.setCarrito(carrito);
         carritoDepartamento.setDepartamento(departamento);
+        carritoDepartamento.setCantidad(cantidad);
+        carritoDepartamento.setCheckIn(checkInDate);
+        carritoDepartamento.setCheckOut(checkOutDate);
+        carritoDepartamento.setPrecio(precio);
         
-        carritoDepartamentoRepository.save(carritoDepartamento);
+        if (carrito.getCarritoDepartamentos() == null) {
+            carrito.setCarritoDepartamentos(new ArrayList<>());
+        }
+        carrito.getCarritoDepartamentos().add(carritoDepartamento);
         
-        return CarritoDepartamentoDTO.builder()
-                .id(carritoDepartamento.getId())
-                .nombreReserva(carritoDepartamento.getNombreReserva())
-                .carritoId(carrito.getId())
-                .departamentoId(departamento.getId())
-                .build();
+        CarritoDepartamento saved = carritoDepartamentoRepository.save(carritoDepartamento);
+        
+        return new CarritoDepartamentoDTO(
+            saved.getId(),
+            saved.getNombreReserva(),
+            saved.getCantidad(),
+            saved.getCheckIn(),
+            saved.getCheckOut(),
+            carrito.getId(),
+            saved.getPrecio(),
+            departamento.getId()
+        );
     }
 
-    @Override
-    public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
-        Usuario u = usuarioService.getUsuarioByUsername(usuario)
-                .orElseThrow(() -> new UsuarioNotFoundException());
-
-        Carrito carrito = carritoRepository.findByUsuario(u)
-                .orElseThrow(() -> new CarritoNotFoundException());
-
-        carrito.getCarritoDepartamentos().removeIf(cd -> cd.getId().equals(id));
-        carritoRepository.save(carrito);
-    }
+        @Override
+        public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
+                departamentoRepository.deleteById(id);
+        }
 }

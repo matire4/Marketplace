@@ -67,7 +67,9 @@ public class CarritoController {
             return ResponseEntity.ok(result);
         } else if ("DEPARTAMENTO".equalsIgnoreCase(tipo)) {
             CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(
-                    usuario, id, request.getNombreReserva());
+                    usuario, id, request.getNombreReserva(),
+                    request.getCheckIn(), request.getCheckOut(), 
+                    request.getCantidad(), request.getPrecio());
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.badRequest()
