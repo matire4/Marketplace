@@ -2,6 +2,7 @@ package com.uade.tpo.marketplace.repository;
 
 import com.uade.tpo.marketplace.entities.CarritoDepartamento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -10,4 +11,7 @@ public interface CarritoDepartamentoRepository extends JpaRepository<CarritoDepa
     List<CarritoDepartamento> findByCarritoId(Long carritoId);
     void deleteByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
     boolean existsByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
+
+    @Query("SELECT cd FROM CarritoDepartamento cd WHERE cd.carrito.usuario.username = ?1")
+    void deleteByDepartamentoId(Long id);
 }

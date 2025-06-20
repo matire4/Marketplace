@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.uade.tpo.marketplace.entities.Carrito;
@@ -15,5 +16,7 @@ public interface CarritoHabitacionRepository extends JpaRepository<CarritoHabita
     Optional<CarritoHabitacion> findByCarritoUsuarioUsername(String username);
     List<CarritoHabitacion> findByCarritoId(Long carritoId);
     List<CarritoHabitacion> findByHabitacionId(Long habitacionId);
-    void deleteByCarritoAndHabitacion(Carrito carrito, Habitacion habitacion);
+
+    @Query("SELECT ch FROM CarritoHabitacion ch WHERE ch.carrito.id = ?1 AND ch.habitacion.id = ?2")
+    void deleteByCarritoIdAndHabitacionId(Long id, Long id2);
 } 

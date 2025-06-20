@@ -142,7 +142,7 @@ public class CarritoServiceImpl implements CarritoService {
                 .orElseThrow(() -> new CarritoNotFoundException());
         Habitacion habitacion = habitacionRepository.findById(habitacionId)
                 .orElseThrow(() -> new HabitacionNotFoundException());  
-        carritoHabitacionRepository.deleteByCarritoAndHabitacion(carrito, habitacion);
+        carritoHabitacionRepository.deleteByCarritoIdAndHabitacionId(carrito.getId(), habitacion.getId());
     }
 
     @Override
@@ -270,6 +270,6 @@ public class CarritoServiceImpl implements CarritoService {
 
         @Override
         public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
-                departamentoRepository.deleteById(id);
+            carritoDepartamentoRepository.deleteByDepartamentoId(id);
         }
 }
