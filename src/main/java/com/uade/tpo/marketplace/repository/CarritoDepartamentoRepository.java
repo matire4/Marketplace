@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface CarritoDepartamentoRepository extends JpaRepository<CarritoDepartamento, Long> {
     List<CarritoDepartamento> findByCarritoId(Long carritoId);
-    void deleteByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
+    
     boolean existsByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
 
-    @Query("SELECT cd FROM CarritoDepartamento cd WHERE cd.carrito.usuario.id = ?1")
-    void deleteByDepartamentoId(Long id);
+    @Query("SELECT cd FROM CarritoDepartamento cd WHERE cd.carrito.id = ?1 AND cd.departamento.id = ?2")
+    void deleteByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
 }

@@ -270,6 +270,9 @@ public class CarritoServiceImpl implements CarritoService {
 
         @Override
         public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
-            carritoDepartamentoRepository.deleteByDepartamentoId(id);
+            Carrito carrito = carritoRepository.findByUsuario(usuarioService.getUsuarioByUsername(usuario)
+                    .orElseThrow(() -> new UsuarioNotFoundException()))
+                    .orElseThrow(() -> new CarritoNotFoundException());
+            carritoDepartamentoRepository.deleteByCarritoIdAndDepartamentoId(carrito.getId(), id);
         }
 }
