@@ -125,6 +125,7 @@ public class HabitacionServiceImpl implements HabitacionService {
                 }
 
                 return HabitacionDTO.builder()
+                                .id(habitacion.getId())
                                 .tipoHabitacion(habitacion.getTipoHabitacion())
                                 .capacidad(habitacion.getCapacidad())
                                 .precioPorNoche(habitacion.getPrecioPorNoche())

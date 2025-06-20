@@ -43,7 +43,7 @@ public class HabitacionController {
     }
 
     @GetMapping("/{nombreHotel}/{numeroHabitacion}")
-    public ResponseEntity<HabitacionDTO> getHabitacionById(@PathVariable String nombreHotel,
+    public ResponseEntity<HabitacionDTO> getHabitacionBy(@PathVariable String nombreHotel,
             @PathVariable String numeroHabitacion)
             throws HabitacionNotFoundException {
         Optional<Habitacion> result = habitacionService.getHabitacionByNombreHotelAndNumeroHabitacion(nombreHotel,

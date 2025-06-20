@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.service;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,6 +30,9 @@ import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
 import com.uade.tpo.marketplace.repository.CarritoRepository;
 import com.uade.tpo.marketplace.repository.DepartamentoRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @Service
 public class CarritoServiceImpl implements CarritoService {
@@ -79,37 +83,57 @@ public class CarritoServiceImpl implements CarritoService {
 
     @Override
         @Transactional
-        public CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva) 
+        public CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, 
+                String checkIn, String checkOut, int cantidad, double precio) 
                 throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        Usuario u = usuarioService.getUsuarioByUsername(usuario)
-                .orElseThrow(() -> new UsuarioNotFoundException());
-                
-        Habitacion habitacion = habitacionRepository.findById(habitacionId)
-                .orElseThrow(() -> new HabitacionNotFoundException());
-                
-        Carrito carrito = carritoRepository.findByUsuario(u)
-                .orElseGet(() -> {
+            Usuario u = usuarioService.getUsuarioByUsername(usuario)
+                    .orElseThrow(() -> new UsuarioNotFoundException());
+                    
+            Habitacion habitacion = habitacionRepository.findById(habitacionId)
+                    .orElseThrow(() -> new HabitacionNotFoundException());
+                    
+            Carrito carrito = carritoRepository.findByUsuario(u)
+                    .orElseGet(() -> {
                         Carrito newCarrito = new Carrito();
                         newCarrito.setUsuario(u);
                         newCarrito.setCarritoHabitacions(new ArrayList<>());
                         return carritoRepository.save(newCarrito);
-                });
+                    });
 
-    // Verificar si la habitación ya está en el carrito
-        Optional<CarritoHabitacion> existingItem = carrito.getCarritoHabitacions().stream()
-                .filter(ch -> ch.getHabitacion().getId().equals(habitacionId))
-                .findFirst();
-                
-        if (existingItem.isPresent()) {
+            // Verificar si la habitación ya está en el carrito
+            Optional<CarritoHabitacion> existingItem = carrito.getCarritoHabitacions().stream()
+                    .filter(ch -> ch.getHabitacion().getId().equals(habitacionId))
+                    .findFirst();
+                    
+            if (existingItem.isPresent()) {
                 // Si ya existe, devolver el DTO correspondiente
                 return carritoHabitacionService.carritoHabitacionToDTO(existingItem.get());
-        } else {
+            } else {
+                // Convertir String a Date
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date checkInDate = null;
+                Date checkOutDate = null;
+                try {
+                    checkInDate = new Date(format.parse(checkIn).getTime());
+                    checkOutDate = new Date(format.parse(checkOut).getTime());
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException("Formato de fecha inválido. Use yyyy-MM-dd");
+                }
+                
                 // Si no existe, crear nuevo
-                CarritoHabitacion carritoHabitacion = new CarritoHabitacion(nombreReserva, carrito, habitacion);
+                CarritoHabitacion carritoHabitacion = new CarritoHabitacion();
+                carritoHabitacion.setNombreReserva(nombreReserva);
+                carritoHabitacion.setCarrito(carrito);
+                carritoHabitacion.setHabitacion(habitacion);
+                carritoHabitacion.setCantidad(cantidad);
+                carritoHabitacion.setCheckIn(checkInDate);
+                carritoHabitacion.setCheckOut(checkOutDate);
+                carritoHabitacion.setPrecio(precio);
+                
                 carrito.getCarritoHabitacions().add(carritoHabitacion);
                 CarritoHabitacion saved = carritoHabitacionRepository.save(carritoHabitacion);
                 return carritoHabitacionService.carritoHabitacionToDTO(saved);
-        }
+            }
         }
 
     @Override
@@ -203,5 +227,17 @@ public class CarritoServiceImpl implements CarritoService {
                 .carritoId(carrito.getId())
                 .departamentoId(departamento.getId())
                 .build();
+    }
+
+    @Override
+    public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
+        Usuario u = usuarioService.getUsuarioByUsername(usuario)
+                .orElseThrow(() -> new UsuarioNotFoundException());
+
+        Carrito carrito = carritoRepository.findByUsuario(u)
+                .orElseThrow(() -> new CarritoNotFoundException());
+
+        carrito.getCarritoDepartamentos().removeIf(cd -> cd.getId().equals(id));
+        carritoRepository.save(carrito);
     }
 }

@@ -13,7 +13,7 @@ import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 public interface CarritoService {
     CarritoDTO getCarritoByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException;
 
-    CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva)
+    CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio)
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException;
 
     void removeHabitacionFromCarrito(String usuario, Long habitacionId)
@@ -25,4 +25,6 @@ public interface CarritoService {
 
     CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva)
             throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException;
+
+    void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException;
 }

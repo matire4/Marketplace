@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 public class CarritoDepartamentoDTO {
     private Long id;
     private String nombreReserva;
+    private int cantidad;
+    private String checkIn;
+    private String checkOut;
     private Long carritoId;
+    private double precio;
     private Long departamentoId;
 }

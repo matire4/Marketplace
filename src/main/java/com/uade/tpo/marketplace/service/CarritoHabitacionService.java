@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,11 @@ public interface CarritoHabitacionService {
     CarritoHabitacion createCarritoHabitacion(
             Long carritoId,
             Long habitacionId,
-            String nombreReserva) throws CarritoNotFoundException, HabitacionNotFoundException;
+            String nombreReserva,
+            int cantidad,
+            Date checkIn,
+            Date checkOut,
+            Double precio) throws CarritoNotFoundException, HabitacionNotFoundException;
     
     void deleteCarritoHabitacion(Long id) throws CarritoNotFoundException;
     

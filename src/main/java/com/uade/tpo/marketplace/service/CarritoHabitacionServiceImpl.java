@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,7 +53,7 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
 
     @Override
     @Transactional
-    public CarritoHabitacion createCarritoHabitacion(Long carritoId, Long habitacionId, String nombreReserva) 
+    public CarritoHabitacion createCarritoHabitacion(Long carritoId, Long habitacionId, String nombreReserva, int cantidad, Date checkIn, Date checkOut, Double precio) 
             throws CarritoNotFoundException, HabitacionNotFoundException {
         
         Carrito carrito = carritoRepository.findById(carritoId)
@@ -61,7 +62,15 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
         Habitacion habitacion = habitacionRepository.findById(habitacionId)
                 .orElseThrow(() -> new HabitacionNotFoundException());
 
-        CarritoHabitacion carritoHabitacion = new CarritoHabitacion(nombreReserva, carrito, habitacion);
+        CarritoHabitacion carritoHabitacion = new CarritoHabitacion();
+        carritoHabitacion.setNombreReserva(nombreReserva);
+        carritoHabitacion.setCantidad(cantidad);
+        carritoHabitacion.setCheckIn(checkIn);
+        carritoHabitacion.setCheckOut(checkOut);
+        carritoHabitacion.setPrecio(precio);
+        carritoHabitacion.setCarrito(carrito);
+        carritoHabitacion.setHabitacion(habitacion);
+
         return carritoHabitacionRepository.save(carritoHabitacion);
     }
 
@@ -99,6 +108,15 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
             return null;
         }
         
-        return new CarritoHabitacionDTO(carritoHabitacion.getId(),carritoHabitacion.getNombreReserva(),habitacionService.habitacionToHabitacionDTO(carritoHabitacion.getHabitacion()),carritoService.carritoToCarritoDTO(carritoHabitacion.getCarrito()));
+        return new CarritoHabitacionDTO(
+            carritoHabitacion.getId(),
+            carritoHabitacion.getNombreReserva(),
+            carritoHabitacion.getCantidad(),
+            carritoHabitacion.getCheckIn(),
+            carritoHabitacion.getCheckOut(),
+            carritoHabitacion.getHabitacion().getId(),
+            carritoHabitacion.getCarrito().getId(),
+            carritoHabitacion.getPrecio()
+        );
     }
 }

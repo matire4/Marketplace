@@ -1,4 +1,7 @@
 package com.uade.tpo.marketplace.entities;
+
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "carrito_departamento")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class CarritoDepartamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +28,20 @@ public class CarritoDepartamento {
 
     @Column(nullable = false)
     private String nombreReserva;
+    
+    @Column(nullable = false)
+    private int cantidad;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date checkIn;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date checkOut;
+
+    @Column(nullable = false)
+    private double precio;
 
     @ManyToOne
     @JoinColumn(name = "carrito_id", nullable = false)
@@ -30,4 +50,13 @@ public class CarritoDepartamento {
     @ManyToOne
     @JoinColumn(name = "departamento_id", nullable = false)
     private Departamento departamento;
+    
+    public CarritoDepartamento(String nombreReserva, int cantidad, Date checkIn, Date checkOut, Carrito carrito, Departamento departamento) {
+        this.nombreReserva = nombreReserva;
+        this.cantidad = cantidad;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.carrito = carrito;
+        this.departamento = departamento;
+    }
 }

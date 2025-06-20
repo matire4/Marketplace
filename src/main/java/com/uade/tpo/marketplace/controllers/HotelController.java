@@ -57,7 +57,7 @@ public class HotelController {
                 hotelRequest.getPais(),
                 hotelRequest.getUsername(),
                 hotelRequest.getCategoria(),
-                hotelRequest.getHabitaciones().stream().map(h -> h.getId()).toList(),
+                (hotelRequest.getHabitaciones() == null ? java.util.Collections.emptyList() : hotelRequest.getHabitaciones().stream().map(h -> h.getId()).toList()),
                 hotelRequest.getHabitacionesParaCrear());
 
         return ResponseEntity.created(URI.create("/hoteles" + result.getId()))

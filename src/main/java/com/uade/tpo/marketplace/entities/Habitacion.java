@@ -39,7 +39,6 @@ public class Habitacion {
     double precioPorNoche;
     @Column(nullable = false)
     String numeroHabitacion;
-
     @ManyToOne
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;

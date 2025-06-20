@@ -90,6 +90,9 @@ public class AlojamientoServiceImpl implements AlojamientoService {
             if (minPrecio.isPresent()) {
                 builder.precio(minPrecio.getAsDouble());
             }
+        }else if (tipo == "departamento") {
+            Departamento d = (Departamento) alojamiento;
+            builder.precio(d.getPrecioPorNoche());
         }
         if (alojamiento.getGestor() != null) {
             builder.gestorId(alojamiento.getGestor().getId());
