@@ -9,7 +9,7 @@ import lombok.Data;
 public class ReservaDTO {
     private Long id;
     private List<ReservaHabitacionDTO> habitaciones;
-    private UsuarioDTO usuarioDTO;
+    private List<ReservaDepartamentoDTO> departamentos;
     private Date fecha;
     private double precio;
 }

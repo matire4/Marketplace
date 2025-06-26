@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservaHabitacionDTO {
+public class ReservaDepartamentoDTO {
     private Long id;
     private String nombreReserva;
     private Long reservaId;
-    private Long habitacionId;
-    private String habitacionNombre;
+    private Long departamentoId;
+    private String departamentoNombre;
     private Date fechaDesde;
     private Date fechaHasta;
     private int cantidadPersonas;

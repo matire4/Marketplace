@@ -1,68 +1,124 @@
 package com.uade.tpo.marketplace.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.tpo.marketplace.entities.Habitacion;
+import com.uade.tpo.marketplace.entities.Reserva;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
+import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
+import com.uade.tpo.marketplace.repository.ReservaRepository;
 
 @Service
 public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
+
     @Autowired
     private ReservaHabitacionRepository reservaHabitacionRepository;
+    
     @Autowired
-    private ReservaService reservaService;
+    private ReservaRepository reservaRepository;
+    
     @Autowired
-    private HabitacionService habitacionService;
+    private HabitacionRepository habitacionRepository;
 
     @Override
-    public List<ReservaHabitacionDTO> getReservasHabitacionesByReservaId(Long reservaId) throws ReservaNotFounException {
-        List<ReservaHabitacion> reservasHabitaciones = reservaHabitacionRepository.findByReservaId(reservaId);
-        return reservasHabitaciones.stream()
+    @Transactional(readOnly = true)
+    public List<ReservaHabitacionDTO> getReservasHabitacionByReservaId(Long reservaId) throws ReservaNotFounException {
+        Optional<Reserva> reserva = reservaRepository.findById(reservaId);
+        if (!reserva.isPresent()) {
+            throw new ReservaNotFounException();
+        }
+        
+        List<ReservaHabitacion> reservasHabitacion = reservaHabitacionRepository.findByReservaId(reservaId);
+        return reservasHabitacion.stream()
                 .map(this::reservaHabitacionToReservaHabitacionDTO)
-                .toList();
+                .collect(Collectors.toList());
     }
+
     @Override
-    public ReservaHabitacionDTO createReservaHabitacion(ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException {
+    @Transactional
+    public ReservaHabitacionDTO createReservaHabitacion(ReservaHabitacionDTO reservaHabitacionDTO) 
+            throws ReservaNotFounException {
+        
+        Optional<Reserva> reserva = reservaRepository.findById(reservaHabitacionDTO.getReservaId());
+        if (!reserva.isPresent()) {
+            throw new ReservaNotFounException();
+        }
+        
+        Optional<Habitacion> habitacion = habitacionRepository.findById(reservaHabitacionDTO.getHabitacionId());
+        if (!habitacion.isPresent()) {
+            throw new ReservaNotFounException();
+        }
+        
         ReservaHabitacion reservaHabitacion = new ReservaHabitacion();
         reservaHabitacion.setNombreReserva(reservaHabitacionDTO.getNombreReserva());
+        reservaHabitacion.setReserva(reserva.get());
+        reservaHabitacion.setHabitacion(habitacion.get());
         reservaHabitacion.setFechaDesde(reservaHabitacionDTO.getFechaDesde());
         reservaHabitacion.setFechaHasta(reservaHabitacionDTO.getFechaHasta());
+        reservaHabitacion.setCantidadPersonas(reservaHabitacionDTO.getCantidadPersonas());
+        reservaHabitacion.setPrecio(reservaHabitacionDTO.getPrecio());
         reservaHabitacion.setEstado(reservaHabitacionDTO.getEstado());
         
-        ReservaHabitacion savedReservaHabitacion = reservaHabitacionRepository.save(reservaHabitacion);
-        return reservaHabitacionToReservaHabitacionDTO(savedReservaHabitacion);
+        ReservaHabitacion saved = reservaHabitacionRepository.save(reservaHabitacion);
+        return reservaHabitacionToReservaHabitacionDTO(saved);
     }
+
     @Override
-    public ReservaHabitacionDTO updateReservaHabitacion(Long reservaHabitacionId, ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException {
-        ReservaHabitacion reservaHabitacion = reservaHabitacionRepository.findById(reservaHabitacionId)
-                .orElseThrow(() -> new ReservaNotFounException());
+    @Transactional
+    public ReservaHabitacionDTO updateReservaHabitacion(Long reservaHabitacionId, 
+            ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException {
         
+        Optional<ReservaHabitacion> existing = reservaHabitacionRepository.findById(reservaHabitacionId);
+        if (!existing.isPresent()) {
+            throw new ReservaNotFounException();
+        }
+        
+        ReservaHabitacion reservaHabitacion = existing.get();
         reservaHabitacion.setNombreReserva(reservaHabitacionDTO.getNombreReserva());
         reservaHabitacion.setFechaDesde(reservaHabitacionDTO.getFechaDesde());
         reservaHabitacion.setFechaHasta(reservaHabitacionDTO.getFechaHasta());
+        reservaHabitacion.setCantidadPersonas(reservaHabitacionDTO.getCantidadPersonas());
+        reservaHabitacion.setPrecio(reservaHabitacionDTO.getPrecio());
         reservaHabitacion.setEstado(reservaHabitacionDTO.getEstado());
         
-        ReservaHabitacion updatedReservaHabitacion = reservaHabitacionRepository.save(reservaHabitacion);
-        return reservaHabitacionToReservaHabitacionDTO(updatedReservaHabitacion);
+        ReservaHabitacion saved = reservaHabitacionRepository.save(reservaHabitacion);
+        return reservaHabitacionToReservaHabitacionDTO(saved);
     }
+
     @Override
+    @Transactional
     public void deleteReservaHabitacion(Long reservaHabitacionId) throws ReservaNotFounException {
-        ReservaHabitacion reservaHabitacion = reservaHabitacionRepository.findById(reservaHabitacionId)
-                .orElseThrow(() -> new ReservaNotFounException());
-        reservaHabitacionRepository.delete(reservaHabitacion);
+        Optional<ReservaHabitacion> reservaHabitacion = reservaHabitacionRepository.findById(reservaHabitacionId);
+        if (!reservaHabitacion.isPresent()) {
+            throw new ReservaNotFounException();
+        }
+        
+        reservaHabitacionRepository.deleteById(reservaHabitacionId);
     }
+
     @Override
+    @Transactional(readOnly = true)
     public ReservaHabitacionDTO reservaHabitacionToReservaHabitacionDTO(ReservaHabitacion reservaHabitacion) {
-        ReservaHabitacionDTO reservaHabitacionDTO = new ReservaHabitacionDTO();
-        reservaHabitacionDTO.setNombreReserva(reservaHabitacion.getNombreReserva());
-        reservaHabitacionDTO.setReservaHabitacion(reservaService.reservaToReservaDTO(reservaHabitacion.getReserva()));
-        reservaHabitacionDTO.setHabitacionReserva(habitacionService.habitacionToHabitacionDTO(reservaHabitacion.getHabitacion()));
-        reservaHabitacionDTO.setEstado(reservaHabitacion.getEstado());
-        return reservaHabitacionDTO;
+        return ReservaHabitacionDTO.builder()
+                .id(reservaHabitacion.getId())
+                .nombreReserva(reservaHabitacion.getNombreReserva())
+                .reservaId(reservaHabitacion.getReserva().getId())
+                .habitacionId(reservaHabitacion.getHabitacion().getId())
+                .habitacionNombre(reservaHabitacion.getHabitacion().getNumeroHabitacion())
+                .fechaDesde(reservaHabitacion.getFechaDesde())
+                .fechaHasta(reservaHabitacion.getFechaHasta())
+                .cantidadPersonas(reservaHabitacion.getCantidadPersonas())
+                .precio(reservaHabitacion.getPrecio())
+                .estado(reservaHabitacion.getEstado())
+                .build();
     }
 }

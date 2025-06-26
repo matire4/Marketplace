@@ -135,14 +135,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional
     public void removeHabitacionFromCarrito(String usuario, Long habitacionId) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        Usuario u = usuarioService.getUsuarioByUsername(usuario)
-                .orElseThrow(() -> new UsuarioNotFoundException());
-
-        Carrito carrito = carritoRepository.findByUsuario(u)
-                .orElseThrow(() -> new CarritoNotFoundException());
-        Habitacion habitacion = habitacionRepository.findById(habitacionId)
-                .orElseThrow(() -> new HabitacionNotFoundException());  
-        carritoHabitacionRepository.deleteByCarritoIdAndHabitacionId(carrito.getId(), habitacion.getId());
+        carritoHabitacionRepository.deleteById(habitacionId);
     }
 
     @Override
@@ -190,7 +183,6 @@ public class CarritoServiceImpl implements CarritoService {
         }
         
         if (carrito.getCarritoDepartamentos() != null) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             List<CarritoDepartamentoDTO> departamentosDTO = carrito.getCarritoDepartamentos().stream()
                     .map(cd -> new CarritoDepartamentoDTO(
                             cd.getId(),
@@ -270,9 +262,22 @@ public class CarritoServiceImpl implements CarritoService {
 
         @Override
         public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
-            Carrito carrito = carritoRepository.findByUsuario(usuarioService.getUsuarioByUsername(usuario)
-                    .orElseThrow(() -> new UsuarioNotFoundException()))
-                    .orElseThrow(() -> new CarritoNotFoundException());
-            carritoDepartamentoRepository.deleteByCarritoIdAndDepartamentoId(carrito.getId(), id);
+            carritoDepartamentoRepository.deleteById(id);
+        }
+
+        @Override
+        @Transactional(readOnly = true)
+        public Carrito getCarritoEntityByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException {
+            Usuario u = usuarioService.getUsuarioByUsername(usuario)
+                    .orElseThrow(() -> new UsuarioNotFoundException());
+
+            return carritoRepository.findByUsuario(u)
+                    .orElseGet(() -> {
+                        Carrito newCarrito = new Carrito();
+                        newCarrito.setUsuario(u);
+                        newCarrito.setCarritoHabitacions(new ArrayList<>());
+                        newCarrito.setCarritoDepartamentos(new ArrayList<>());
+                        return carritoRepository.save(newCarrito);
+                    });
         }
 }

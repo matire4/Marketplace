@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Reserva;
 import com.uade.tpo.marketplace.entities.dto.ReservaDTO;
+import com.uade.tpo.marketplace.exceptions.CarritoEmptyException;
+import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
@@ -34,7 +37,7 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getReservas());
     }
     
-    @GetMapping("/user/{usuario}")
+    @GetMapping("/{usuario}")
     public ResponseEntity<List<ReservaDTO>> getReservasByUsuario(@PathVariable String usuario)
             throws ReservaNotFounException, UsuarioNotFoundException {
         List<ReservaDTO> result = reservaService.getReservasByUsuario(usuario);
@@ -59,18 +62,23 @@ public class ReservaController {
             @RequestBody ReservaDTO reservaDTO) throws ReservaNotFounException,
             HabitacionNotFoundException, UsuarioNotFoundException {
             Reserva result = reservaService.updateReserva(reservaId, reservaDTO.getFecha(),
-                reservaDTO.getHabitaciones(), reservaDTO.getUsuarioDTO());
+                reservaDTO.getHabitaciones());
         return ResponseEntity.ok(reservaService.reservaToReservaDTO(result));
     }
 
-    @PostMapping
-    public ResponseEntity<ReservaDTO> createHabitacion(@RequestBody ReservaDTO reservaRequest) throws ReservaNotFounException,
-            HabitacionNotFoundException, UsuarioNotFoundException {
-        Reserva result = reservaService.createReserva(reservaRequest.getFecha(),
-                reservaRequest.getHabitaciones(), reservaRequest.getUsuarioDTO());
-
-        return ResponseEntity.created(URI.create("/reserva" + result.getId()))
-                .body(reservaService.reservaToReservaDTO(result));
+    @PostMapping("/{username}")
+    public ResponseEntity<?> createReservaFromCarrito(@PathVariable String username) {
+        try {
+            ReservaDTO reservaDTO = reservaService.createReservaFromCarrito(username);
+            return ResponseEntity.status(HttpStatus.CREATED).body(reservaDTO);
+        } catch (UsuarioNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado: " + username);
+        } catch (CarritoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Carrito no encontrado para el usuario: " + username);
+        } catch (CarritoEmptyException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El carrito está vacío");
+        } catch (HabitacionNotFoundException | ReservaNotFounException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la reserva: " + e.getMessage());
+        }
     }
-
 }

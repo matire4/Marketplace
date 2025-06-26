@@ -14,6 +14,7 @@ import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
+import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
@@ -187,5 +188,10 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .orElseThrow(() -> new HabitacionNotFoundException());
                 List<Habitacion> habitaciones = habitacionRepository.findByHotel(hotel);
                 return habitaciones.stream().map(habitacion -> this.habitacionToHabitacionDTO(habitacion)).toList();
+        }
+
+        @Override
+        public Optional<Habitacion> getHabitacionById(Long habitacionId) {
+                return habitacionRepository.findById(habitacionId);
         }
 }

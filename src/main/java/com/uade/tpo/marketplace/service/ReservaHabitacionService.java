@@ -7,7 +7,7 @@ import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 
 public interface ReservaHabitacionService {
-    List<ReservaHabitacionDTO> getReservasHabitacionesByReservaId(Long reservaId) throws ReservaNotFounException;
+    List<ReservaHabitacionDTO> getReservasHabitacionByReservaId(Long reservaId) throws ReservaNotFounException;
     ReservaHabitacionDTO createReservaHabitacion(ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException;
     ReservaHabitacionDTO updateReservaHabitacion(Long reservaHabitacionId, ReservaHabitacionDTO reservaHabitacionDTO) throws ReservaNotFounException;
     void deleteReservaHabitacion(Long reservaHabitacionId) throws ReservaNotFounException;
