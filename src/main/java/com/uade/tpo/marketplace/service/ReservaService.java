@@ -31,7 +31,6 @@ public interface ReservaService {
 
     ReservaDTO reservaToReservaDTO(Reserva reserva);
     
-    // Nuevo método para crear reserva desde el carrito
     ReservaDTO createReservaFromCarrito(String username) 
             throws UsuarioNotFoundException, CarritoNotFoundException, CarritoEmptyException, 
                    HabitacionNotFoundException, ReservaNotFounException;

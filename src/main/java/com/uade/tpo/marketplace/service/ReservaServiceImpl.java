@@ -193,7 +193,8 @@ public class ReservaServiceImpl implements ReservaService {
                 reserva.getReservasHabitacion().add(rh);
                 precioTotal += ch.getPrecio();
                 
-                carritoHabitacionRepository.delete(ch);
+                carritoHabitacionRepository.deleteById(ch.getId());
+                carritoHabitacionRepository.flush();
             }
         }
         
@@ -211,8 +212,12 @@ public class ReservaServiceImpl implements ReservaService {
                 
                 reserva.getReservasDepartamento().add(rd);
                 precioTotal += cd.getPrecio();
-                
+        
+                cd.getDepartamento().getCarritoDepartamento().remove(cd);
+                carrito.getCarritoDepartamentos().remove(cd);
+
                 carritoDepartamentoRepository.delete(cd);
+                carritoDepartamentoRepository.flush();
             }
         }
         
