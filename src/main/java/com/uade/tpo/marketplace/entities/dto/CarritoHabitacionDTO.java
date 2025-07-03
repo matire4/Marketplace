@@ -22,7 +22,7 @@ public class CarritoHabitacionDTO {
     private Long carritoId;
     private Double precio;
     private String tipo = "habitacion"; 
-
+    //
     public CarritoHabitacionDTO(Long id, String nombreReserva, int cantidad, Date checkIn, Date checkOut, Long hotelId, Long habitacionId, Long carritoId, Double precio) {
         this.id = id;
         this.nombreReserva = nombreReserva;
