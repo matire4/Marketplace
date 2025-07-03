@@ -173,6 +173,7 @@ public class CarritoServiceImpl implements CarritoService {
                             ch.getCantidad(),
                             ch.getCheckIn(),
                             ch.getCheckOut(),
+                            ch.getHabitacion().getHotel().getId(),
                             ch.getHabitacion().getId(),
                             ch.getCarrito().getId(),
                             ch.getPrecio()

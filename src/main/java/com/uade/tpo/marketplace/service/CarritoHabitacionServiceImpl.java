@@ -114,6 +114,7 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
             carritoHabitacion.getCantidad(),
             carritoHabitacion.getCheckIn(),
             carritoHabitacion.getCheckOut(),
+            carritoHabitacion.getHabitacion().getHotel().getId(),
             carritoHabitacion.getHabitacion().getId(),
             carritoHabitacion.getCarrito().getId(),
             carritoHabitacion.getPrecio()
