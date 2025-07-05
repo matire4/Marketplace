@@ -3,8 +3,6 @@ package com.uade.tpo.marketplace.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.ResponseEntity;
-
 import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
@@ -39,4 +37,6 @@ public interface HotelService {
         public void deleteHotel(String nombre)throws HotelNotFoundException;
 
         public HotelDTO updateHotel(String nombre, HotelDTO hotel) throws HotelNotFoundException, HotelDuplicateException;
+
+        public Optional<Hotel> findById(Long id);
 }

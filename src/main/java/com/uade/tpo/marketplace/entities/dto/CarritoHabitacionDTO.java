@@ -1,10 +1,8 @@
 package com.uade.tpo.marketplace.entities.dto;
 
-import java.lang.classfile.instruction.ConstantInstruction.LoadConstantInstruction;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

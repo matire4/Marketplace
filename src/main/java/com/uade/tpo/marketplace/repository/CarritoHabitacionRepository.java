@@ -10,9 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.uade.tpo.marketplace.entities.Carrito;
 import com.uade.tpo.marketplace.entities.CarritoHabitacion;
-import com.uade.tpo.marketplace.entities.Habitacion;
 
 @Repository
 public interface CarritoHabitacionRepository extends JpaRepository<CarritoHabitacion, Long> {

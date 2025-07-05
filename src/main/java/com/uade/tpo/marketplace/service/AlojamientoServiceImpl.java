@@ -20,26 +20,18 @@ import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.AlojamientoRepository;
-import com.uade.tpo.marketplace.repository.HabitacionRepository;
-import com.uade.tpo.marketplace.repository.HotelRepository;
 
 @Service
 public class AlojamientoServiceImpl implements AlojamientoService {
-
-    private final HabitacionRepository habitacionRepository;
 
     @Autowired
     private AlojamientoRepository alojamientoRepository;
     @Autowired
     private GestorService gestorService;
     @Autowired
-    private HotelRepository hotelRepository;
+    private HotelService hotelService;
     @Autowired
     private HabitacionService habitacionService;
-
-    AlojamientoServiceImpl(HabitacionRepository habitacionRepository) {
-        this.habitacionRepository = habitacionRepository;
-    }
 
     @Override
     public List<AlojamientoDTO> getAlojamientos() {
@@ -82,7 +74,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                 .ciudad(alojamiento.getCiudad())
                 .pais(alojamiento.getPais());
         if (tipo == "hotel") {
-            Hotel h = hotelRepository.findById(alojamiento.getId()).get();
+            Hotel h = hotelService.findById(alojamiento.getId()).get();
             OptionalDouble minPrecio = h.getHabitaciones().stream()
                 .mapToDouble(hab -> hab.getPrecioPorNoche())
                 .min();

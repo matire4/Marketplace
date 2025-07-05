@@ -19,8 +19,6 @@ import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoDepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
-import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
-import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
@@ -51,12 +49,6 @@ public class CarritoServiceImpl implements CarritoService {
     
     @Autowired
     private UsuarioService usuarioService;
-
-    @Autowired
-    private HabitacionService habitacionService;
-
-    @Autowired
-    private DepartamentoService departamentoService;
     
     @Autowired
     private DepartamentoRepository departamentoRepository;

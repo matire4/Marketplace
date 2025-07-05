@@ -1,11 +1,9 @@
 package com.uade.tpo.marketplace.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoDepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;

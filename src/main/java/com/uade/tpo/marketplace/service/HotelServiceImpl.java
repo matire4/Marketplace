@@ -24,7 +24,6 @@ import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
-import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
 import jakarta.transaction.Transactional;
@@ -37,8 +36,6 @@ public class HotelServiceImpl implements HotelService {
         private GestorRepository gestorRepository;
         @Autowired
         private CategoriaRepository categoriaRepository;
-        @Autowired
-        private ImagenRepository imagenRepository;
         @Autowired
         private HabitacionRepository habitacionRepository;
         @Autowired
@@ -196,5 +193,10 @@ public class HotelServiceImpl implements HotelService {
 
                 hotelRepository.save(h);
                 return hotelToHotelDTO(h);
+        }
+
+        @Override
+        public Optional<Hotel> findById(Long id) {
+                return hotelRepository.findById(id);
         }
 }

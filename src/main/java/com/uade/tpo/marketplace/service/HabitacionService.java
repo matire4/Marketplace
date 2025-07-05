@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
-import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;

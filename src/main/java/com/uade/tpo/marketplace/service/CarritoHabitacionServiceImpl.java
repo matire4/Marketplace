@@ -30,12 +30,6 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
     @Autowired
     private HabitacionRepository habitacionRepository;
 
-    @Autowired
-    private CarritoService carritoService;
-
-    @Autowired
-    private HabitacionService habitacionService;
-
     @Override
     @Transactional(readOnly = true)
     public List<CarritoHabitacionDTO> getCarritosHabitacion() {

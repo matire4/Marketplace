@@ -1,6 +1,5 @@
 package com.uade.tpo.marketplace.controllers;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 

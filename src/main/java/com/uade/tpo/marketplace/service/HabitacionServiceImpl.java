@@ -14,7 +14,6 @@ import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
-import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
@@ -30,7 +29,6 @@ import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
-import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
 @Service
@@ -41,8 +39,6 @@ public class HabitacionServiceImpl implements HabitacionService {
         private GestorRepository gestorRepository;
         @Autowired
         private CategoriaRepository categoriaRepository;
-        @Autowired
-        private ImagenRepository imagenRepository;
         @Autowired
         private HotelRepository hotelRepository;
         @Autowired
