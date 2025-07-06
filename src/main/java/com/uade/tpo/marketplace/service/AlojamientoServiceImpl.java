@@ -104,7 +104,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
         }
         if (alojamiento.getImagenes() != null && Hibernate.isInitialized(alojamiento.getImagenes())) {
             builder.imagenes(alojamiento.getImagenes().stream()
-                    .map(imagen -> imagen.getId())
+                    .map(imagen -> imagen.getImagen().getBytes())
                     .toList());
         }
         return builder.build();
@@ -148,19 +148,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
 
         if (hotel.getImagenes() != null) {
             hotelDTO.setImagenes(hotel.getImagenes().stream()
-                    .map(i -> i.getId())
-                    .toList());
-        }
-
-        if (hotel.getReviews() != null) {
-            hotelDTO.setReviews(hotel.getReviews().stream()
-                    .map(r -> r.getId())
-                    .toList());
-        }
-
-        if (hotel.getPreguntas() != null) {
-            hotelDTO.setPreguntas(hotel.getPreguntas().stream()
-                    .map(p -> p.getId())
+                    .map(i -> i.getImagen().getBytes())
                     .toList());
         }
 
@@ -204,7 +192,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
 
         if (departamento.getImagenes() != null) {
             departamentoDTO.setImagenes(departamento.getImagenes().stream()
-                    .map(i -> i.getId())
+                    .map(i -> i.getImagen().getBytes())
                     .toList());
         }
 

@@ -2,6 +2,8 @@ package com.uade.tpo.marketplace.entities.dto;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Data;
 
 @Data
@@ -17,10 +19,9 @@ public class HotelDTO {
 
     private List<HabitacionDTO> habitaciones;
     private List<HabitacionDTO> habitacionesParaCrear;
-    private List<Long> imagenes;
+    private List<byte[]> imagenes;
+    private List<MultipartFile> imagenesNuevas;
 
-    private List<Long> reviews;
-    private List<Long> preguntas;
     private String username;
     private String categoria;
 

@@ -1,7 +1,10 @@
 package com.uade.tpo.marketplace.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
@@ -24,7 +27,7 @@ public interface HabitacionService {
                         int capacidad,
                         double precioPorNoche,
                         String numeroHabitacion,
-                        List<Long> imagenes,
+                        List<MultipartFile> imagenes,
                         String username,
                         String categoria,
                         int ambientes,
@@ -34,14 +37,14 @@ public interface HabitacionService {
                         String hotel,
                         List<ReservaHabitacionDTO> reservas,
                         List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException,
-                        HotelNotFoundException, HabitacionDuplicateException;
+                        HotelNotFoundException, HabitacionDuplicateException, IOException;
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 
         public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException;
 
         public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
-                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException,
+                        throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException, IOException,
                         ImagenNotFoundException;
 
         public Optional<Habitacion> getHabitacionById(Long habitacionId);

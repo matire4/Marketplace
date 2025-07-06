@@ -1,16 +1,18 @@
 package com.uade.tpo.marketplace.controllers;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,10 +45,10 @@ public class HotelController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
-    public ResponseEntity<HotelDTO> createHotel(@RequestBody HotelDTO hotelRequest) throws HotelDuplicateException,
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<HotelDTO> createHotel(@ModelAttribute HotelDTO hotelRequest) throws HotelDuplicateException,
             GestorNotFoundException,
-            CategoriaNotFoundException {
+            CategoriaNotFoundException, IOException {
         Hotel result = hotelService.createHotel(
                 hotelRequest.getNombre(),
                 hotelRequest.getTelefono(),
@@ -58,7 +60,8 @@ public class HotelController {
                 hotelRequest.getUsername(),
                 hotelRequest.getCategoria(),
                 (hotelRequest.getHabitaciones() == null ? java.util.Collections.emptyList() : hotelRequest.getHabitaciones().stream().map(h -> h.getId()).toList()),
-                hotelRequest.getHabitacionesParaCrear());
+                hotelRequest.getHabitacionesParaCrear(),
+                hotelRequest.getImagenesNuevas());
 
         return ResponseEntity.created(URI.create("/hoteles" + result.getId()))
                 .body(hotelService.hotelToHotelDTO(result));
@@ -74,9 +77,9 @@ public class HotelController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{nombre}")
-    public ResponseEntity<HotelDTO> updateHotel(@PathVariable String nombre, @RequestBody HotelDTO hotel)
-            throws HotelNotFoundException, HotelDuplicateException {
+    @PutMapping(value = "/{nombre}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<HotelDTO> updateHotel(@PathVariable String nombre, @ModelAttribute HotelDTO hotel)
+            throws HotelNotFoundException, HotelDuplicateException, IOException {
         Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
         if (result.isPresent()) {
             return ResponseEntity.ok(hotelService.updateHotel(nombre, hotel));

@@ -1,11 +1,13 @@
 package com.uade.tpo.marketplace.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
-import com.uade.tpo.marketplace.entities.dto.ImagenDTO;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
@@ -28,14 +30,13 @@ public interface DepartamentoService {
             int banos,
             int dormitorios,
             int camas,
-            List<Long> imagenes,
-            List<ImagenDTO> imagenCrear,
+            List<MultipartFile> imagenesNuevas,
             String username,
-            String categoria) throws GestorNotFoundException, CategoriaNotFoundException;
+            String categoria) throws GestorNotFoundException, CategoriaNotFoundException, IOException;
 
     Departamento updateDepartamento(
             Long departamentoId,
-            DepartamentoDTO departamentoDTO) throws DepartamentoNotFoundException, GestorNotFoundException, CategoriaNotFoundException;
+            DepartamentoDTO departamentoDTO) throws DepartamentoNotFoundException, GestorNotFoundException, CategoriaNotFoundException, IOException;
     
     void deleteDepartamento(Long departamentoId) throws DepartamentoNotFoundException;
     

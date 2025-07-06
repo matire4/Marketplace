@@ -35,8 +35,8 @@ public class Hotel extends Alojamiento {
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Habitacion> habitaciones = new ArrayList<>();
 
-    public Hotel(String descripcion, String direccion, String ciudad, String pais, Gestor gestor, Categoria categoria, String nombre, String telefono, String email) {
-        super(descripcion, direccion, ciudad, pais, gestor, categoria);
+    public Hotel(String descripcion, String direccion, String ciudad, String pais, Gestor gestor, Categoria categoria, List<Imagen> imagenes, String nombre, String telefono, String email) {
+        super(descripcion, direccion, ciudad, pais, gestor, categoria, imagenes);
         this.nombre = nombre;
         this.telefono = telefono;
         this.email = email;

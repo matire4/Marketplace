@@ -23,6 +23,6 @@ public class AlojamientoDTO {
     private Long categoriaId;
     private List<Long> reviews;
     private List<Long> preguntas;
-    private List<Long> imagenes;
+    private List<byte[]> imagenes;
     private String tipoAlojamiento;
 }

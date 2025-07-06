@@ -1,7 +1,10 @@
 package com.uade.tpo.marketplace.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entities.Hotel;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
@@ -27,16 +30,17 @@ public interface HotelService {
                         String username,
                         String categoria,
                         List<Long> habitaciones,
-                        List<HabitacionDTO> habitacionesParaCrear)
+                        List<HabitacionDTO> habitacionesParaCrear,
+                        List<MultipartFile> imagenesNuevas)
                         throws HotelDuplicateException,
                         GestorNotFoundException,
-                        CategoriaNotFoundException;
+                        CategoriaNotFoundException, IOException;
 
         public HotelDTO hotelToHotelDTO(Hotel hotel);
 
         public void deleteHotel(String nombre)throws HotelNotFoundException;
 
-        public HotelDTO updateHotel(String nombre, HotelDTO hotel) throws HotelNotFoundException, HotelDuplicateException;
+        public HotelDTO updateHotel(String nombre, HotelDTO hotel) throws HotelNotFoundException, HotelDuplicateException, IOException;
 
         public Optional<Hotel> findById(Long id);
 }

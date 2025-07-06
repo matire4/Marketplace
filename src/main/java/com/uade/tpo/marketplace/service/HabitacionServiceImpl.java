@@ -1,10 +1,12 @@
 package com.uade.tpo.marketplace.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.Imagen;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
@@ -29,6 +32,7 @@ import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
+import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
 @Service
@@ -49,6 +53,8 @@ public class HabitacionServiceImpl implements HabitacionService {
         ReservaHabitacionRepository reservaHabitacionRepository;
         @Autowired
         CarritoHabitacionRepository carritoHabitacionRepository;
+        @Autowired
+        ImagenRepository imagenRepository;
 
         @Override
         public List<HabitacionDTO> getHabitaciones() {
@@ -70,7 +76,7 @@ public class HabitacionServiceImpl implements HabitacionService {
                         int capacidad,
                         double precioPorNoche,
                         String numeroHabitacion,
-                        List<Long> imagenes,
+                        List<MultipartFile> imagenes,
                         String username,
                         String categoria,
                         int ambientes,
@@ -80,7 +86,7 @@ public class HabitacionServiceImpl implements HabitacionService {
                         String hotel,
                         List<ReservaHabitacionDTO> reservas,
                         List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException,
-                        HotelNotFoundException, HabitacionDuplicateException {
+                        HotelNotFoundException, HabitacionDuplicateException, IOException {
 
                 Gestor gestor = gestorRepository.findByUsername(username)
                                 .orElseThrow(() -> new GestorNotFoundException());
@@ -96,6 +102,17 @@ public class HabitacionServiceImpl implements HabitacionService {
                 if (habitacionRepository.findByHotelAndNumeroHabitacion(h, numeroHabitacion).isPresent()) {
                         throw new HabitacionDuplicateException();
                 }
+                List<Imagen> imagenesHabitacion = imagenes.stream()
+                                .map(imagen -> {
+                                        Imagen newImagen = new Imagen();
+                                        try {
+                                                newImagen.setImagen(imagen.getBytes().toString());
+                                        } catch (IOException e) {
+                                                e.printStackTrace();
+                                        }
+                                        return newImagen;
+                                }).toList();
+                imagenesHabitacion.forEach(imagen -> imagen.setAlojamiento(h));
                 Habitacion habitacion = new Habitacion(
                                 tipoHabitacion,
                                 capacidad,
@@ -109,9 +126,15 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 camas,
                                 h,
                                 r,
-                                carr);
+                                carr,
+                                imagenesHabitacion);
+                Habitacion savedHabitacion = habitacionRepository.save(habitacion);
+                for (Imagen imagen : imagenesHabitacion) {
+                        imagen.setHabitacion(savedHabitacion);
+                        imagenRepository.save(imagen);
+                }
 
-                return habitacionRepository.save(habitacion);
+                return savedHabitacion;
         }
 
         @Override
@@ -131,10 +154,10 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .banos(habitacion.getBanos())
                                 .dormitorios(habitacion.getDormitorios())
                                 .camas(habitacion.getCamas())
-                                .imagenes(habitacion.getImagenesHabitacion() != null
-                                                && Hibernate.isInitialized(habitacion.getImagenesHabitacion())
-                                                                ? habitacion.getImagenesHabitacion().stream()
-                                                                                .map(imagen -> imagen.getId())
+                                .imagenes(habitacion.getImagenes() != null
+                                                && Hibernate.isInitialized(habitacion.getImagenes())
+                                                                ? habitacion.getImagenes().stream()
+                                                                                .map(imagen -> imagen.getImagen().getBytes())
                                                                                 .toList()
                                                                 : null)
                                 .gestor(habitacion.getGestor() != null ? habitacion.getGestor().getUsername() : null)
@@ -158,7 +181,7 @@ public class HabitacionServiceImpl implements HabitacionService {
         @Transactional
         public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
                         throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException,
-                        ImagenNotFoundException {
+                        ImagenNotFoundException, IOException {
 
                 Habitacion habitacion = habitacionRepository
                                 .findByHotelAndNumeroHabitacion(hotelRepository.findByNombre(nombreHotel)

@@ -48,7 +48,7 @@ public class Habitacion {
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CarritoHabitacion> carritoHabitacion = new ArrayList<>();
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Imagen> imagenesHabitacion = new ArrayList<>();
+    private List<Imagen> imagenes = new ArrayList<>();
 
 
     @ManyToOne
@@ -63,12 +63,12 @@ public class Habitacion {
 
     public Habitacion(TipoHabitacion tipoHabitacion, int capacidad, double precioPorNoche, String numeroHabitacion, Gestor gestor, Categoria categoria, int ambientes, int banos,
             int dormitorios, int camas, Hotel hotel, List<ReservaHabitacion> reservas,
-            List<CarritoHabitacion> carritos) {
+            List<CarritoHabitacion> carritos,List<Imagen> imagenes) {
         this.tipoHabitacion = tipoHabitacion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;
         this.numeroHabitacion = numeroHabitacion;
-        this.imagenesHabitacion = new java.util.ArrayList<>();
+        this.imagenes = imagenes;
         this.gestor = gestor;
         this.categoria = categoria;
         this.ambientes = ambientes;

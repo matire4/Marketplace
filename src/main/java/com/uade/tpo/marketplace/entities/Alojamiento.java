@@ -54,13 +54,13 @@ public abstract class Alojamiento {
     private Categoria categoria;
 
     public Alojamiento(String descripcion, String direccion, String ciudad, String pais, Gestor gestor,
-            Categoria categoria) {
+            Categoria categoria, List<Imagen> imagenes) {
         this.gestor = gestor;
         this.descripcion = descripcion;
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.pais = pais;
         this.categoria = categoria;
-        this.imagenes = new java.util.ArrayList<>();
+        this.imagenes = imagenes;
     }
 }

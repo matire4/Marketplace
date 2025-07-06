@@ -2,6 +2,8 @@ package com.uade.tpo.marketplace.entities.dto;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,8 +27,8 @@ public class DepartamentoDTO {
     private String direccion;
     private String ciudad;
     private String pais;
-    private List<Long> imagenes;
-    private List<ImagenDTO> imagenesNuevas;
+    private List<byte[]> imagenes;
+    private List<MultipartFile> imagenesNuevas;
     private String username;
     private String categoria;
 }

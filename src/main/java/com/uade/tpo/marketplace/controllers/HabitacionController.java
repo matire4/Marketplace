@@ -1,16 +1,18 @@
 package com.uade.tpo.marketplace.controllers;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,27 +68,27 @@ public class HabitacionController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{nombreHotel}/{numeroHabitacion}")
+    @PutMapping(value = "/{nombreHotel}/{numeroHabitacion}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable String nombreHotel,
             @PathVariable String numeroHabitacion,
-            @RequestBody HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
+            @ModelAttribute HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
-            CategoriaNotFoundException, ImagenNotFoundException {
+            CategoriaNotFoundException, ImagenNotFoundException, IOException {
         Habitacion result = habitacionService.updateHabitacion(nombreHotel, numeroHabitacion, habitacionRequest);
         return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result));
     }
 
-    @PostMapping
-    public ResponseEntity<HabitacionDTO> createHabitacion(@RequestBody HabitacionDTO habitacionRequest)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<HabitacionDTO> createHabitacion(@ModelAttribute HabitacionDTO habitacionRequest)
             throws HabitacionNotFoundException,
             GestorNotFoundException,
-            CategoriaNotFoundException, HotelNotFoundException, HabitacionDuplicateException {
+            CategoriaNotFoundException, HotelNotFoundException, HabitacionDuplicateException, IOException {
         Habitacion result = habitacionService.createHabitacion(
                 habitacionRequest.getTipoHabitacion(),
                 habitacionRequest.getCapacidad(),
                 habitacionRequest.getPrecioPorNoche(),
                 habitacionRequest.getNumeroHabitacion(),
-                habitacionRequest.getImagenes(),
+                habitacionRequest.getImagenesNuevas(),
                 habitacionRequest.getGestor(),
                 habitacionRequest.getCategoria(),
                 habitacionRequest.getAmbientes(),

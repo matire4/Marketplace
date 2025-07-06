@@ -2,13 +2,19 @@ package com.uade.tpo.marketplace.entities.dto;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class HabitacionDTO {
     private Long id;
     private TipoHabitacion tipoHabitacion;
@@ -19,7 +25,8 @@ public class HabitacionDTO {
     private int banos;
     private int dormitorios;
     private int camas;
-    private List<Long> imagenes;
+    private List<byte[]> imagenes;
+    private List<MultipartFile> imagenesNuevas;
     private String hotel;
     private List<ReservaHabitacionDTO> reservas;
     private List<CarritoHabitacionDTO> carritos;

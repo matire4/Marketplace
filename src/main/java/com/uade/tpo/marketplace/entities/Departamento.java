@@ -43,9 +43,9 @@ public class Departamento extends Alojamiento {
     private List<ReservaDepartamento> reservasDepartamento = new ArrayList<>();
 
     public Departamento(String breveDescripcion, String descripcion, String direccion, String ciudad, String pais,
-            Gestor gestor, Categoria categoria, int capacidad, double precioPorNoche, String numeroDepartamento,
+            Gestor gestor, Categoria categoria, List<Imagen> imagenes, int capacidad, double precioPorNoche, String numeroDepartamento,
             int ambientes, int banos, int dormitorios, int camas) {
-        super(descripcion, direccion, ciudad, pais, gestor, categoria);
+        super(descripcion, direccion, ciudad, pais, gestor, categoria, imagenes);
         this.breveDescripcion = breveDescripcion;
         this.capacidad = capacidad;
         this.precioPorNoche = precioPorNoche;

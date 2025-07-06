@@ -1,18 +1,19 @@
 package com.uade.tpo.marketplace.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Imagen;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
-import com.uade.tpo.marketplace.entities.dto.ImagenDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
@@ -61,8 +62,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
             int banos,
             int dormitorios,
             int camas,
-            List<Long> imagenes,
-            List<ImagenDTO> imagenCrear,
+            List<MultipartFile> imagenesNuevas,
             String username,
             String categoria) throws GestorNotFoundException, CategoriaNotFoundException {
 
@@ -70,16 +70,33 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .orElseThrow(() -> new GestorNotFoundException());
         Categoria c = categoriaRepository.findByNombre(categoria)
                 .orElseThrow(() -> new CategoriaNotFoundException());
+        List<Imagen> imagenes = new ArrayList<>();
+        if (imagenesNuevas != null) {
+            for (MultipartFile imagen : imagenesNuevas) {
+                Imagen newImagen = new Imagen();
+                try {
+                    newImagen.setImagen(imagen.getBytes().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imagenes.add(imagenRepository.save(newImagen));
+            }
+        }
 
-        Departamento departamento = new Departamento(breveDescripcion, descripcion, direccion, ciudad, pais, gestor, c, capacidad, precioPorNoche, numeroDepartamento, ambientes, banos, dormitorios, camas);
+        Departamento departamento = new Departamento(breveDescripcion, descripcion, direccion, ciudad, pais, gestor, c, imagenes, capacidad, precioPorNoche, numeroDepartamento, ambientes, banos, dormitorios, camas);
+        Departamento savedDepartamento = departamentoRepository.save(departamento);
+        for (Imagen imagen : imagenes) {
+            imagen.setAlojamiento(savedDepartamento);
+            imagenRepository.save(imagen);
+        }
 
-        return departamentoRepository.save(departamento);
+        return savedDepartamento;
     }
 
     @Override
     @Transactional
     public Departamento updateDepartamento(Long departamentoId, DepartamentoDTO departamentoDTO)
-            throws DepartamentoNotFoundException, GestorNotFoundException, CategoriaNotFoundException {
+            throws DepartamentoNotFoundException, GestorNotFoundException, CategoriaNotFoundException, IOException{
         
         Departamento departamento = departamentoRepository.findById(departamentoId)
                 .orElseThrow(() -> new DepartamentoNotFoundException());
@@ -90,8 +107,15 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .orElseThrow(() -> new CategoriaNotFoundException());
         if (departamentoDTO.getImagenesNuevas() != null) {
             List<Imagen> imagenes = departamentoDTO.getImagenesNuevas().stream()
-                    .map(imagenDTO -> imagenRepository.findById(imagenDTO.getId())
-                            .orElseThrow(() -> new RuntimeException()))
+                    .map(imagen -> {
+                        Imagen newImagen = new Imagen();
+                        try {
+                            newImagen.setImagen(imagen.getBytes().toString());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return imagenRepository.save(newImagen);
+                    })
                     .toList();
                 departamento.setImagenes(new ArrayList<>(imagenes));
         }
@@ -125,7 +149,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .numeroDepartamento(departamento.getNumeroDepartamento())
                 .descripcion(departamento.getDescripcion())
                 .direccion(departamento.getDireccion())
-                .imagenes(departamento.getImagenes().stream().map(i -> i.getId()).toList())
+                .imagenes(departamento.getImagenes().stream().map(i -> i.getImagen().getBytes()).toList())
                 .username(departamento.getGestor().getUsername())
                 .categoria(departamento.getCategoria().getNombre())
                 .build();

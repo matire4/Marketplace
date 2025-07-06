@@ -1,14 +1,16 @@
 package com.uade.tpo.marketplace.controllers;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +36,9 @@ public class DepartamentoController {
         return ResponseEntity.ok(departamentoService.getDepartamentos());
     }
 
-    @PostMapping
-    public ResponseEntity<DepartamentoDTO> createDepartamento(@RequestBody DepartamentoDTO departamentoRequest)
-            throws GestorNotFoundException, CategoriaNotFoundException {
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<DepartamentoDTO> createDepartamento(@ModelAttribute DepartamentoDTO departamentoRequest)
+            throws GestorNotFoundException, CategoriaNotFoundException, IOException {
         Departamento result = departamentoService.createDepartamento(
             departamentoRequest.getCapacidad(),
             departamentoRequest.getPrecioPorNoche(),
@@ -50,7 +52,6 @@ public class DepartamentoController {
             departamentoRequest.getBanos(),
             departamentoRequest.getDormitorios(),
             departamentoRequest.getCamas(),
-            departamentoRequest.getImagenes(),
             departamentoRequest.getImagenesNuevas(),
             departamentoRequest.getUsername(),
             departamentoRequest.getCategoria());
@@ -65,10 +66,10 @@ public class DepartamentoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{departamentoId}")
+    @PutMapping(value = "/{departamentoId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<DepartamentoDTO> updateDepartamento(@PathVariable Long departamentoId,
-            @RequestBody DepartamentoDTO departamentoRequest) throws DepartamentoNotFoundException,
-            GestorNotFoundException, CategoriaNotFoundException {
+            @ModelAttribute DepartamentoDTO departamentoRequest) throws DepartamentoNotFoundException,
+            GestorNotFoundException, CategoriaNotFoundException, IOException {
         var result = departamentoService.updateDepartamento(departamentoId, departamentoRequest);
         return ResponseEntity.ok(departamentoService.departamentoToDepartamentoDTO(result));
     }

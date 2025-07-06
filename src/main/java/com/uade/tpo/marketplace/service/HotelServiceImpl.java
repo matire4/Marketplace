@@ -1,17 +1,20 @@
 package com.uade.tpo.marketplace.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.Categoria;
 import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Habitacion;
 import com.uade.tpo.marketplace.entities.Hotel;
+import com.uade.tpo.marketplace.entities.Imagen;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HotelDTO;
@@ -24,6 +27,7 @@ import com.uade.tpo.marketplace.repository.CategoriaRepository;
 import com.uade.tpo.marketplace.repository.GestorRepository;
 import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.HotelRepository;
+import com.uade.tpo.marketplace.repository.ImagenRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 
 import jakarta.transaction.Transactional;
@@ -44,6 +48,8 @@ public class HotelServiceImpl implements HotelService {
         private ReservaHabitacionRepository reservaHabitacionRepository;
         @Autowired
         private CarritoHabitacionRepository carritoHabitacionRepository;
+        @Autowired
+        private ImagenRepository imagenRepository;
 
         public List<HotelDTO> getHotels() {
                 List<Hotel> hoteles = hotelRepository.findAll();
@@ -66,9 +72,10 @@ public class HotelServiceImpl implements HotelService {
                         String username,
                         String categoria,
                         List<Long> habitaciones,
-                        List<HabitacionDTO> habitacionesParaCrear)
+                        List<HabitacionDTO> habitacionesParaCrear,
+                        List<MultipartFile> imagenesNuevas)
                         throws HotelDuplicateException, GestorNotFoundException,
-                        CategoriaNotFoundException {
+                        CategoriaNotFoundException, IOException {
 
                 List<Hotel> hoteles = hotelRepository.findByEmail(email);
                 if (hoteles.isEmpty()) {
@@ -77,9 +84,29 @@ public class HotelServiceImpl implements HotelService {
                                         .orElseThrow(() -> new GestorNotFoundException());
                         Categoria c = categoriaRepository.findByNombre(categoria)
                                         .orElseThrow(() -> new CategoriaNotFoundException());
+                        List<Imagen> imagenes = new ArrayList<>();
+                        if (imagenesNuevas != null && !imagenesNuevas.isEmpty()) {
+                                for (MultipartFile imagen : imagenesNuevas) {
+                                        Imagen newImagen = new Imagen();
+                                        try {
+                                                newImagen.setImagen(imagen.getBytes().toString());
+                                        } catch (IOException e) {
+                                                e.printStackTrace();
+                                        }
+                                        imagenes.add(imagenRepository.save(newImagen));
+                                }
+                        }
 
-                        Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, c,
+                        Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, c, imagenes,
                                         nombre, telefono, email);
+                        
+                        Hotel savedHotel = hotelRepository.save(hotel);
+                        
+                        // Asociar las imágenes con el hotel guardado
+                        for (Imagen imagen : imagenes) {
+                            imagen.setAlojamiento(savedHotel);
+                            imagenRepository.save(imagen);
+                        }
 
                         if (habitacionesParaCrear != null) {
                                 habitacionesParaCrear.forEach(habitacion -> {
@@ -103,7 +130,18 @@ public class HotelServiceImpl implements HotelService {
                                                                                 .orElse(null))
                                                                 .toList();
                                         }
-
+                                        List<Imagen> imagenesHabitacion = new ArrayList<>();
+                                        if (habitacion.getImagenesNuevas() != null && !habitacion.getImagenesNuevas().isEmpty()) {
+                                            for (MultipartFile imagen : habitacion.getImagenesNuevas()) {
+                                                Imagen newImagen = new Imagen();
+                                                try {
+                                                    newImagen.setImagen(imagen.getBytes().toString());
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                imagenesHabitacion.add(imagenRepository.save(newImagen));
+                                            }
+                                        }
                                         Habitacion newHabitacion = new Habitacion(
                                                         habitacion.getTipoHabitacion(),
                                                         habitacion.getCapacidad(),
@@ -115,15 +153,24 @@ public class HotelServiceImpl implements HotelService {
                                                         habitacion.getBanos(),
                                                         habitacion.getDormitorios(),
                                                         habitacion.getCamas(),
-                                                        hotel,
+                                                        savedHotel,
                                                         r,
-                                                        carr);
-                                        newHabitacion.setHotel(hotel);
-                                        hotel.getHabitaciones().add(newHabitacion);
+                                                        carr,
+                                                        imagenesHabitacion);
+                                        
+                                        Habitacion savedHabitacion = habitacionRepository.save(newHabitacion);
+                                        
+                                        // Asociar las imágenes con la habitación guardada
+                                        for (Imagen imagen : imagenesHabitacion) {
+                                            imagen.setHabitacion(savedHabitacion);
+                                            imagenRepository.save(imagen);
+                                        }
+                                        
+                                        savedHotel.getHabitaciones().add(savedHabitacion);
                                 });
                         }
 
-                        return hotelRepository.save(hotel);
+                        return savedHotel;
                 }
                 throw new HotelDuplicateException();
         }
@@ -143,16 +190,6 @@ public class HotelServiceImpl implements HotelService {
                         hotelDTO.setHabitaciones(hotel.getHabitaciones()
                                         .stream()
                                         .map(habitacion -> habitacionService.habitacionToHabitacionDTO(habitacion))
-                                        .toList());
-                if (hotel.getReviews() != null)
-                        hotelDTO.setReviews(hotel.getReviews()
-                                        .stream()
-                                        .map(review -> review.getId())
-                                        .toList());
-                if (hotel.getPreguntas() != null)
-                        hotelDTO.setPreguntas(hotel.getPreguntas()
-                                        .stream()
-                                        .map(pregunta -> pregunta.getId())
                                         .toList());
                 hotelDTO.setUsername(hotel.getGestor().getUsername());
                 hotelDTO.setCategoria(hotel.getCategoria().getNombre());
