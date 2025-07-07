@@ -1,6 +1,8 @@
 package com.uade.tpo.marketplace.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,7 +108,7 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .map(imagen -> {
                                         Imagen newImagen = new Imagen();
                                         try {
-                                                newImagen.setImagen(imagen.getBytes().toString());
+                                                newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
                                         } catch (IOException e) {
                                                 e.printStackTrace();
                                         }
@@ -154,10 +156,11 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .banos(habitacion.getBanos())
                                 .dormitorios(habitacion.getDormitorios())
                                 .camas(habitacion.getCamas())
-                                .imagenes(habitacion.getImagenes() != null
+                                // Solo enviar IDs de imágenes, no las imágenes completas
+                                .imagenesIds(habitacion.getImagenes() != null
                                                 && Hibernate.isInitialized(habitacion.getImagenes())
                                                                 ? habitacion.getImagenes().stream()
-                                                                                .map(imagen -> imagen.getImagen().getBytes())
+                                                                                .map(imagen -> imagen.getId())
                                                                                 .toList()
                                                                 : null)
                                 .gestor(habitacion.getGestor() != null ? habitacion.getGestor().getUsername() : null)
@@ -197,6 +200,31 @@ public class HabitacionServiceImpl implements HabitacionService {
 
                 habitacion.setGestor(gestor);
                 habitacion.setCategoria(categoria);
+                List<Imagen> currentImages = new ArrayList<>();
+                
+                // Mantener imágenes existentes si se proporcionan sus IDs
+                if (habitacionRequest.getImagenesIds() != null && !habitacionRequest.getImagenesIds().isEmpty()) {
+                        currentImages = habitacionRequest.getImagenesIds().stream()
+                                .map(imagenId -> imagenRepository.findById(imagenId).orElse(null))
+                                .filter(imagen -> imagen != null)
+                                .toList();
+                }
+                
+                // Agregar nuevas imágenes
+                if (habitacionRequest.getImagenesNuevas() != null && !habitacionRequest.getImagenesNuevas().isEmpty()) {
+                        List<Imagen> newImages = habitacionRequest.getImagenesNuevas().stream()
+                                        .map(imagen -> {
+                                                Imagen newImagen = new Imagen();
+                                                try {
+                                                        newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+                                                } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                }
+                                                return imagenRepository.save(newImagen);
+                                        }).toList();
+                        currentImages.addAll(newImages);
+                }
+                habitacion.setImagenes(currentImages);
 
                 return habitacionRepository.save(habitacion);
         }

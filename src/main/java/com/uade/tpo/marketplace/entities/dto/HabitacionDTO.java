@@ -25,8 +25,13 @@ public class HabitacionDTO {
     private int banos;
     private int dormitorios;
     private int camas;
-    private List<byte[]> imagenes;
+    
+    // Solo IDs de imágenes en el response, no las imágenes completas
+    private List<Long> imagenesIds;
+    
+    // Solo para recibir archivos en el request
     private List<MultipartFile> imagenesNuevas;
+    
     private String hotel;
     private List<ReservaHabitacionDTO> reservas;
     private List<CarritoHabitacionDTO> carritos;

@@ -25,4 +25,6 @@ public interface ImagenService {
     ImagenDTO imagenToImagenDTO(Imagen imagen);
 
     List<ImagenDTO> getImagenesByAlojamientoId(Long alojamientoId);
+    
+    List<ImagenDTO> getImagenesByHabitacionId(Long habitacionId);
 }

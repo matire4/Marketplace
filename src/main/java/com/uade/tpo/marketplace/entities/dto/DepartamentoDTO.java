@@ -27,8 +27,13 @@ public class DepartamentoDTO {
     private String direccion;
     private String ciudad;
     private String pais;
-    private List<byte[]> imagenes;
+    
+    // Solo IDs de imágenes en el response, no las imágenes completas
+    private List<Long> imagenesIds;
+    
+    // Solo para recibir archivos en el request
     private List<MultipartFile> imagenesNuevas;
+    
     private String username;
     private String categoria;
 }

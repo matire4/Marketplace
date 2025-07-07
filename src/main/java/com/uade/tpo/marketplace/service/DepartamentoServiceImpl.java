@@ -2,6 +2,7 @@ package com.uade.tpo.marketplace.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
             for (MultipartFile imagen : imagenesNuevas) {
                 Imagen newImagen = new Imagen();
                 try {
-                    newImagen.setImagen(imagen.getBytes().toString());
+                    newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,6 +128,26 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         departamento.setDireccion(departamentoDTO.getDireccion());
         departamento.setGestor(gestor);
         departamento.setCategoria(categoria);
+        List<Imagen> currentImages = new ArrayList<>();
+        if (departamentoDTO.getImagenesIds() != null) {
+                currentImages = departamentoDTO.getImagenesIds().stream()
+                        .map(imagenId -> {
+                                Imagen newImagen = new Imagen();
+                                newImagen.setId(imagenId);
+                                return imagenRepository.save(newImagen);
+                        }).toList();
+        }
+        currentImages.addAll(departamentoDTO.getImagenesNuevas().stream()
+                        .map(imagen -> {
+                                Imagen newImagen = new Imagen();
+                                try {
+                                        newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+                                } catch (IOException e) {
+                                        e.printStackTrace();
+                                }
+                                return imagenRepository.save(newImagen);
+                        }).toList());
+        departamento.setImagenes(currentImages);
 
         return departamentoRepository.save(departamento);
     }
@@ -149,7 +170,15 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .numeroDepartamento(departamento.getNumeroDepartamento())
                 .descripcion(departamento.getDescripcion())
                 .direccion(departamento.getDireccion())
-                .imagenes(departamento.getImagenes().stream().map(i -> i.getImagen().getBytes()).toList())
+                .ambientes(departamento.getAmbientes())
+                .banos(departamento.getBanos())
+                .dormitorios(departamento.getDormitorios())
+                .camas(departamento.getCamas())
+                .breveDescripcion(departamento.getBreveDescripcion())
+                .ciudad(departamento.getCiudad())
+                .pais(departamento.getPais())
+                // Solo enviar IDs de imágenes, no las imágenes completas
+                .imagenesIds(departamento.getImagenes().stream().map(i -> i.getId()).toList())
                 .username(departamento.getGestor().getUsername())
                 .categoria(departamento.getCategoria().getNombre())
                 .build();

@@ -10,4 +10,6 @@ import com.uade.tpo.marketplace.entities.Imagen;
 @Repository
 public interface ImagenRepository extends JpaRepository<Imagen, Long> {
     List<Imagen> findByAlojamientoId(Long alojamientoId);
+    
+    List<Imagen> findByHabitacionId(Long habitacionId);
 }

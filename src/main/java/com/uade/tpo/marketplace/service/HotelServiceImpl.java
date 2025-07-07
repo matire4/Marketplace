@@ -2,6 +2,7 @@ package com.uade.tpo.marketplace.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +90,7 @@ public class HotelServiceImpl implements HotelService {
                                 for (MultipartFile imagen : imagenesNuevas) {
                                         Imagen newImagen = new Imagen();
                                         try {
-                                                newImagen.setImagen(imagen.getBytes().toString());
+                                                newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
                                         } catch (IOException e) {
                                                 e.printStackTrace();
                                         }
@@ -135,7 +136,7 @@ public class HotelServiceImpl implements HotelService {
                                             for (MultipartFile imagen : habitacion.getImagenesNuevas()) {
                                                 Imagen newImagen = new Imagen();
                                                 try {
-                                                    newImagen.setImagen(imagen.getBytes().toString());
+                                                    newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
@@ -191,6 +192,8 @@ public class HotelServiceImpl implements HotelService {
                                         .stream()
                                         .map(habitacion -> habitacionService.habitacionToHabitacionDTO(habitacion))
                                         .toList());
+                // Solo enviar IDs de imágenes, no las imágenes completas
+                hotelDTO.setImagenesIds(hotel.getImagenes().stream().map(i -> i.getId()).toList());
                 hotelDTO.setUsername(hotel.getGestor().getUsername());
                 hotelDTO.setCategoria(hotel.getCategoria().getNombre());
 
@@ -227,6 +230,32 @@ public class HotelServiceImpl implements HotelService {
                                                 .map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
                         }
                 }
+
+                List<Imagen> currentImages = new ArrayList<>();
+                
+                // Mantener imágenes existentes si se proporcionan sus IDs
+                if (hotel.getImagenesIds() != null && !hotel.getImagenesIds().isEmpty()) {
+                        currentImages = hotel.getImagenesIds().stream()
+                                .map(imagenId -> imagenRepository.findById(imagenId).orElse(null))
+                                .filter(imagen -> imagen != null)
+                                .toList();
+                }
+                
+                // Agregar nuevas imágenes
+                if (hotel.getImagenesNuevas() != null && !hotel.getImagenesNuevas().isEmpty()) {
+                        List<Imagen> newImages = hotel.getImagenesNuevas().stream()
+                                        .map(imagen -> {
+                                                Imagen newImagen = new Imagen();
+                                                try {
+                                                        newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+                                                } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                }
+                                                return imagenRepository.save(newImagen);
+                                        }).toList();
+                        currentImages.addAll(newImages);
+                }
+                h.setImagenes(currentImages);
 
                 hotelRepository.save(h);
                 return hotelToHotelDTO(h);

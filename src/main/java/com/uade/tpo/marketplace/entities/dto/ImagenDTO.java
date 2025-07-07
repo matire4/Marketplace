@@ -13,4 +13,5 @@ public class ImagenDTO {
     private Long id;
     private String imagen;
     private Long alojamientoId;
+    private Long habitacionId;
 }

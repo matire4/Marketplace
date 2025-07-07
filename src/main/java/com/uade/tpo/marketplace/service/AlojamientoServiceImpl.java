@@ -10,6 +10,7 @@ import com.uade.tpo.marketplace.entities.Departamento;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.lang.System;
 
 import com.uade.tpo.marketplace.entities.Alojamiento;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;
@@ -20,6 +21,7 @@ import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.AlojamientoRepository;
+import com.uade.tpo.marketplace.repository.ImagenRepository;
 
 @Service
 public class AlojamientoServiceImpl implements AlojamientoService {
@@ -32,6 +34,8 @@ public class AlojamientoServiceImpl implements AlojamientoService {
     private HotelService hotelService;
     @Autowired
     private HabitacionService habitacionService;
+    @Autowired
+    private ImagenRepository imagenRepository;
 
     @Override
     public List<AlojamientoDTO> getAlojamientos() {
@@ -102,11 +106,9 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                     .map(pregunta -> pregunta.getId())
                     .toList());
         }
-        if (alojamiento.getImagenes() != null && Hibernate.isInitialized(alojamiento.getImagenes())) {
-            builder.imagenes(alojamiento.getImagenes().stream()
-                    .map(imagen -> imagen.getImagen().getBytes())
-                    .toList());
-        }
+        builder.imagenesIds(imagenRepository.findByAlojamientoId(alojamiento.getId()).stream()
+                .map(i -> i.getId())
+                .toList());
         return builder.build();
 
     }
@@ -147,8 +149,8 @@ public class AlojamientoServiceImpl implements AlojamientoService {
         }
 
         if (hotel.getImagenes() != null) {
-            hotelDTO.setImagenes(hotel.getImagenes().stream()
-                    .map(i -> i.getImagen().getBytes())
+            hotelDTO.setImagenesIds(hotel.getImagenes().stream()
+                    .map(i -> i.getId())
                     .toList());
         }
 
@@ -191,8 +193,8 @@ public class AlojamientoServiceImpl implements AlojamientoService {
         departamentoDTO.setPais(departamento.getPais());
 
         if (departamento.getImagenes() != null) {
-            departamentoDTO.setImagenes(departamento.getImagenes().stream()
-                    .map(i -> i.getImagen().getBytes())
+            departamentoDTO.setImagenesIds(departamento.getImagenes().stream()
+                    .map(i -> i.getId())
                     .toList());
         }
 

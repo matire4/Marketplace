@@ -75,13 +75,22 @@ public class ImagenServiceImpl implements ImagenService {
         return ImagenDTO.builder()
                 .id(imagen.getId())
                 .imagen(imagen.getImagen())
-                .alojamientoId(imagen.getAlojamiento().getId())
+                .alojamientoId(imagen.getAlojamiento() != null ? imagen.getAlojamiento().getId() : null)
+                .habitacionId(imagen.getHabitacion() != null ? imagen.getHabitacion().getId() : null)
                 .build();
     }
 
     @Override
     public List<ImagenDTO> getImagenesByAlojamientoId(Long alojamientoId) {
         List<Imagen> imagenes = imagenRepository.findByAlojamientoId(alojamientoId);
+        return imagenes.stream()
+                .map(this::imagenToImagenDTO)
+                .toList();
+    }
+    
+    @Override
+    public List<ImagenDTO> getImagenesByHabitacionId(Long habitacionId) {
+        List<Imagen> imagenes = imagenRepository.findByHabitacionId(habitacionId);
         return imagenes.stream()
                 .map(this::imagenToImagenDTO)
                 .toList();
