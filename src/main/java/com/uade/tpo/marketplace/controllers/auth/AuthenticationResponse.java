@@ -16,4 +16,9 @@ public class AuthenticationResponse {
     @JsonProperty("access_token")
     private String accessToken;
     private String username;
+    private String nombre;
+    private String apellido;
+    private String tipoUsuario; // Puede ser "gestor" o "usuario"
+    private String email;
+    private String telefono;
 }

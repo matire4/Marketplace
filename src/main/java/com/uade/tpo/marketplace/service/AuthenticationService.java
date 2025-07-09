@@ -46,6 +46,11 @@ public class AuthenticationService {
                         return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .username(user.getUsername())
+                                .nombre(user.getNombre())
+                                .apellido(user.getApellido())
+                                .tipoUsuario(user.getRole().name().toLowerCase())
+                                .email(user.getEmail())
+                                .telefono(user.getTelefono())
                                 .build(); 
                 }
                 else {
@@ -61,9 +66,12 @@ public class AuthenticationService {
                         return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .username(gestor.getUsername())
-                                .build(); 
+                                .nombre(gestor.getNombre())
+                                .tipoUsuario(gestor.getRole().name().toLowerCase())
+                                .email(gestor.getEmail())
+                                .telefono(gestor.getTelefono())
+                                .build();
                 }
-                
         }
 
         public AuthenticationResponse authenticate(AuthenticationRequest request) throws UsuarioNotFoundException,GestorNotFoundException{
@@ -76,9 +84,30 @@ public class AuthenticationService {
                 if (user == null) {
                         throw new UsuarioNotFoundException();
                 }
-                var jwtToken = jwtService.generateToken(user);
-                return AuthenticationResponse.builder()
+                if (user instanceof Usuario) {
+                        Usuario usuario = (Usuario) user;
+                        var jwtToken = jwtService.generateToken(usuario);
+                        return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
+                                .username(usuario.getUsername())
+                                .nombre(usuario.getNombre())
+                                .apellido(usuario.getApellido())
+                                .tipoUsuario("usuario")
+                                .email(usuario.getEmail())
+                                .telefono(usuario.getTelefono())
                                 .build();
+                }
+                else {
+                        Gestor gestor = (Gestor) user;
+                        var jwtToken = jwtService.generateToken(gestor);
+                        return AuthenticationResponse.builder()
+                                .accessToken(jwtToken)
+                                .username(gestor.getUsername())
+                                .nombre(gestor.getNombre())
+                                .tipoUsuario("gestor")
+                                .email(gestor.getEmail())
+                                .telefono(gestor.getTelefono())
+                                .build();
+                }
         }
 }
