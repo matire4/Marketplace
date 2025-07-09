@@ -10,4 +10,5 @@ import com.uade.tpo.marketplace.entities.ReservaDepartamento;
 @Repository
 public interface ReservaDepartamentoRepository extends JpaRepository<ReservaDepartamento, Long> {
     List<ReservaDepartamento> findByReservaId(Long reservaId);
+    List<ReservaDepartamento> findByDepartamentoId(Long departamentoId);
 }

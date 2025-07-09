@@ -10,7 +10,6 @@ import com.uade.tpo.marketplace.entities.Departamento;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.lang.System;
 
 import com.uade.tpo.marketplace.entities.Alojamiento;
 import com.uade.tpo.marketplace.entities.dto.AlojamientoDTO;

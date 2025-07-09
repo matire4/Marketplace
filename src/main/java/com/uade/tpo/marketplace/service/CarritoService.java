@@ -8,6 +8,7 @@ import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.entities.dto.CarritoDepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 
 public interface CarritoService {
     CarritoDTO getCarritoByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException;
@@ -16,10 +17,10 @@ public interface CarritoService {
     Carrito getCarritoEntityByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException;
 
     CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio)
-            throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException;
+            throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException, FechaYaReservadaException;
 
     CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio)
-            throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException;
+            throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException, FechaYaReservadaException;
 
     void removeHabitacionFromCarrito(String usuario, Long habitacionId)
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException;

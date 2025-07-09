@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.Reserva;
 import com.uade.tpo.marketplace.entities.ReservaDepartamento;
 import com.uade.tpo.marketplace.entities.dto.ReservaDepartamentoDTO;
+import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.repository.DepartamentoRepository;
 import com.uade.tpo.marketplace.repository.ReservaDepartamentoRepository;
@@ -120,5 +122,20 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
                 .precio(reservaDepartamento.getPrecio())
                 .estado(reservaDepartamento.getEstado())
                 .build();
+    }
+
+    @Override
+    public void checkFechasReservadas(Long departamentoId, String checkIn, String checkOut)
+            throws FechaYaReservadaException {
+        Date checkInDate = Date.from(java.time.LocalDate.parse(checkIn).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
+        Date checkOutDate = Date.from(java.time.LocalDate.parse(checkOut).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant());
+        List<ReservaDepartamento> reservas = reservaDepartamentoRepository.findByDepartamentoId(departamentoId);
+        for (ReservaDepartamento reserva : reservas) {
+            Date fechaDesde = new Date(reserva.getFechaDesde().getTime());
+            Date fechaHasta = new Date(reserva.getFechaHasta().getTime());
+            if (fechaDesde.compareTo(checkOutDate) < 0 && fechaHasta.compareTo(checkInDate) > 0) {
+                throw new FechaYaReservadaException();
+            }
+        }
     }
 }

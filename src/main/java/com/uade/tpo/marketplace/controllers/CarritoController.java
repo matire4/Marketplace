@@ -10,6 +10,7 @@ import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoRequestDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.service.CarritoService;
@@ -43,7 +44,7 @@ public class CarritoController {
 
     @DeleteMapping("/{usuario}")
     public ResponseEntity<Void> clearCarrito(@PathVariable String usuario)
-            throws CarritoNotFoundException, UsuarioNotFoundException {
+            throws CarritoNotFoundException, UsuarioNotFoundException, FechaYaReservadaException {
         carritoService.clearCarrito(usuario);
         return ResponseEntity.noContent().build();
     }
@@ -55,7 +56,7 @@ public class CarritoController {
             @PathVariable String tipo,
             @RequestBody CarritoRequestDTO request)
             throws CarritoNotFoundException, UsuarioNotFoundException,
-            HabitacionNotFoundException, DepartamentoNotFoundException {
+            HabitacionNotFoundException, DepartamentoNotFoundException, FechaYaReservadaException {
 
         if ("HABITACION".equalsIgnoreCase(tipo)) {
             CarritoHabitacionDTO result = carritoService.addHabitacionToCarrito(

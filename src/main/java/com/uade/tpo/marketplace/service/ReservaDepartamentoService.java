@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.uade.tpo.marketplace.entities.ReservaDepartamento;
 import com.uade.tpo.marketplace.entities.dto.ReservaDepartamentoDTO;
+import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 
 public interface ReservaDepartamentoService {
@@ -12,4 +13,5 @@ public interface ReservaDepartamentoService {
     ReservaDepartamentoDTO updateReservaDepartamento(Long reservaDepartamentoId, ReservaDepartamentoDTO reservaDepartamentoDTO) throws ReservaNotFounException;
     void deleteReservaDepartamento(Long reservaDepartamentoId) throws ReservaNotFounException;
     ReservaDepartamentoDTO reservaDepartamentoToReservaDepartamentoDTO(ReservaDepartamento reservaDepartamento);
+    void checkFechasReservadas(Long departamentoId, String checkIn, String checkOut) throws FechaYaReservadaException;
 }

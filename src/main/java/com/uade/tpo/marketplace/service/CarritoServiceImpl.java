@@ -21,6 +21,7 @@ import com.uade.tpo.marketplace.entities.dto.CarritoDepartamentoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.repository.CarritoDepartamentoRepository;
@@ -56,6 +57,12 @@ public class CarritoServiceImpl implements CarritoService {
     @Autowired
     private CarritoDepartamentoRepository carritoDepartamentoRepository;
 
+    @Autowired
+    private ReservaHabitacionService reservaHabitacionService;
+    
+    @Autowired
+    private ReservaDepartamentoService reservaDepartamentoService;
+
     @Override
     @Transactional(readOnly = true)
     public CarritoDTO getCarritoByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException {
@@ -77,7 +84,10 @@ public class CarritoServiceImpl implements CarritoService {
         @Transactional
         public CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, 
                 String checkIn, String checkOut, int cantidad, double precio) 
-                throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
+                throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException, FechaYaReservadaException {
+
+            reservaHabitacionService.checkFechasReservadas(habitacionId, checkIn, checkOut);
+
             Usuario u = usuarioService.getUsuarioByUsername(usuario)
                     .orElseThrow(() -> new UsuarioNotFoundException());
                     
@@ -198,7 +208,8 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional
     public CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, 
             String checkIn, String checkOut, int cantidad, double precio) 
-            throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException {
+            throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException, FechaYaReservadaException {
+        reservaDepartamentoService.checkFechasReservadas(departamentoId, checkIn, checkOut);
         
         Usuario u = usuarioService.getUsuarioByUsername(usuario)
                 .orElseThrow(() -> new UsuarioNotFoundException());
