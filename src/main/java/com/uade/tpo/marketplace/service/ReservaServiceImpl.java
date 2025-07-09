@@ -3,6 +3,7 @@ package com.uade.tpo.marketplace.service;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.uade.tpo.marketplace.entities.Carrito;
 import com.uade.tpo.marketplace.entities.CarritoDepartamento;
 import com.uade.tpo.marketplace.entities.CarritoHabitacion;
+import com.uade.tpo.marketplace.entities.Gestor;
 import com.uade.tpo.marketplace.entities.Reserva;
 import com.uade.tpo.marketplace.entities.ReservaDepartamento;
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
@@ -23,6 +25,7 @@ import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.enums.Estado;
 import com.uade.tpo.marketplace.exceptions.CarritoEmptyException;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
@@ -36,6 +39,8 @@ public class ReservaServiceImpl implements ReservaService {
     private ReservaRepository reservaRepository; 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private GestorService gestorService;
     @Autowired
     private HabitacionService habitacionService;
     @Autowired
@@ -226,5 +231,60 @@ public class ReservaServiceImpl implements ReservaService {
         reserva = reservaRepository.save(reserva);
         
         return reservaToReservaDTO(reserva);
+    }
+
+    @Override
+    public List<ReservaDTO> getReservasByGestor(String gestor)
+            throws ReservaNotFounException, HabitacionNotFoundException, GestorNotFoundException {
+        Optional<Gestor> optionalGestor = gestorService.getGestorByUsername(gestor);
+        if (optionalGestor.isEmpty()) {
+            throw new GestorNotFoundException();
+        }
+        
+        List<ReservaDepartamento> reservasDepartamento = reservaDepartamentoService.findByGestorId(optionalGestor.get().getId());
+        List<ReservaHabitacion> reservasHabitacion = reservaHabitacionService.findByGestorId(optionalGestor.get().getId());
+        
+        Map<Long, List<ReservaDepartamento>> departamentosPorReserva = reservasDepartamento.stream()
+            .collect(Collectors.groupingBy(rd -> rd.getReserva().getId()));
+        
+        Map<Long, List<ReservaHabitacion>> habitacionesPorReserva = reservasHabitacion.stream()
+            .collect(Collectors.groupingBy(rh -> rh.getReserva().getId()));
+        
+        List<Long> reservaIds = new ArrayList<>();
+        reservaIds.addAll(departamentosPorReserva.keySet());
+        reservaIds.addAll(habitacionesPorReserva.keySet());
+        reservaIds = reservaIds.stream().distinct().collect(Collectors.toList());
+
+        List<ReservaDTO> reservaDTOs = new ArrayList<>();
+        for (Long reservaId : reservaIds) {
+            Optional<Reserva> optionalReserva = reservaRepository.findById(reservaId);
+            if (optionalReserva.isPresent()) {
+                Reserva reserva = optionalReserva.get();
+                ReservaDTO reservaDTO = new ReservaDTO();
+                reservaDTO.setId(reserva.getId());
+                reservaDTO.setFecha(reserva.getFecha());
+                reservaDTO.setPrecio(reserva.getPrecio());
+                
+                if (departamentosPorReserva.containsKey(reservaId)) {
+                    reservaDTO.setDepartamentos(
+                        departamentosPorReserva.get(reservaId).stream()
+                            .map(rd -> reservaDepartamentoService.reservaDepartamentoToReservaDepartamentoDTO(rd))
+                            .collect(Collectors.toList())
+                    );
+                }
+                
+                if (habitacionesPorReserva.containsKey(reservaId)) {
+                    reservaDTO.setHabitaciones(
+                        habitacionesPorReserva.get(reservaId).stream()
+                            .map(rh -> reservaHabitacionService.reservaHabitacionToReservaHabitacionDTO(rh))
+                            .collect(Collectors.toList())
+                    );
+                }
+                
+                reservaDTOs.add(reservaDTO);
+            }
+        }
+        
+        return reservaDTOs;
     }
 }

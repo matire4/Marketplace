@@ -18,6 +18,7 @@ import com.uade.tpo.marketplace.entities.Reserva;
 import com.uade.tpo.marketplace.entities.dto.ReservaDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoEmptyException;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
@@ -36,11 +37,20 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getReservas());
     }
     
-    @GetMapping("/{usuario}")
+    @GetMapping("/{usuario}/usuario")
     public ResponseEntity<List<ReservaDTO>> getReservasByUsuario(@PathVariable String usuario)
             throws ReservaNotFounException, UsuarioNotFoundException {
         List<ReservaDTO> result = reservaService.getReservasByUsuario(usuario);
         if (result != null && !result.isEmpty()) 
+            return ResponseEntity.ok(result);
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{gestor}/gestor")
+    public ResponseEntity<List<ReservaDTO>> getReservasByGestor(@PathVariable String gestor)
+            throws ReservaNotFounException, GestorNotFoundException, HabitacionNotFoundException {
+        List<ReservaDTO> result = reservaService.getReservasByGestor(gestor);
+        if (result != null && !result.isEmpty())
             return ResponseEntity.ok(result);
         return ResponseEntity.notFound().build();
     }

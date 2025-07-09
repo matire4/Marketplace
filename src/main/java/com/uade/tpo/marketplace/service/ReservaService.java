@@ -10,6 +10,7 @@ import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoEmptyException;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
+import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
@@ -18,6 +19,8 @@ public interface ReservaService {
     List<ReservaDTO> getReservas();
 
     List<ReservaDTO> getReservasByUsuario(String usuario) throws ReservaNotFounException, UsuarioNotFoundException;
+
+    List<ReservaDTO> getReservasByGestor(String gestor) throws ReservaNotFounException, HabitacionNotFoundException, GestorNotFoundException;
 
     Optional<Reserva> getReservaById(Long reservaId) throws ReservaNotFounException;
 
@@ -34,4 +37,5 @@ public interface ReservaService {
     ReservaDTO createReservaFromCarrito(String username) 
             throws UsuarioNotFoundException, CarritoNotFoundException, CarritoEmptyException, 
                    HabitacionNotFoundException, ReservaNotFounException;
-}
+
+                }

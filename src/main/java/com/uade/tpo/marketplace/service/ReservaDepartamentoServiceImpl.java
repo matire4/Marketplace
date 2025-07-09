@@ -138,4 +138,9 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
             }
         }
     }
+
+    @Override
+    public List<ReservaDepartamento> findByGestorId(Long id) {
+        return reservaDepartamentoRepository.findByGestorId(id);
+    }
 }

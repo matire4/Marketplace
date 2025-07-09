@@ -138,4 +138,9 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
             }
         }
     }
+
+    @Override
+    public List<ReservaHabitacion> findByGestorId(Long id) {
+        return reservaHabitacionRepository.findByGestorId(id);
+    }
 }

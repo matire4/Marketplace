@@ -26,10 +26,13 @@ import lombok.EqualsAndHashCode;
 public class Gestor extends Cuenta{
     @Column(nullable = false)
     private String nombre;
+    
     @Column(nullable = false, unique = true)
     private String cuil;
+
     @Enumerated(EnumType.STRING)
     Role role = Role.GESTOR; // for difference between gestor and user
+
     @OneToMany(mappedBy = "gestor")
     private List<Hotel> hoteles;
     @OneToMany(mappedBy = "gestor")

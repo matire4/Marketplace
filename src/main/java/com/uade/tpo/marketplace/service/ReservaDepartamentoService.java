@@ -14,4 +14,5 @@ public interface ReservaDepartamentoService {
     void deleteReservaDepartamento(Long reservaDepartamentoId) throws ReservaNotFounException;
     ReservaDepartamentoDTO reservaDepartamentoToReservaDepartamentoDTO(ReservaDepartamento reservaDepartamento);
     void checkFechasReservadas(Long departamentoId, String checkIn, String checkOut) throws FechaYaReservadaException;
+    List<ReservaDepartamento> findByGestorId(Long id);
 }

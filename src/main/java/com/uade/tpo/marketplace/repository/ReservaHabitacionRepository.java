@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
@@ -22,4 +23,7 @@ public interface ReservaHabitacionRepository extends JpaRepository<ReservaHabita
     List<ReservaHabitacion> findByFechaDesde(Date fechaDesde);
     List<ReservaHabitacion> findByFechaHasta(Date fechaHasta);
     List<ReservaHabitacion> findByPrecio(double precio);
+
+    @Query("SELECT rh FROM ReservaHabitacion rh WHERE rh.habitacion.gestor.id = :gestorId")
+    List<ReservaHabitacion> findByGestorId(Long gestorId);
 }
