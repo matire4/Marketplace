@@ -64,7 +64,8 @@ public class CarritoController {
                 CarritoHabitacionDTO result = carritoService.addHabitacionToCarrito(
                         usuario, id, request.getNombreReserva(),
                         request.getCheckIn(), request.getCheckOut(),
-                        request.getCantidad(), request.getPrecio());
+                        request.getCantidad(), request.getPrecio(),
+                        request.getTitularReserva());
                 return ResponseEntity.ok(result);
             } catch (FechaYaReservadaException e) {
                 ResponseStatus responseStatus = e.getClass().getAnnotation(ResponseStatus.class);
@@ -74,8 +75,9 @@ public class CarritoController {
             try {
                 CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(
                     usuario, id, request.getNombreReserva(),
-                    request.getCheckIn(), request.getCheckOut(), 
-                    request.getCantidad(), request.getPrecio());
+                    request.getCheckIn(), request.getCheckOut(),
+                    request.getCantidad(), request.getPrecio(),
+                    request.getTitularReserva());
                 return ResponseEntity.ok(result);
             } catch (FechaYaReservadaException e) {
                 ResponseStatus responseStatus = e.getClass().getAnnotation(ResponseStatus.class);

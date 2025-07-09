@@ -12,4 +12,5 @@ public class ReservaDTO {
     private List<ReservaDepartamentoDTO> departamentos;
     private Date fecha;
     private double precio;
+    private String usuario;
 }

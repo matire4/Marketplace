@@ -27,6 +27,9 @@ public class CarritoDepartamento {
     private Long id;
 
     @Column(nullable = false)
+    private String titularReserva;
+    
+    @Column(nullable = false)
     private String nombreReserva;
     
     @Column(nullable = false)

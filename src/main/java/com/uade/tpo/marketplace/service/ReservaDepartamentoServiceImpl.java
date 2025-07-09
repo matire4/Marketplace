@@ -61,6 +61,7 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
         }
         
         ReservaDepartamento reservaDepartamento = new ReservaDepartamento();
+        reservaDepartamento.setTitularReserva(reservaDepartamentoDTO.getTitularReserva());
         reservaDepartamento.setNombreReserva(reservaDepartamentoDTO.getNombreReserva());
         reservaDepartamento.setReserva(reserva.get());
         reservaDepartamento.setDepartamento(departamento.get());
@@ -112,6 +113,7 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
     public ReservaDepartamentoDTO reservaDepartamentoToReservaDepartamentoDTO(ReservaDepartamento reservaDepartamento) {
         return ReservaDepartamentoDTO.builder()
                 .id(reservaDepartamento.getId())
+                .titularReserva(reservaDepartamento.getTitularReserva())
                 .nombreReserva(reservaDepartamento.getNombreReserva())
                 .reservaId(reservaDepartamento.getReserva().getId())
                 .departamentoId(reservaDepartamento.getDepartamento().getId())

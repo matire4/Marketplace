@@ -61,6 +61,7 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
         }
         
         ReservaHabitacion reservaHabitacion = new ReservaHabitacion();
+        reservaHabitacion.setTitularReserva(reservaHabitacionDTO.getTitularReserva());
         reservaHabitacion.setNombreReserva(reservaHabitacionDTO.getNombreReserva());
         reservaHabitacion.setReserva(reserva.get());
         reservaHabitacion.setHabitacion(habitacion.get());
@@ -112,6 +113,7 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     public ReservaHabitacionDTO reservaHabitacionToReservaHabitacionDTO(ReservaHabitacion reservaHabitacion) {
         return ReservaHabitacionDTO.builder()
                 .id(reservaHabitacion.getId())
+                .titularReserva(reservaHabitacion.getTitularReserva())
                 .nombreReserva(reservaHabitacion.getNombreReserva())
                 .reservaId(reservaHabitacion.getReserva().getId())
                 .habitacionId(reservaHabitacion.getHabitacion().getId())

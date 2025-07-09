@@ -81,7 +81,6 @@ public class ReservaServiceImpl implements ReservaService {
     public Reserva createReserva(Date fecha, List<ReservaHabitacionDTO> ReservaHabitaciones, UsuarioDTO usuario)
      throws ReservaNotFounException, HabitacionNotFoundException, UsuarioNotFoundException {
         
-        // Corrección de línea 71 - Usar findById en lugar de usar un objeto complejo
         List<ReservaHabitacion> reservaHabitacionesEntities = ReservaHabitaciones.stream()
             .map((ReservaHabitacionDTO reservaHabitacionDTO) -> {
                 try {
@@ -101,7 +100,6 @@ public class ReservaServiceImpl implements ReservaService {
             })
             .collect(Collectors.toList());
         
-        // Corrección de línea 78 - Manejo adecuado de Optional
         Usuario usuarioEntity = usuarioService.getUsuarioByUsername(usuario.getUsername())
                 .orElseThrow(() -> new UsuarioNotFoundException());
         
@@ -133,7 +131,9 @@ public class ReservaServiceImpl implements ReservaService {
         reservaDTO.setId(reserva.getId());
         reservaDTO.setFecha(reserva.getFecha());
         reservaDTO.setPrecio(reserva.getPrecio());
-        
+        reservaDTO.setUsuario(reserva.getUsuario().getUsername());
+        System.out.println("ReservaDTO: " + reservaDTO);
+
         // Incluir habitaciones si existen
         if (reserva.getReservasHabitacion() != null) {
             reservaDTO.setHabitaciones(
@@ -194,6 +194,7 @@ public class ReservaServiceImpl implements ReservaService {
                 rh.setCantidadPersonas(ch.getCantidad());
                 rh.setPrecio(ch.getPrecio());
                 rh.setEstado(Estado.aprobado);
+                rh.setTitularReserva(ch.getTitularReserva());
                 
                 reserva.getReservasHabitacion().add(rh);
                 precioTotal += ch.getPrecio();
@@ -214,6 +215,7 @@ public class ReservaServiceImpl implements ReservaService {
                 rd.setCantidadPersonas(cd.getCantidad());
                 rd.setPrecio(cd.getPrecio());
                 rd.setEstado(Estado.aprobado);
+                rd.setTitularReserva(cd.getTitularReserva());
                 
                 reserva.getReservasDepartamento().add(rd);
                 precioTotal += cd.getPrecio();
@@ -264,6 +266,7 @@ public class ReservaServiceImpl implements ReservaService {
                 reservaDTO.setId(reserva.getId());
                 reservaDTO.setFecha(reserva.getFecha());
                 reservaDTO.setPrecio(reserva.getPrecio());
+                reservaDTO.setUsuario(reserva.getUsuario().getUsername());
                 
                 if (departamentosPorReserva.containsKey(reservaId)) {
                     reservaDTO.setDepartamentos(

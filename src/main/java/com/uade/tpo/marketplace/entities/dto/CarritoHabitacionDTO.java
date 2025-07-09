@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CarritoHabitacionDTO {
     private Long id;
+    private String titularReserva;
     private String nombreReserva;
     private int cantidad;
     private Date checkIn;
@@ -20,9 +21,10 @@ public class CarritoHabitacionDTO {
     private Long carritoId;
     private Double precio;
     private String tipo = "habitacion"; 
-   
-    public CarritoHabitacionDTO(Long id, String nombreReserva, int cantidad, Date checkIn, Date checkOut, Long hotelId, Long habitacionId, Long carritoId, Double precio) {
+
+    public CarritoHabitacionDTO(Long id, String titularReserva, String nombreReserva, int cantidad, Date checkIn, Date checkOut, Long hotelId, Long habitacionId, Long carritoId, Double precio) {
         this.id = id;
+        this.titularReserva = titularReserva;
         this.nombreReserva = nombreReserva;
         this.cantidad = cantidad;
         this.checkIn = checkIn;

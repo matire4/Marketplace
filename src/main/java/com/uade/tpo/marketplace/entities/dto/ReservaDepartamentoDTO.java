@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservaDepartamentoDTO {
     private Long id;
+    private String titularReserva;
     private String nombreReserva;
     private Long reservaId;
     private Long departamentoId;

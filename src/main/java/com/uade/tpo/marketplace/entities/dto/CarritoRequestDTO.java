@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class CarritoRequestDTO {
+    private String titularReserva;
     private String nombreReserva;
     private String checkIn;
     private String checkOut;

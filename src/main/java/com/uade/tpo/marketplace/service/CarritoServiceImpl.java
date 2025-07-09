@@ -83,7 +83,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
         @Transactional
         public CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, 
-                String checkIn, String checkOut, int cantidad, double precio) 
+                String checkIn, String checkOut, int cantidad, double precio, String titularReserva) 
                 throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException, FechaYaReservadaException {
 
             reservaHabitacionService.checkFechasReservadas(habitacionId, checkIn, checkOut);
@@ -119,6 +119,7 @@ public class CarritoServiceImpl implements CarritoService {
                     throw new IllegalArgumentException("Formato de fecha inválido. Use yyyy-MM-dd");
                 }
                 CarritoHabitacion carritoHabitacion = new CarritoHabitacion();
+                carritoHabitacion.setTitularReserva(titularReserva);
                 carritoHabitacion.setNombreReserva(nombreReserva);
                 carritoHabitacion.setCarrito(carrito);
                 carritoHabitacion.setHabitacion(habitacion);
@@ -171,6 +172,7 @@ public class CarritoServiceImpl implements CarritoService {
             List<CarritoHabitacionDTO> habitacionesDTO = carrito.getCarritoHabitacions().stream()
                     .map(ch -> new CarritoHabitacionDTO(
                             ch.getId(),
+                            ch.getTitularReserva(),
                             ch.getNombreReserva(),
                             ch.getCantidad(),
                             ch.getCheckIn(),
@@ -189,6 +191,7 @@ public class CarritoServiceImpl implements CarritoService {
             List<CarritoDepartamentoDTO> departamentosDTO = carrito.getCarritoDepartamentos().stream()
                     .map(cd -> new CarritoDepartamentoDTO(
                             cd.getId(),
+                            cd.getTitularReserva(),
                             cd.getNombreReserva(),
                             cd.getCantidad(),
                             cd.getCheckIn(),
@@ -207,7 +210,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Override
     @Transactional
     public CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, 
-            String checkIn, String checkOut, int cantidad, double precio) 
+            String checkIn, String checkOut, int cantidad, double precio, String titularReserva) 
             throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException, FechaYaReservadaException {
         reservaDepartamentoService.checkFechasReservadas(departamentoId, checkIn, checkOut);
         
@@ -237,6 +240,7 @@ public class CarritoServiceImpl implements CarritoService {
         }
         
         CarritoDepartamento carritoDepartamento = new CarritoDepartamento();
+        carritoDepartamento.setTitularReserva(titularReserva);
         carritoDepartamento.setNombreReserva(nombreReserva);
         carritoDepartamento.setCarrito(carrito);
         carritoDepartamento.setDepartamento(departamento);
@@ -254,6 +258,7 @@ public class CarritoServiceImpl implements CarritoService {
         
         return new CarritoDepartamentoDTO(
             saved.getId(),
+            saved.getTitularReserva(),
             saved.getNombreReserva(),
             saved.getCantidad(),
             saved.getCheckIn(),

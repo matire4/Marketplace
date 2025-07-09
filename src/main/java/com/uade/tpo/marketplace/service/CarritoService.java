@@ -16,10 +16,10 @@ public interface CarritoService {
     // Nuevo método: obtiene la entidad Carrito en vez del DTO
     Carrito getCarritoEntityByUsuario(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException;
 
-    CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio)
+    CarritoHabitacionDTO addHabitacionToCarrito(String usuario, Long habitacionId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio, String titularReserva)
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException, FechaYaReservadaException;
 
-    CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio)
+    CarritoDepartamentoDTO addDepartamentoToCarrito(String usuario, Long departamentoId, String nombreReserva, String checkIn, String checkOut, int cantidad, double precio, String titularReserva)
             throws CarritoNotFoundException, DepartamentoNotFoundException, UsuarioNotFoundException, FechaYaReservadaException;
 
     void removeHabitacionFromCarrito(String usuario, Long habitacionId)

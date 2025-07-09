@@ -104,6 +104,7 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
         
         return new CarritoHabitacionDTO(
             carritoHabitacion.getId(),
+            carritoHabitacion.getTitularReserva(),
             carritoHabitacion.getNombreReserva(),
             carritoHabitacion.getCantidad(),
             carritoHabitacion.getCheckIn(),

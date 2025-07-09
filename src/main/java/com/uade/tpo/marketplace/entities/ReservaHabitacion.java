@@ -27,6 +27,8 @@ public class ReservaHabitacion {
     private Long id;
     
     @Column(nullable = false)
+    private String titularReserva;
+    @Column(nullable = false)
     private String nombreReserva;
     @Column(nullable = false)
     private Date fechaDesde;
