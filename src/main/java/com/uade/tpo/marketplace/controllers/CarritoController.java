@@ -3,6 +3,7 @@ package com.uade.tpo.marketplace.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
 import com.uade.tpo.marketplace.entities.dto.CarritoDepartamentoDTO;
@@ -59,17 +60,27 @@ public class CarritoController {
             HabitacionNotFoundException, DepartamentoNotFoundException, FechaYaReservadaException {
 
         if ("HABITACION".equalsIgnoreCase(tipo)) {
-            CarritoHabitacionDTO result = carritoService.addHabitacionToCarrito(
-                    usuario, id, request.getNombreReserva(),
-                    request.getCheckIn(), request.getCheckOut(), 
-                    request.getCantidad(), request.getPrecio());
-            return ResponseEntity.ok(result);
+            try {
+                CarritoHabitacionDTO result = carritoService.addHabitacionToCarrito(
+                        usuario, id, request.getNombreReserva(),
+                        request.getCheckIn(), request.getCheckOut(),
+                        request.getCantidad(), request.getPrecio());
+                return ResponseEntity.ok(result);
+            } catch (FechaYaReservadaException e) {
+                ResponseStatus responseStatus = e.getClass().getAnnotation(ResponseStatus.class);
+                return ResponseEntity.status(responseStatus.code()).body(responseStatus.reason());
+            }
         } else if ("DEPARTAMENTO".equalsIgnoreCase(tipo)) {
-            CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(
+            try {
+                CarritoDepartamentoDTO result = carritoService.addDepartamentoToCarrito(
                     usuario, id, request.getNombreReserva(),
                     request.getCheckIn(), request.getCheckOut(), 
                     request.getCantidad(), request.getPrecio());
-            return ResponseEntity.ok(result);
+                return ResponseEntity.ok(result);
+            } catch (FechaYaReservadaException e) {
+                ResponseStatus responseStatus = e.getClass().getAnnotation(ResponseStatus.class);
+                return ResponseEntity.status(responseStatus.code()).body(responseStatus.reason());
+            }
         } else {
             return ResponseEntity.badRequest()
                     .body("Tipo de alojamiento no válido. Debe ser HABITACION o DEPARTAMENTO");
