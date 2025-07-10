@@ -185,15 +185,12 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .orElseThrow(() -> new HabitacionNotFoundException());
                 Gestor g = gestorRepository.findByUsername(gestor)
                                 .orElseThrow(() -> new GestorNotFoundException());
-                Categoria categoria = categoriaRepository.findByNombre(habitacionRequest.getCategoria())
-                                .orElseThrow(() -> new CategoriaNotFoundException());
                 habitacion.setTipoHabitacion(habitacionRequest.getTipoHabitacion());
                 habitacion.setCapacidad(habitacionRequest.getCapacidad());
                 habitacion.setPrecioPorNoche(habitacionRequest.getPrecioPorNoche());
 
                 habitacion.setGestor(g);
                 habitacion.setNumeroHabitacion(habitacionRequest.getNumeroHabitacion());
-                habitacion.setCategoria(categoria);
                 List<Imagen> currentImages = new ArrayList<>();
                 
                 // Mantener imágenes existentes si se proporcionan sus IDs
