@@ -123,6 +123,7 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
                 .cantidadPersonas(reservaHabitacion.getCantidadPersonas())
                 .precio(reservaHabitacion.getPrecio())
                 .estado(reservaHabitacion.getEstado())
+                .hotelId(reservaHabitacion.getHabitacion().getHotel().getId().toString())
                 .build();
     }
 

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ImagenDTO {
     private Long id;
-    private String imagen;
+    private byte[] imagen;
     private Long alojamientoId;
     private Long habitacionId;
 }

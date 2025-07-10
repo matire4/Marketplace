@@ -1,5 +1,6 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +75,7 @@ public class ImagenServiceImpl implements ImagenService {
     public ImagenDTO imagenToImagenDTO(Imagen imagen) {
         return ImagenDTO.builder()
                 .id(imagen.getId())
-                .imagen(imagen.getImagen())
+                .imagen(Base64.getDecoder().decode(imagen.getImagen()))
                 .alojamientoId(imagen.getAlojamiento() != null ? imagen.getAlojamiento().getId() : null)
                 .habitacionId(imagen.getHabitacion() != null ? imagen.getHabitacion().getId() : null)
                 .build();

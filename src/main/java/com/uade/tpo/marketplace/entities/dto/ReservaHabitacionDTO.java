@@ -25,4 +25,5 @@ public class ReservaHabitacionDTO {
     private int cantidadPersonas;
     private double precio;
     private Estado estado;
+    private String hotelId;
 }
