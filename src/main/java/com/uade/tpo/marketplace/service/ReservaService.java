@@ -37,5 +37,7 @@ public interface ReservaService {
     ReservaDTO createReservaFromCarrito(String username) 
             throws UsuarioNotFoundException, CarritoNotFoundException, CarritoEmptyException, 
                    HabitacionNotFoundException, ReservaNotFounException;
+    
+    void finalizarReserva(String tipo, Long itemId) throws ReservaNotFounException;
 
-                }
+}

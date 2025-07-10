@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.marketplace.entities.Reserva;
@@ -88,6 +89,19 @@ public class ReservaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El carrito está vacío");
         } catch (HabitacionNotFoundException | ReservaNotFounException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la reserva: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{itemId}/finalizar")
+    public ResponseEntity<String> finalizarReserva(@PathVariable Long itemId,
+                                                  @RequestParam String tipo) {
+        try {
+            reservaService.finalizarReserva(tipo, itemId);
+            return ResponseEntity.ok("Reserva finalizada exitosamente");
+        } catch (ReservaNotFounException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Reserva no encontrada");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al finalizar la reserva: " + e.getMessage());
         }
     }
 }

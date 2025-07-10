@@ -31,6 +31,8 @@ import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 import com.uade.tpo.marketplace.repository.CarritoDepartamentoRepository;
 import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
+import com.uade.tpo.marketplace.repository.ReservaDepartamentoRepository;
+import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 import com.uade.tpo.marketplace.repository.ReservaRepository;
 
 @Service
@@ -53,7 +55,13 @@ public class ReservaServiceImpl implements ReservaService {
     private CarritoHabitacionRepository carritoHabitacionRepository;
 
     @Autowired
-    private CarritoDepartamentoRepository carritoDepartamentoRepository;    
+    private CarritoDepartamentoRepository carritoDepartamentoRepository;
+    
+    @Autowired
+    private ReservaHabitacionRepository reservaHabitacionRepository;
+    
+    @Autowired
+    private ReservaDepartamentoRepository reservaDepartamentoRepository;    
 
     @Override
     public List<ReservaDTO> getReservas() {
@@ -289,5 +297,27 @@ public class ReservaServiceImpl implements ReservaService {
         }
         
         return reservaDTOs;
+    }
+    
+    @Override
+    @Transactional
+    public void finalizarReserva(String tipo, Long itemId) throws ReservaNotFounException {
+        if ("habitacion".equalsIgnoreCase(tipo)) {
+            // Finalizar ReservaHabitacion específica
+            Optional<ReservaHabitacion> reservaHabitaciones = reservaHabitacionRepository.findById(itemId);
+            if (reservaHabitaciones.isPresent()) {
+                ReservaHabitacion rh = reservaHabitaciones.get();
+                rh.setEstado(Estado.finalizado);
+                reservaHabitacionRepository.save(rh);
+            }
+        } else if ("departamento".equalsIgnoreCase(tipo)) {
+            // Finalizar ReservaDepartamento específica
+            Optional<ReservaDepartamento> reservaDepartamento = reservaDepartamentoRepository.findById(itemId);
+            if (reservaDepartamento.isPresent()) {
+                ReservaDepartamento rd = reservaDepartamento.get();
+                rd.setEstado(Estado.finalizado);
+                reservaDepartamentoRepository.save(rd);
+            }
+        }
     }
 }
