@@ -38,9 +38,12 @@ public interface HotelService {
 
         public HotelDTO hotelToHotelDTO(Hotel hotel);
 
-        public void deleteHotel(String nombre)throws HotelNotFoundException;
+        public void deleteHotel(String nombre) throws HotelNotFoundException;
 
-        public HotelDTO updateHotel(String nombre, HotelDTO hotel) throws HotelNotFoundException, HotelDuplicateException, IOException;
+        public HotelDTO updateHotel(Long id, HotelDTO hotel)
+                        throws HotelNotFoundException, HotelDuplicateException, IOException;
 
         public Optional<Hotel> findById(Long id);
+
+        public Optional<Hotel> getHoytelById(Long id);
 }

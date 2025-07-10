@@ -45,7 +45,7 @@ public class HotelController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<HotelDTO> createHotel(@ModelAttribute HotelDTO hotelRequest) throws HotelDuplicateException,
             GestorNotFoundException,
             CategoriaNotFoundException, IOException {
@@ -59,7 +59,8 @@ public class HotelController {
                 hotelRequest.getPais(),
                 hotelRequest.getUsername(),
                 hotelRequest.getCategoria(),
-                (hotelRequest.getHabitaciones() == null ? java.util.Collections.emptyList() : hotelRequest.getHabitaciones().stream().map(h -> h.getId()).toList()),
+                (hotelRequest.getHabitaciones() == null ? java.util.Collections.emptyList()
+                        : hotelRequest.getHabitaciones().stream().map(h -> h.getId()).toList()),
                 hotelRequest.getHabitacionesParaCrear(),
                 hotelRequest.getImagenesNuevas());
 
@@ -77,12 +78,13 @@ public class HotelController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "/{nombre}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<HotelDTO> updateHotel(@PathVariable String nombre, @ModelAttribute HotelDTO hotel)
+    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long id, @ModelAttribute HotelDTO hotel)
             throws HotelNotFoundException, HotelDuplicateException, IOException {
-        Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
+        Optional<Hotel> result = hotelService.findById(id);
         if (result.isPresent()) {
-            return ResponseEntity.ok(hotelService.updateHotel(nombre, hotel));
+            return ResponseEntity.ok(hotelService.updateHotel(id, hotel));
         }
         return ResponseEntity.notFound().build();
     }

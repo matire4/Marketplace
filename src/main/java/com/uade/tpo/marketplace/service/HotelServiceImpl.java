@@ -90,7 +90,8 @@ public class HotelServiceImpl implements HotelService {
                                 for (MultipartFile imagen : imagenesNuevas) {
                                         Imagen newImagen = new Imagen();
                                         try {
-                                                newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+                                                newImagen.setImagen(
+                                                                Base64.getEncoder().encodeToString(imagen.getBytes()));
                                         } catch (IOException e) {
                                                 e.printStackTrace();
                                         }
@@ -100,13 +101,13 @@ public class HotelServiceImpl implements HotelService {
 
                         Hotel hotel = new Hotel(description, direccion, ciudad, pais, gestor, c, imagenes,
                                         nombre, telefono, email);
-                        
+
                         Hotel savedHotel = hotelRepository.save(hotel);
-                        
+
                         // Asociar las imágenes con el hotel guardado
                         for (Imagen imagen : imagenes) {
-                            imagen.setAlojamiento(savedHotel);
-                            imagenRepository.save(imagen);
+                                imagen.setAlojamiento(savedHotel);
+                                imagenRepository.save(imagen);
                         }
 
                         if (habitacionesParaCrear != null) {
@@ -130,16 +131,18 @@ public class HotelServiceImpl implements HotelService {
                                                                 .toList();
                                         }
                                         List<Imagen> imagenesHabitacion = new ArrayList<>();
-                                        if (habitacion.getImagenesNuevas() != null && !habitacion.getImagenesNuevas().isEmpty()) {
-                                            for (MultipartFile imagen : habitacion.getImagenesNuevas()) {
-                                                Imagen newImagen = new Imagen();
-                                                try {
-                                                    newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
+                                        if (habitacion.getImagenesNuevas() != null
+                                                        && !habitacion.getImagenesNuevas().isEmpty()) {
+                                                for (MultipartFile imagen : habitacion.getImagenesNuevas()) {
+                                                        Imagen newImagen = new Imagen();
+                                                        try {
+                                                                newImagen.setImagen(Base64.getEncoder()
+                                                                                .encodeToString(imagen.getBytes()));
+                                                        } catch (IOException e) {
+                                                                e.printStackTrace();
+                                                        }
+                                                        imagenesHabitacion.add(imagenRepository.save(newImagen));
                                                 }
-                                                imagenesHabitacion.add(imagenRepository.save(newImagen));
-                                            }
                                         }
                                         Habitacion newHabitacion = new Habitacion(
                                                         habitacion.getTipoHabitacion(),
@@ -156,15 +159,15 @@ public class HotelServiceImpl implements HotelService {
                                                         r,
                                                         carr,
                                                         imagenesHabitacion);
-                                        
+
                                         Habitacion savedHabitacion = habitacionRepository.save(newHabitacion);
-                                        
+
                                         // Asociar las imágenes con la habitación guardada
                                         for (Imagen imagen : imagenesHabitacion) {
-                                            imagen.setHabitacion(savedHabitacion);
-                                            imagenRepository.save(imagen);
+                                                imagen.setHabitacion(savedHabitacion);
+                                                imagenRepository.save(imagen);
                                         }
-                                        
+
                                         savedHotel.getHabitaciones().add(savedHabitacion);
                                 });
                         }
@@ -206,9 +209,9 @@ public class HotelServiceImpl implements HotelService {
         }
 
         @Override
-        public HotelDTO updateHotel(String nombre, HotelDTO hotel)
+        public HotelDTO updateHotel(Long id, HotelDTO hotel)
                         throws HotelNotFoundException, HotelDuplicateException {
-                Hotel h = hotelRepository.findByNombre(nombre).orElseThrow(() -> new HotelNotFoundException());
+                Hotel h = hotelRepository.findById(id).orElseThrow(() -> new HotelNotFoundException());
                 h.setCategoria(categoriaRepository.findByNombre(hotel.getCategoria()).get());
                 h.setCiudad(hotel.getCiudad());
                 h.setDescripcion(hotel.getDescripcion());
@@ -230,22 +233,23 @@ public class HotelServiceImpl implements HotelService {
                 }
 
                 List<Imagen> currentImages = new ArrayList<>();
-                
+
                 // Mantener imágenes existentes si se proporcionan sus IDs
                 if (hotel.getImagenesIds() != null && !hotel.getImagenesIds().isEmpty()) {
                         currentImages = hotel.getImagenesIds().stream()
-                                .map(imagenId -> imagenRepository.findById(imagenId).orElse(null))
-                                .filter(imagen -> imagen != null)
-                                .toList();
+                                        .map(imagenId -> imagenRepository.findById(imagenId).orElse(null))
+                                        .filter(imagen -> imagen != null)
+                                        .toList();
                 }
-                
+
                 // Agregar nuevas imágenes
                 if (hotel.getImagenesNuevas() != null && !hotel.getImagenesNuevas().isEmpty()) {
                         List<Imagen> newImages = hotel.getImagenesNuevas().stream()
                                         .map(imagen -> {
                                                 Imagen newImagen = new Imagen();
                                                 try {
-                                                        newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
+                                                        newImagen.setImagen(Base64.getEncoder()
+                                                                        .encodeToString(imagen.getBytes()));
                                                 } catch (IOException e) {
                                                         e.printStackTrace();
                                                 }
@@ -262,5 +266,11 @@ public class HotelServiceImpl implements HotelService {
         @Override
         public Optional<Hotel> findById(Long id) {
                 return hotelRepository.findById(id);
+        }
+
+        @Override
+        public Optional<Hotel> getHoytelById(Long id) {
+                // TODO Auto-generated method stub
+                return Optional.empty();
         }
 }
