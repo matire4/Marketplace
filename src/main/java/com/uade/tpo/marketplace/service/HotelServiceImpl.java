@@ -114,7 +114,6 @@ public class HotelServiceImpl implements HotelService {
                                         List<ReservaHabitacion> r = new ArrayList<>();
                                         List<CarritoHabitacion> carr = new ArrayList<>();
 
-                                        // Manejar reservas si existen
                                         if (habitacion.getReservas() != null) {
                                                 r = habitacion.getReservas().stream()
                                                                 .map(reserva -> reservaHabitacionRepository
@@ -123,7 +122,6 @@ public class HotelServiceImpl implements HotelService {
                                                                 .toList();
                                         }
 
-                                        // Manejar carritos si existen
                                         if (habitacion.getCarritos() != null) {
                                                 carr = habitacion.getCarritos().stream()
                                                                 .map(carrito -> carritoHabitacionRepository

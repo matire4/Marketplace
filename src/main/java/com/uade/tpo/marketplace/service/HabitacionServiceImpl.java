@@ -85,9 +85,7 @@ public class HabitacionServiceImpl implements HabitacionService {
                         int banos,
                         int dormitorios,
                         int camas,
-                        String hotel,
-                        List<ReservaHabitacionDTO> reservas,
-                        List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException,
+                        String hotel) throws GestorNotFoundException, CategoriaNotFoundException,
                         HotelNotFoundException, HabitacionDuplicateException, IOException {
 
                 Gestor gestor = gestorRepository.findByUsername(username)
@@ -96,11 +94,6 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .orElseThrow(() -> new CategoriaNotFoundException());
                 Hotel h = hotelRepository.findByNombre(hotel)
                                 .orElseThrow(() -> new HotelNotFoundException());
-                List<ReservaHabitacion> r = reservas.stream()
-                                .map(reserva -> reservaHabitacionRepository.findById(reserva.getId()).get()).toList();
-
-                List<CarritoHabitacion> carr = carritos.stream()
-                                .map(carrito -> carritoHabitacionRepository.findById(carrito.getId()).get()).toList();
                 if (habitacionRepository.findByHotelAndNumeroHabitacion(h, numeroHabitacion).isPresent()) {
                         throw new HabitacionDuplicateException();
                 }
@@ -127,8 +120,8 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 dormitorios,
                                 camas,
                                 h,
-                                r,
-                                carr,
+                                new ArrayList<>(),
+                                new ArrayList<>(),
                                 imagenesHabitacion);
                 Habitacion savedHabitacion = habitacionRepository.save(habitacion);
                 for (Imagen imagen : imagenesHabitacion) {
@@ -182,7 +175,7 @@ public class HabitacionServiceImpl implements HabitacionService {
 
         @Override
         @Transactional
-        public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
+        public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest, String gestor)
                         throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException,
                         ImagenNotFoundException, IOException {
 
@@ -190,7 +183,7 @@ public class HabitacionServiceImpl implements HabitacionService {
                                 .findByHotelAndNumeroHabitacion(hotelRepository.findByNombre(nombreHotel)
                                                 .orElseThrow(() -> new HabitacionNotFoundException()), numeroHabitacion)
                                 .orElseThrow(() -> new HabitacionNotFoundException());
-                Gestor gestor = gestorRepository.findByUsername(habitacionRequest.getGestor())
+                Gestor g = gestorRepository.findByUsername(gestor)
                                 .orElseThrow(() -> new GestorNotFoundException());
                 Categoria categoria = categoriaRepository.findByNombre(habitacionRequest.getCategoria())
                                 .orElseThrow(() -> new CategoriaNotFoundException());
@@ -198,7 +191,8 @@ public class HabitacionServiceImpl implements HabitacionService {
                 habitacion.setCapacidad(habitacionRequest.getCapacidad());
                 habitacion.setPrecioPorNoche(habitacionRequest.getPrecioPorNoche());
 
-                habitacion.setGestor(gestor);
+                habitacion.setGestor(g);
+                habitacion.setNumeroHabitacion(habitacionRequest.getNumeroHabitacion());
                 habitacion.setCategoria(categoria);
                 List<Imagen> currentImages = new ArrayList<>();
                 

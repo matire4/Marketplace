@@ -68,13 +68,14 @@ public class HabitacionController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping(value = "/{nombreHotel}/{numeroHabitacion}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable String nombreHotel,
+    @PutMapping(value = "/{gestor}/{nombreHotel}/{numeroHabitacion}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<HabitacionDTO> updateHabitacion(@PathVariable String gestor,
+            @PathVariable String nombreHotel,
             @PathVariable String numeroHabitacion,
             @ModelAttribute HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
             CategoriaNotFoundException, ImagenNotFoundException, IOException {
-        Habitacion result = habitacionService.updateHabitacion(nombreHotel, numeroHabitacion, habitacionRequest);
+        Habitacion result = habitacionService.updateHabitacion(nombreHotel, numeroHabitacion, habitacionRequest, gestor);
         return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result));
     }
 
@@ -95,9 +96,7 @@ public class HabitacionController {
                 habitacionRequest.getBanos(),
                 habitacionRequest.getDormitorios(),
                 habitacionRequest.getCamas(),
-                habitacionRequest.getHotel(),
-                habitacionRequest.getReservas(),
-                habitacionRequest.getCarritos());
+                habitacionRequest.getHotel());
 
         return ResponseEntity.created(URI.create("/habitaciones" + result.getId()))
                 .body(habitacionService.habitacionToHabitacionDTO(result));

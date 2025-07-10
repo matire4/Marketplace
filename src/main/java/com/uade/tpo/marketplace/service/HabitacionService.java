@@ -34,16 +34,14 @@ public interface HabitacionService {
                         int banos,
                         int dormitorios,
                         int camas,
-                        String hotel,
-                        List<ReservaHabitacionDTO> reservas,
-                        List<CarritoHabitacionDTO> carritos) throws GestorNotFoundException, CategoriaNotFoundException,
+                        String hotel) throws GestorNotFoundException, CategoriaNotFoundException,
                         HotelNotFoundException, HabitacionDuplicateException, IOException;
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 
         public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException;
 
-        public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest)
+        public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest, String gestor)
                         throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException, IOException,
                         ImagenNotFoundException;
 
