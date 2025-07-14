@@ -29,10 +29,6 @@ import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
-import com.uade.tpo.marketplace.repository.CarritoDepartamentoRepository;
-import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
-import com.uade.tpo.marketplace.repository.ReservaDepartamentoRepository;
-import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
 import com.uade.tpo.marketplace.repository.ReservaRepository;
 
 @Service
@@ -46,22 +42,18 @@ public class ReservaServiceImpl implements ReservaService {
     @Autowired
     private HabitacionService habitacionService;
     @Autowired
-    private ReservaHabitacionService reservaHabitacionService;
-    @Autowired
-    private ReservaDepartamentoService reservaDepartamentoService;
-    @Autowired
     private CarritoService carritoService;
     @Autowired
-    private CarritoHabitacionRepository carritoHabitacionRepository;
+    private CarritoHabitacionService carritoHabitacionService;
 
     @Autowired
-    private CarritoDepartamentoRepository carritoDepartamentoRepository;
-    
+    private CarritoDepartamentoService carritoDepartamentoService;
+
     @Autowired
-    private ReservaHabitacionRepository reservaHabitacionRepository;
-    
+    private ReservaHabitacionService reservaHabitacionService;
+
     @Autowired
-    private ReservaDepartamentoRepository reservaDepartamentoRepository;    
+    private ReservaDepartamentoService reservaDepartamentoService;
 
     @Override
     public List<ReservaDTO> getReservas() {
@@ -206,9 +198,8 @@ public class ReservaServiceImpl implements ReservaService {
                 
                 reserva.getReservasHabitacion().add(rh);
                 precioTotal += ch.getPrecio();
-                
-                carritoHabitacionRepository.deleteById(ch.getId());
-                carritoHabitacionRepository.flush();
+
+                carritoHabitacionService.deleteById(ch.getId());
             }
         }
         
@@ -231,8 +222,7 @@ public class ReservaServiceImpl implements ReservaService {
                 cd.getDepartamento().getCarritoDepartamento().remove(cd);
                 carrito.getCarritoDepartamentos().remove(cd);
 
-                carritoDepartamentoRepository.delete(cd);
-                carritoDepartamentoRepository.flush();
+                carritoDepartamentoService.deleteCarritoDepartamento(cd.getId());
             }
         }
         
@@ -304,19 +294,19 @@ public class ReservaServiceImpl implements ReservaService {
     public void finalizarReserva(String tipo, Long itemId) throws ReservaNotFounException {
         if ("habitacion".equalsIgnoreCase(tipo)) {
             // Finalizar ReservaHabitacion específica
-            Optional<ReservaHabitacion> reservaHabitaciones = reservaHabitacionRepository.findById(itemId);
+            Optional<ReservaHabitacion> reservaHabitaciones = reservaHabitacionService.getReservaHabitacionById(itemId);
             if (reservaHabitaciones.isPresent()) {
                 ReservaHabitacion rh = reservaHabitaciones.get();
                 rh.setEstado(Estado.finalizado);
-                reservaHabitacionRepository.save(rh);
+                reservaHabitacionService.save(rh);
             }
         } else if ("departamento".equalsIgnoreCase(tipo)) {
             // Finalizar ReservaDepartamento específica
-            Optional<ReservaDepartamento> reservaDepartamento = reservaDepartamentoRepository.findById(itemId);
+            Optional<ReservaDepartamento> reservaDepartamento = reservaDepartamentoService.getReservaDepartamentoById(itemId);
             if (reservaDepartamento.isPresent()) {
                 ReservaDepartamento rd = reservaDepartamento.get();
                 rd.setEstado(Estado.finalizado);
-                reservaDepartamentoRepository.save(rd);
+                reservaDepartamentoService.save(rd);
             }
         }
     }

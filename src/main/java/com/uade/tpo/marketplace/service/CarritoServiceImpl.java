@@ -24,11 +24,7 @@ import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
-import com.uade.tpo.marketplace.repository.CarritoDepartamentoRepository;
-import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
 import com.uade.tpo.marketplace.repository.CarritoRepository;
-import com.uade.tpo.marketplace.repository.DepartamentoRepository;
-import com.uade.tpo.marketplace.repository.HabitacionRepository;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,22 +36,19 @@ public class CarritoServiceImpl implements CarritoService {
     private CarritoRepository carritoRepository;
 
     @Autowired
-    private CarritoHabitacionRepository carritoHabitacionRepository;
+    private CarritoHabitacionService carritoHabitacionService;
 
     @Autowired
-    CarritoHabitacionService carritoHabitacionService;
-    
-    @Autowired
-    private HabitacionRepository habitacionRepository;
+    private HabitacionService habitacionService;
     
     @Autowired
     private UsuarioService usuarioService;
     
     @Autowired
-    private DepartamentoRepository departamentoRepository;
+    private DepartamentoService departamentoService;
     
     @Autowired
-    private CarritoDepartamentoRepository carritoDepartamentoRepository;
+    private CarritoDepartamentoService carritoDepartamentoService;
 
     @Autowired
     private ReservaHabitacionService reservaHabitacionService;
@@ -91,7 +84,7 @@ public class CarritoServiceImpl implements CarritoService {
             Usuario u = usuarioService.getUsuarioByUsername(usuario)
                     .orElseThrow(() -> new UsuarioNotFoundException());
                     
-            Habitacion habitacion = habitacionRepository.findById(habitacionId)
+            Habitacion habitacion = habitacionService.findById(habitacionId)
                     .orElseThrow(() -> new HabitacionNotFoundException());
                     
             Carrito carrito = carritoRepository.findByUsuario(u)
@@ -129,8 +122,7 @@ public class CarritoServiceImpl implements CarritoService {
                 carritoHabitacion.setPrecio(precio);
                 
                 carrito.getCarritoHabitacions().add(carritoHabitacion);
-                CarritoHabitacion saved = carritoHabitacionRepository.save(carritoHabitacion);
-                return carritoHabitacionService.carritoHabitacionToDTO(saved);
+                return carritoHabitacionService.save(carritoHabitacion);
             }
         }
 
@@ -138,7 +130,7 @@ public class CarritoServiceImpl implements CarritoService {
     @Transactional
     public void removeHabitacionFromCarrito(String usuario, Long habitacionId) 
             throws CarritoNotFoundException, HabitacionNotFoundException, UsuarioNotFoundException {
-        carritoHabitacionRepository.deleteById(habitacionId);
+        carritoHabitacionService.deleteById(habitacionId);
     }
 
     @Override
@@ -225,7 +217,7 @@ public class CarritoServiceImpl implements CarritoService {
                     return carritoRepository.save(newCarrito);
                 });
         
-        Departamento departamento = departamentoRepository.findById(departamentoId)
+        Departamento departamento = departamentoService.getDepartamentoById(departamentoId)
                 .orElseThrow(() -> new DepartamentoNotFoundException());
         
         // Convertir String a Date
@@ -253,25 +245,13 @@ public class CarritoServiceImpl implements CarritoService {
             carrito.setCarritoDepartamentos(new ArrayList<>());
         }
         carrito.getCarritoDepartamentos().add(carritoDepartamento);
-        
-        CarritoDepartamento saved = carritoDepartamentoRepository.save(carritoDepartamento);
-        
-        return new CarritoDepartamentoDTO(
-            saved.getId(),
-            saved.getTitularReserva(),
-            saved.getNombreReserva(),
-            saved.getCantidad(),
-            saved.getCheckIn(),
-            saved.getCheckOut(),
-            carrito.getId(),
-            saved.getPrecio(),
-            departamento.getId()
-        );
+
+        return carritoDepartamentoService.save(carritoDepartamento);
     }
 
         @Override
         public void removeDepartamentoFromCarrito(String usuario, Long id) throws CarritoNotFoundException, UsuarioNotFoundException {
-            carritoDepartamentoRepository.deleteById(id);
+            carritoDepartamentoService.deleteCarritoDepartamento(id);
         }
 
         @Override
@@ -288,5 +268,16 @@ public class CarritoServiceImpl implements CarritoService {
                         newCarrito.setCarritoDepartamentos(new ArrayList<>());
                         return carritoRepository.save(newCarrito);
                     });
+        }
+
+        @Override
+        public Optional<Carrito> findById(Long carritoId) {
+            return carritoRepository.findById(carritoId);
+        }
+
+        @Override
+        public Carrito getCarritoById(Long carritoId) throws CarritoNotFoundException {
+            return carritoRepository.findById(carritoId)
+                    .orElseThrow(() -> new CarritoNotFoundException());
         }
 }

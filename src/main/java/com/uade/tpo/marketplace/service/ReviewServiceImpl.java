@@ -14,9 +14,7 @@ import com.uade.tpo.marketplace.exceptions.AlojamientoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.ReviewDuplicateException;
 import com.uade.tpo.marketplace.exceptions.ReviewNotFoundException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
-import com.uade.tpo.marketplace.repository.AlojamientoRepository;
 import com.uade.tpo.marketplace.repository.ReviewRepository;
-import com.uade.tpo.marketplace.repository.UsuarioRepository;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
@@ -25,10 +23,10 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewRepository reviewRepository;
     
     @Autowired
-    private UsuarioRepository usuarioRepository;
-    
+    private UsuarioService usuarioService;
+
     @Autowired
-    private AlojamientoRepository alojamientoRepository;
+    private AlojamientoService alojamientoService;
 
     @Override
     public List<ReviewDTO> getReviews() {
@@ -56,13 +54,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review createReview(String username, Long alojamientoId, double rating, String comment) 
             throws UsuarioNotFoundException, AlojamientoNotFoundException, ReviewDuplicateException {
-        
-        Usuario usuario = usuarioRepository.findByUsername(username);
-        if (usuario == null) {
-            throw new UsuarioNotFoundException();
-        }
-        
-        Optional<Alojamiento> alojamientoOpt = alojamientoRepository.findById(alojamientoId);
+
+        Usuario usuario = usuarioService.getUsuarioByUsername(username)
+                .orElseThrow(() -> new UsuarioNotFoundException());
+
+        Optional<Alojamiento> alojamientoOpt = alojamientoService.getAlojamientoById(alojamientoId);
         if (!alojamientoOpt.isPresent()) {
             throw new AlojamientoNotFoundException("Alojamiento no encontrado");
         }

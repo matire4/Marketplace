@@ -10,4 +10,5 @@ import com.uade.tpo.marketplace.entities.Categoria;
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     Optional<Categoria> findByNombre(String nombre);
+    Optional<Categoria> findByNombreIgnoreCase(String nombre);
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entities.Departamento;
+import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.DepartamentoDTO;
 import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;

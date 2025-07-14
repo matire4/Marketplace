@@ -40,14 +40,14 @@ public class HabitacionController {
 
     @GetMapping("/{nombreHotel}")
     public ResponseEntity<List<HabitacionDTO>> getHabitacionByHotel(@PathVariable String nombreHotel)
-            throws HabitacionNotFoundException {
+            throws HabitacionNotFoundException, HotelNotFoundException {
         return ResponseEntity.ok(habitacionService.getHabitacionesByHotel(nombreHotel));
     }
 
     @GetMapping("/{nombreHotel}/{numeroHabitacion}")
     public ResponseEntity<HabitacionDTO> getHabitacionBy(@PathVariable String nombreHotel,
             @PathVariable String numeroHabitacion)
-            throws HabitacionNotFoundException {
+            throws HabitacionNotFoundException, HotelNotFoundException {
         Optional<Habitacion> result = habitacionService.getHabitacionByNombreHotelAndNumeroHabitacion(nombreHotel,
                 numeroHabitacion);
         if (result.isPresent())
@@ -58,7 +58,7 @@ public class HabitacionController {
     @DeleteMapping("/{nombreHotel}/{numeroHabitacion}")
     public ResponseEntity<Void> deleteHabitacion(@PathVariable String nombreHotel,
             @PathVariable String numeroHabitacion)
-            throws HabitacionNotFoundException {
+            throws HabitacionNotFoundException, HotelNotFoundException {
         Optional<Habitacion> result = habitacionService.getHabitacionByNombreHotelAndNumeroHabitacion(nombreHotel,
                 numeroHabitacion);
         if (result.isPresent()) {
@@ -74,7 +74,7 @@ public class HabitacionController {
             @PathVariable String numeroHabitacion,
             @ModelAttribute HabitacionDTO habitacionRequest) throws HabitacionNotFoundException,
             GestorNotFoundException,
-            CategoriaNotFoundException, ImagenNotFoundException, IOException {
+            CategoriaNotFoundException, ImagenNotFoundException, IOException, HotelNotFoundException, HabitacionDuplicateException {
         Habitacion result = habitacionService.updateHabitacion(nombreHotel, numeroHabitacion, habitacionRequest, gestor);
         return ResponseEntity.ok(habitacionService.habitacionToHabitacionDTO(result));
     }

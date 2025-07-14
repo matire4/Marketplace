@@ -95,10 +95,3 @@ public class GestorServiceImpl implements GestorService {
                         .orElseThrow(() -> new GestorNotFoundException()));
     }
 }
-
-
-//HabitacionRepository, Service e implement
-//Controlerhabitacion -> Endpoint
-//Excepcion de habitacion
-
-//Reservas -> Revisar

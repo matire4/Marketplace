@@ -34,7 +34,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
     @Autowired
     private HabitacionService habitacionService;
     @Autowired
-    private ImagenRepository imagenRepository;
+    private ImagenService imagenService;
 
     @Override
     public List<AlojamientoDTO> getAlojamientos() {
@@ -105,7 +105,7 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                     .map(pregunta -> pregunta.getId())
                     .toList());
         }
-        builder.imagenesIds(imagenRepository.findByAlojamientoId(alojamiento.getId()).stream()
+        builder.imagenesIds(imagenService.findByAlojamientoId(alojamiento.getId()).stream()
                 .map(i -> i.getId())
                 .toList());
         return builder.build();

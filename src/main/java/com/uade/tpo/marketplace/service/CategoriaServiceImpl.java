@@ -63,4 +63,9 @@ public void deleteCategoria(Long categoriaId) throws CategoriaNotFoundException 
         }
         return categoriaDTO;
     }
+
+    @Override
+    public Optional<Categoria> getCategoriaByNombre(String categoria) {
+        return categoriaRepository.findByNombre(categoria);
+    }
 }

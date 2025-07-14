@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 import com.uade.tpo.marketplace.entities.Carrito;
 import com.uade.tpo.marketplace.entities.Usuario;
 
+
 @Repository
 public interface CarritoRepository extends JpaRepository<Carrito, Long> {
+    Optional<Carrito> findById(Long id);
     Optional<Carrito> findByUsuario(Usuario usuario);
     Optional<Carrito> findByUsuarioId(Long usuarioId);
 }

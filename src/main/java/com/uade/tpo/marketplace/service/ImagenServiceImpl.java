@@ -96,4 +96,17 @@ public class ImagenServiceImpl implements ImagenService {
                 .map(this::imagenToImagenDTO)
                 .toList();
     }
+
+    @Override
+    public List<ImagenDTO> findByAlojamientoId(Long id) {
+        List<Imagen> imagenes = imagenRepository.findByAlojamientoId(id);
+        return imagenes.stream()
+                .map(this::imagenToImagenDTO)
+                .toList();
+    }
+
+    @Override
+    public Imagen save(Imagen newImagen) {
+        return imagenRepository.save(newImagen);
+    }
 }

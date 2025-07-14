@@ -30,4 +30,8 @@ public interface CarritoHabitacionService {
     List<CarritoHabitacionDTO> getCarritosHabitacionByHabitacionId(Long habitacionId);
     
     CarritoHabitacionDTO carritoHabitacionToDTO(CarritoHabitacion carritoHabitacion);
+
+    CarritoHabitacionDTO save(CarritoHabitacion carritoHabitacion);
+
+    void deleteById(Long habitacionId);
 }

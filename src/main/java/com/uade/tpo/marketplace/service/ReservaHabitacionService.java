@@ -1,6 +1,7 @@
 package com.uade.tpo.marketplace.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
@@ -15,4 +16,6 @@ public interface ReservaHabitacionService {
     ReservaHabitacionDTO reservaHabitacionToReservaHabitacionDTO(ReservaHabitacion reservaHabitacion);
     void checkFechasReservadas(Long habitacionId, String checkIn, String checkOut) throws FechaYaReservadaException;
     List<ReservaHabitacion> findByGestorId(Long id);
+    Optional<ReservaHabitacion> getReservaHabitacionById(Long itemId);
+    void save(ReservaHabitacion rh);
 }

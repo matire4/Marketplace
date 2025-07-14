@@ -15,8 +15,6 @@ import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
 import com.uade.tpo.marketplace.repository.CarritoHabitacionRepository;
-import com.uade.tpo.marketplace.repository.CarritoRepository;
-import com.uade.tpo.marketplace.repository.HabitacionRepository;
 
 @Service
 public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
@@ -25,10 +23,10 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
     private CarritoHabitacionRepository carritoHabitacionRepository;
     
     @Autowired
-    private CarritoRepository carritoRepository;
-    
+    private CarritoService carritoService;
+
     @Autowired
-    private HabitacionRepository habitacionRepository;
+    private HabitacionService habitacionService;
 
     @Override
     @Transactional(readOnly = true)
@@ -49,11 +47,11 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
     @Transactional
     public CarritoHabitacion createCarritoHabitacion(Long carritoId, Long habitacionId, String nombreReserva, int cantidad, Date checkIn, Date checkOut, Double precio) 
             throws CarritoNotFoundException, HabitacionNotFoundException {
-        
-        Carrito carrito = carritoRepository.findById(carritoId)
+
+        Carrito carrito = carritoService.findById(carritoId)
                 .orElseThrow(() -> new CarritoNotFoundException());
-                
-        Habitacion habitacion = habitacionRepository.findById(habitacionId)
+
+        Habitacion habitacion = habitacionService.findById(habitacionId)
                 .orElseThrow(() -> new HabitacionNotFoundException());
 
         CarritoHabitacion carritoHabitacion = new CarritoHabitacion();
@@ -114,5 +112,17 @@ public class CarritoHabitacionServiceImpl implements CarritoHabitacionService {
             carritoHabitacion.getCarrito().getId(),
             carritoHabitacion.getPrecio()
         );
+    }
+
+    @Override
+    public CarritoHabitacionDTO save(CarritoHabitacion carritoHabitacion) {
+        CarritoHabitacion saved = carritoHabitacionRepository.save(carritoHabitacion);
+        return carritoHabitacionToDTO(saved);
+    }
+
+    @Override
+    public void deleteById(Long habitacionId) {
+        carritoHabitacionRepository.deleteById(habitacionId);
+        carritoHabitacionRepository.flush();
     }
 }

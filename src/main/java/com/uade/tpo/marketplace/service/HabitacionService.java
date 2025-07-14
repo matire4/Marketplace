@@ -7,20 +7,18 @@ import java.util.Optional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.uade.tpo.marketplace.entities.Habitacion;
-import com.uade.tpo.marketplace.entities.dto.CarritoHabitacionDTO;
 import com.uade.tpo.marketplace.entities.dto.HabitacionDTO;
-import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.enums.TipoHabitacion;
 import com.uade.tpo.marketplace.exceptions.*;
 
 public interface HabitacionService {
         public List<HabitacionDTO> getHabitaciones();
 
-        public List<HabitacionDTO> getHabitacionesByHotel(String nombreHotel) throws HabitacionNotFoundException;
+        public List<HabitacionDTO> getHabitacionesByHotel(String nombreHotel) throws HabitacionNotFoundException, HotelNotFoundException;
 
         public Optional<Habitacion> getHabitacionByNombreHotelAndNumeroHabitacion(String nombreHotel,
                         String numeroHabitacion)
-                        throws HabitacionNotFoundException;
+                        throws HabitacionNotFoundException, HotelNotFoundException;
 
         public Habitacion createHabitacion(
                         TipoHabitacion tipoHabitacion,
@@ -39,11 +37,13 @@ public interface HabitacionService {
 
         public HabitacionDTO habitacionToHabitacionDTO(Habitacion habitacion);
 
-        public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException;
+        public void deleteHabitacion(String nombreHotel, String numeroHabitacion) throws HabitacionNotFoundException, HotelNotFoundException;
 
         public Habitacion updateHabitacion(String nombreHotel, String numeroHabitacion, HabitacionDTO habitacionRequest, String gestor)
                         throws HabitacionNotFoundException, GestorNotFoundException, CategoriaNotFoundException, IOException,
-                        ImagenNotFoundException;
+                        ImagenNotFoundException,HotelNotFoundException;
 
         public Optional<Habitacion> getHabitacionById(Long habitacionId);
+
+        public Optional<Habitacion> findById(Long habitacionId);
 }

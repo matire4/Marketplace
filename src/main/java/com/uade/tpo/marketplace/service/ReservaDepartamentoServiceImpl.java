@@ -13,11 +13,10 @@ import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.Reserva;
 import com.uade.tpo.marketplace.entities.ReservaDepartamento;
 import com.uade.tpo.marketplace.entities.dto.ReservaDepartamentoDTO;
+import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
-import com.uade.tpo.marketplace.repository.DepartamentoRepository;
 import com.uade.tpo.marketplace.repository.ReservaDepartamentoRepository;
-import com.uade.tpo.marketplace.repository.ReservaRepository;
 
 @Service
 public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoService {
@@ -26,15 +25,15 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
     private ReservaDepartamentoRepository reservaDepartamentoRepository;
     
     @Autowired
-    private ReservaRepository reservaRepository;
-    
+    private ReservaService reservaService;
+
     @Autowired
-    private DepartamentoRepository departamentoRepository;
+    private DepartamentoService departamentoService;
 
     @Override
     @Transactional(readOnly = true)
     public List<ReservaDepartamentoDTO> getReservasDepartamentosByReservaId(Long reservaId) throws ReservaNotFounException {
-        Optional<Reserva> reserva = reservaRepository.findById(reservaId);
+        Optional<Reserva> reserva = reservaService.getReservaById(reservaId);
         if (!reserva.isPresent()) {
             throw new ReservaNotFounException();
         }
@@ -48,14 +47,14 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
     @Override
     @Transactional
     public ReservaDepartamentoDTO createReservaDepartamento(ReservaDepartamentoDTO reservaDepartamentoDTO) 
-            throws ReservaNotFounException {
-        
-        Optional<Reserva> reserva = reservaRepository.findById(reservaDepartamentoDTO.getReservaId());
+            throws ReservaNotFounException, DepartamentoNotFoundException {
+
+        Optional<Reserva> reserva = reservaService.getReservaById(reservaDepartamentoDTO.getReservaId());
         if (!reserva.isPresent()) {
             throw new ReservaNotFounException();
         }
-        
-        Optional<Departamento> departamento = departamentoRepository.findById(reservaDepartamentoDTO.getDepartamentoId());
+
+        Optional<Departamento> departamento = departamentoService.getDepartamentoById(reservaDepartamentoDTO.getDepartamentoId());
         if (!departamento.isPresent()) {
             throw new ReservaNotFounException();
         }
@@ -144,5 +143,15 @@ public class ReservaDepartamentoServiceImpl implements ReservaDepartamentoServic
     @Override
     public List<ReservaDepartamento> findByGestorId(Long id) {
         return reservaDepartamentoRepository.findByGestorId(id);
+    }
+
+    @Override
+    public Optional<ReservaDepartamento> getReservaDepartamentoById(Long itemId) {
+        return reservaDepartamentoRepository.findById(itemId);
+    }
+
+    @Override
+    public void save(ReservaDepartamento rd) {
+        reservaDepartamentoRepository.save(rd);
     }
 }

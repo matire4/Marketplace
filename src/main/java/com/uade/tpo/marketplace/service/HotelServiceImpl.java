@@ -204,15 +204,41 @@ public class HotelServiceImpl implements HotelService {
         @Override
         @Transactional
         public void deleteHotel(String nombre) throws HotelNotFoundException {
-                Hotel hotel = hotelRepository.findByNombre(nombre).get();
+                Hotel hotel = hotelRepository.findByNombre(nombre)
+                        .orElseThrow(() -> new HotelNotFoundException());
                 hotelRepository.delete(hotel);
         }
 
         @Override
         public HotelDTO updateHotel(Long id, HotelDTO hotel)
-                        throws HotelNotFoundException, HotelDuplicateException {
+                        throws HotelNotFoundException, HotelDuplicateException, CategoriaNotFoundException {
                 Hotel h = hotelRepository.findById(id).orElseThrow(() -> new HotelNotFoundException());
-                h.setCategoria(categoriaRepository.findByNombre(hotel.getCategoria()).get());
+                
+                // Buscar la categoría con el nombre exacto o normalizado
+                String categoriaNombre = hotel.getCategoria() != null ? hotel.getCategoria().trim() : null;
+                if (categoriaNombre != null && !categoriaNombre.isEmpty()) {
+                        System.out.println("Buscando categoría: '" + categoriaNombre + "'");
+                        
+                        // Primero intentar búsqueda exacta
+                        Optional<Categoria> categoria = categoriaRepository.findByNombre(categoriaNombre);
+                        
+                        // Si no se encuentra, intentar búsqueda case-insensitive
+                        if (categoria.isEmpty()) {
+                                categoria = categoriaRepository.findByNombreIgnoreCase(categoriaNombre);
+                        }
+                        
+                        if (categoria.isEmpty()) {
+                                // Si no se encuentra, mostrar todas las categorías disponibles para debug
+                                System.out.println("Categorías disponibles:");
+                                categoriaRepository.findAll().forEach(cat -> 
+                                        System.out.println("  - '" + cat.getNombre() + "'"));
+                                
+                                throw new CategoriaNotFoundException("Categoría no encontrada: '" + categoriaNombre + "'");
+                        }
+                        
+                        h.setCategoria(categoria.get());
+                }
+                
                 h.setCiudad(hotel.getCiudad());
                 h.setDescripcion(hotel.getDescripcion());
                 h.setDireccion(hotel.getDireccion());
@@ -228,7 +254,9 @@ public class HotelServiceImpl implements HotelService {
 
                         if (!hotel.getHabitaciones().isEmpty()) {
                                 h.setHabitaciones(hotel.getHabitaciones().stream()
-                                                .map(ho -> habitacionRepository.findById(ho.getId()).get()).toList());
+                                                .map(ho -> habitacionRepository.findById(ho.getId())
+                                                        .orElseThrow(() -> new RuntimeException("Habitación no encontrada con ID: " + ho.getId())))
+                                                .toList());
                         }
                 }
 

@@ -1,6 +1,9 @@
 package com.uade.tpo.marketplace.service;
 
+import java.util.Optional;
+
 import com.uade.tpo.marketplace.entities.Carrito;
+import com.uade.tpo.marketplace.entities.CarritoHabitacion;
 import com.uade.tpo.marketplace.entities.dto.CarritoDTO;
 import com.uade.tpo.marketplace.exceptions.CarritoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HabitacionNotFoundException;
@@ -31,4 +34,8 @@ public interface CarritoService {
     void clearCarrito(String usuario) throws CarritoNotFoundException, UsuarioNotFoundException;
 
     CarritoDTO carritoToCarritoDTO(Carrito carrito);
+
+    Optional<Carrito> findById(Long carritoId);
+
+    Carrito getCarritoById(Long carritoId) throws CarritoNotFoundException;
 }

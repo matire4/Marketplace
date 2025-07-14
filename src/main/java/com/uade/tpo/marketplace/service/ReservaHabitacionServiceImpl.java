@@ -15,9 +15,7 @@ import com.uade.tpo.marketplace.entities.ReservaHabitacion;
 import com.uade.tpo.marketplace.entities.dto.ReservaHabitacionDTO;
 import com.uade.tpo.marketplace.exceptions.FechaYaReservadaException;
 import com.uade.tpo.marketplace.exceptions.ReservaNotFounException;
-import com.uade.tpo.marketplace.repository.HabitacionRepository;
 import com.uade.tpo.marketplace.repository.ReservaHabitacionRepository;
-import com.uade.tpo.marketplace.repository.ReservaRepository;
 
 @Service
 public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
@@ -26,15 +24,15 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     private ReservaHabitacionRepository reservaHabitacionRepository;
     
     @Autowired
-    private ReservaRepository reservaRepository;
-    
+    private ReservaService reservaService;
+
     @Autowired
-    private HabitacionRepository habitacionRepository;
+    private HabitacionService habitacionService;
 
     @Override
     @Transactional(readOnly = true)
     public List<ReservaHabitacionDTO> getReservasHabitacionByReservaId(Long reservaId) throws ReservaNotFounException {
-        Optional<Reserva> reserva = reservaRepository.findById(reservaId);
+        Optional<Reserva> reserva = reservaService.getReservaById(reservaId);
         if (!reserva.isPresent()) {
             throw new ReservaNotFounException();
         }
@@ -49,13 +47,13 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     @Transactional
     public ReservaHabitacionDTO createReservaHabitacion(ReservaHabitacionDTO reservaHabitacionDTO) 
             throws ReservaNotFounException {
-        
-        Optional<Reserva> reserva = reservaRepository.findById(reservaHabitacionDTO.getReservaId());
+
+        Optional<Reserva> reserva = reservaService.getReservaById(reservaHabitacionDTO.getReservaId());
         if (!reserva.isPresent()) {
             throw new ReservaNotFounException();
         }
-        
-        Optional<Habitacion> habitacion = habitacionRepository.findById(reservaHabitacionDTO.getHabitacionId());
+
+        Optional<Habitacion> habitacion = habitacionService.getHabitacionById(reservaHabitacionDTO.getHabitacionId());
         if (!habitacion.isPresent()) {
             throw new ReservaNotFounException();
         }
@@ -145,5 +143,15 @@ public class ReservaHabitacionServiceImpl implements ReservaHabitacionService {
     @Override
     public List<ReservaHabitacion> findByGestorId(Long id) {
         return reservaHabitacionRepository.findByGestorId(id);
+    }
+
+    @Override
+    public Optional<ReservaHabitacion> getReservaHabitacionById(Long itemId) {
+        return reservaHabitacionRepository.findById(itemId);
+    }
+
+    @Override
+    public void save(ReservaHabitacion rh) {
+        reservaHabitacionRepository.save(rh);
     }
 }

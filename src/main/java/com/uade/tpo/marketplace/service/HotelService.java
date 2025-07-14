@@ -41,7 +41,7 @@ public interface HotelService {
         public void deleteHotel(String nombre) throws HotelNotFoundException;
 
         public HotelDTO updateHotel(Long id, HotelDTO hotel)
-                        throws HotelNotFoundException, HotelDuplicateException, IOException;
+                        throws HotelNotFoundException, HotelDuplicateException, CategoriaNotFoundException;
 
         public Optional<Hotel> findById(Long id);
 

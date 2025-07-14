@@ -70,23 +70,30 @@ public class HotelController {
 
     @DeleteMapping("/{nombre}")
     public ResponseEntity<Void> deleteHotel(@PathVariable String nombre) throws HotelNotFoundException {
-        Optional<Hotel> result = hotelService.getHotelByNombre(nombre);
-        if (result.isPresent()) {
+        try {
             hotelService.deleteHotel(nombre);
             return ResponseEntity.noContent().build();
+        } catch (HotelNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
     @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE,
             MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long id, @ModelAttribute HotelDTO hotel)
-            throws HotelNotFoundException, HotelDuplicateException, IOException {
-        Optional<Hotel> result = hotelService.findById(id);
-        if (result.isPresent()) {
-            return ResponseEntity.ok(hotelService.updateHotel(id, hotel));
+            throws HotelNotFoundException, HotelDuplicateException, CategoriaNotFoundException {
+        System.out.println("Actualizando hotel con ID: " + id);
+        System.out.println("Datos recibidos:");
+        System.out.println("  - Nombre: " + hotel.getNombre());
+        System.out.println("  - Categoría: " + hotel.getCategoria());
+        System.out.println("  - Ciudad: " + hotel.getCiudad());
+        
+        try {
+            HotelDTO updatedHotel = hotelService.updateHotel(id, hotel);
+            return ResponseEntity.ok(updatedHotel);
+        } catch (HotelNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
     }
 
 }
