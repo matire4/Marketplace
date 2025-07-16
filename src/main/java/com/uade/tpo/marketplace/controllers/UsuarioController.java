@@ -31,6 +31,11 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.getUsuarios());
     }
 
+    @GetMapping("/admins")
+    public ResponseEntity<List<UsuarioDTO>> getAdministradores() {
+        return ResponseEntity.ok(usuarioService.getAdministradores());
+    }
+
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioDTO> getUsuarioById(@PathVariable Long usuarioId) throws UsuarioNotFoundException {
         Optional<Usuario> usuario = usuarioService.getUsuarioById(usuarioId);

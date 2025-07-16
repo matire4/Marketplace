@@ -42,6 +42,5 @@ public interface UsuarioService {
 
         public UsuarioDTO usuarioToUsuarioDTO(Usuario usuario);
 
-        // public GestorDTO convertogestor(String username) throws
-        // UsuarioNotFoundException;
+        public List<UsuarioDTO> getAdministradores();
 }

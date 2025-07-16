@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.uade.tpo.marketplace.entities.Categoria;
-import com.uade.tpo.marketplace.entities.Departamento;
 import com.uade.tpo.marketplace.entities.dto.CategoriaDTO;
 import com.uade.tpo.marketplace.exceptions.CategoriaNotFoundException;
 

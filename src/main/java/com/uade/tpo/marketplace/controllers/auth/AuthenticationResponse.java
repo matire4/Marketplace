@@ -1,5 +1,7 @@
 package com.uade.tpo.marketplace.controllers.auth;
 
+import com.uade.tpo.marketplace.enums.Role;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ public class AuthenticationResponse {
     private String nombre;
     private String apellido;
     private String tipoUsuario; // Puede ser "gestor" o "usuario"
+    private Role role; //administrador o cliente
     private String email;
     private String telefono;
 }

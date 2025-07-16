@@ -13,8 +13,6 @@ public interface CarritoDepartamentoService {
 
     List<CarritoDepartamentoDTO> getCarritosDepartamento();
 
-    List<CarritoDepartamentoDTO> getCarritosDepartamentosByUsuario(String username) throws CarritoNotFoundException;
-
     CarritoDepartamentoDTO createCarritoDepartamento(
             Long carritoId,
             Long departamentoId,

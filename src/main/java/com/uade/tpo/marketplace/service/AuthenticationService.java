@@ -51,7 +51,8 @@ public class AuthenticationService {
                                 .tipoUsuario(user.getRole().name().toLowerCase())
                                 .email(user.getEmail())
                                 .telefono(user.getTelefono())
-                                .build(); 
+                                .role(user.getRole())
+                                .build();
                 }
                 else {
                         Gestor gestor = new Gestor(
@@ -70,6 +71,7 @@ public class AuthenticationService {
                                 .tipoUsuario(gestor.getRole().name().toLowerCase())
                                 .email(gestor.getEmail())
                                 .telefono(gestor.getTelefono())
+                                .role(gestor.getRole())
                                 .build();
                 }
         }
@@ -95,6 +97,7 @@ public class AuthenticationService {
                                 .tipoUsuario("usuario")
                                 .email(usuario.getEmail())
                                 .telefono(usuario.getTelefono())
+                                .role(usuario.getRole())
                                 .build();
                 }
                 else {
@@ -107,6 +110,7 @@ public class AuthenticationService {
                                 .tipoUsuario("gestor")
                                 .email(gestor.getEmail())
                                 .telefono(gestor.getTelefono())
+                                .role(gestor.getRole())
                                 .build();
                 }
         }

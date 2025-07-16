@@ -13,9 +13,6 @@ import java.util.List;
 public interface CarritoDepartamentoRepository extends JpaRepository<CarritoDepartamento, Long> {
     List<CarritoDepartamento> findByCarritoId(Long carritoId);
     
-    boolean existsByCarritoIdAndDepartamentoId(Long carritoId, Long departamentoId);
-    List<CarritoDepartamento> findByHabitacionId(Long habitacionId);
-    List<CarritoDepartamento> findByUsuario(String username);
     List<CarritoDepartamento> findByDepartamentoId(Long departamentoId);
 
     @Modifying

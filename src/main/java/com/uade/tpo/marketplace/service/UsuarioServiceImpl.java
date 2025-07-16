@@ -20,7 +20,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<UsuarioDTO> getUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> usuarios = usuarioRepository.findAllByRole(Role.CLIENTE);
         return usuarios.stream().map(usuario -> this.usuarioToUsuarioDTO(usuario)).toList();
     }
 
@@ -104,17 +104,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioDTO;
     }
 
-    // @Override
-    // public GestorDTO convertogestor(String username) throws
-    // UsuarioNotFoundException {
-    // Usuario usuario = usuarioRepository.findByUsername(username);
-    // if (usuario == null) {
-    // throw new UsuarioNotFoundException();
-    // }
-    // usuario.setRole(Role.GESTOR);
-    // usuarioRepository.save(usuario);
-
-    // return new GestorDTO(usuario.getId(), usuario.getNombre(),
-    // usuario.getApellido(), usuario.getUsername());
-    // }
+    @Override
+    public List<UsuarioDTO> getAdministradores() {
+        List<Usuario> administradores = usuarioRepository.findAllByRole(Role.ADMINISTRADOR);
+        return administradores.stream().map(usuario -> this.usuarioToUsuarioDTO(usuario)).toList();
+    }
 }

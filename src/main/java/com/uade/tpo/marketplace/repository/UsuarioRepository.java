@@ -1,9 +1,12 @@
 package com.uade.tpo.marketplace.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.uade.tpo.marketplace.entities.Usuario;
+import com.uade.tpo.marketplace.enums.Role;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
@@ -18,4 +21,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByEmailAndIdNot(String email, Long id);
 
     Usuario findByCarritoId(Long carritoId);
+
+    List<Usuario> findAllByRole(Role cliente);
 }

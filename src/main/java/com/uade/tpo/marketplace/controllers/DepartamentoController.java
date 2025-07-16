@@ -70,6 +70,8 @@ public class DepartamentoController {
     public ResponseEntity<DepartamentoDTO> updateDepartamento(@PathVariable Long departamentoId,
             @ModelAttribute DepartamentoDTO departamentoRequest) throws DepartamentoNotFoundException,
             GestorNotFoundException, CategoriaNotFoundException, IOException {
+            System.out.println("Updating departamento with ID: " + departamentoId);
+            System.out.println("Request data: " + departamentoRequest);
         var result = departamentoService.updateDepartamento(departamentoId, departamentoRequest);
         return ResponseEntity.ok(departamentoService.departamentoToDepartamentoDTO(result));
     }

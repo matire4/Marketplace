@@ -20,7 +20,6 @@ import com.uade.tpo.marketplace.exceptions.DepartamentoNotFoundException;
 import com.uade.tpo.marketplace.exceptions.GestorNotFoundException;
 import com.uade.tpo.marketplace.exceptions.HotelNotFoundException;
 import com.uade.tpo.marketplace.repository.AlojamientoRepository;
-import com.uade.tpo.marketplace.repository.ImagenRepository;
 
 @Service
 public class AlojamientoServiceImpl implements AlojamientoService {

@@ -33,14 +33,6 @@ public class CarritoDepartamentoServiceImpl implements CarritoDepartamentoServic
     }
 
     @Override
-    public List<CarritoDepartamentoDTO> getCarritosDepartamentosByUsuario(String username) throws CarritoNotFoundException {
-        return carritoDepartamentoRepository.findByUsuario(username)
-                .stream()
-                .map(this::carritoDepartamentoDTO)
-                .toList();
-    }
-
-    @Override
     public CarritoDepartamentoDTO createCarritoDepartamento(Long carritoId, Long departamentoId, String nombreReserva, int cantidad, Date checkIn, Date checkOut, Double precio) throws CarritoNotFoundException, DepartamentoNotFoundException {
             CarritoDepartamento carritoDepartamento = new CarritoDepartamento();
             Carrito carrito = carritoService.getCarritoById(carritoId);

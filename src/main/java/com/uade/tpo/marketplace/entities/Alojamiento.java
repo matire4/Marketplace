@@ -3,6 +3,7 @@ package com.uade.tpo.marketplace.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -39,11 +40,11 @@ public abstract class Alojamiento {
     @Column(nullable = false)
     private String pais;
 
-    @OneToMany(mappedBy = "alojamiento")
+    @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
-    @OneToMany(mappedBy = "alojamiento")
+    @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pregunta> preguntas = new ArrayList<>();
-    @OneToMany(mappedBy = "alojamiento")
+    @OneToMany(mappedBy = "alojamiento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagen> imagenes = new ArrayList<>();
 
     @ManyToOne

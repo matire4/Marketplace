@@ -103,19 +103,21 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                 .orElseThrow(() -> new GestorNotFoundException());
         Categoria categoria = categoriaService.getCategoriaByNombre(departamentoDTO.getCategoria())
                 .orElseThrow(() -> new CategoriaNotFoundException());
-        if (departamentoDTO.getImagenesNuevas() != null) {
-            List<Imagen> imagenes = departamentoDTO.getImagenesNuevas().stream()
+        if (departamentoDTO.getImagenesNuevas() != null && !departamentoDTO.getImagenesNuevas().isEmpty()) {
+            List<Imagen> nuevasImagenes = departamentoDTO.getImagenesNuevas().stream()
                     .map(imagen -> {
                         Imagen newImagen = new Imagen();
                         try {
-                            newImagen.setImagen(imagen.getBytes().toString());
+                            newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         return imagenService.save(newImagen);
                     })
                     .toList();
-                departamento.setImagenes(new ArrayList<>(imagenes));
+            List<Imagen> todasImagenes = new ArrayList<>(departamento.getImagenes());
+            todasImagenes.addAll(nuevasImagenes);
+            departamento.setImagenes(todasImagenes);
         }
 
         departamento.setCapacidad(departamentoDTO.getCapacidad());
@@ -125,26 +127,6 @@ public class DepartamentoServiceImpl implements DepartamentoService {
         departamento.setDireccion(departamentoDTO.getDireccion());
         departamento.setGestor(gestor);
         departamento.setCategoria(categoria);
-        List<Imagen> currentImages = new ArrayList<>();
-        if (departamentoDTO.getImagenesIds() != null) {
-                currentImages = departamentoDTO.getImagenesIds().stream()
-                        .map(imagenId -> {
-                                Imagen newImagen = new Imagen();
-                                newImagen.setId(imagenId);
-                                return imagenService.save(newImagen);
-                        }).toList();
-        }
-        currentImages.addAll(departamentoDTO.getImagenesNuevas().stream()
-                        .map(imagen -> {
-                                Imagen newImagen = new Imagen();
-                                try {
-                                        newImagen.setImagen(Base64.getEncoder().encodeToString(imagen.getBytes()));
-                                } catch (IOException e) {
-                                        e.printStackTrace();
-                                }
-                                return imagenService.save(newImagen);
-                        }).toList());
-        departamento.setImagenes(currentImages);
 
         return departamentoRepository.save(departamento);
     }
