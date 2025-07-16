@@ -84,6 +84,7 @@ public class GestorServiceImpl implements GestorService {
         gestorDTO.setEmail(gestor.getEmail());
         gestorDTO.setTelefono(gestor.getTelefono());
         gestorDTO.setNombre(gestor.getNombre());
+        gestorDTO.setRole(gestor.getRole());
         gestorDTO.setCuil(gestor.getCuil());
         return gestorDTO;
     }

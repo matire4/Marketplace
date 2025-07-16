@@ -23,4 +23,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByCarritoId(Long carritoId);
 
     List<Usuario> findAllByRole(Role cliente);
+
+    boolean existsByTelefonoAndIdNot(String telefono, Long id);
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import lombok.Data;
 
+import com.uade.tpo.marketplace.enums.Role;
+
 @Data
 public class GestorDTO {
     private Long id;
@@ -13,5 +15,6 @@ public class GestorDTO {
     private String password;
     private String email;
     private String telefono;
+    private Role role;
     private List<Long> hotelesIds;
 }

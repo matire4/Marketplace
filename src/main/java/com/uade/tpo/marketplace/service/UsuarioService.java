@@ -6,6 +6,9 @@ import java.util.Optional;
 import com.uade.tpo.marketplace.entities.Usuario;
 import com.uade.tpo.marketplace.entities.dto.UsuarioDTO;
 import com.uade.tpo.marketplace.enums.Role;
+import com.uade.tpo.marketplace.exceptions.EmailDuplicateException;
+import com.uade.tpo.marketplace.exceptions.TelefonoDuplicateException;
+import com.uade.tpo.marketplace.exceptions.UsernameDuplicateException;
 import com.uade.tpo.marketplace.exceptions.UsuarioDuplicateException;
 import com.uade.tpo.marketplace.exceptions.UsuarioNotFoundException;
 
@@ -27,20 +30,22 @@ public interface UsuarioService {
                         String email,
                         String telefono) throws UsuarioDuplicateException;
 
-        public Usuario updateUsuario(
-                        Long usuarioId,
+        public UsuarioDTO updateUsuario(
+                        String username,
                         String nombre,
                         String apellido,
                         Role rolUsuario,
-                        String username,
+                        String newUsername,
                         String password,
                         String email,
-                        String telefono) throws UsuarioDuplicateException, UsuarioNotFoundException;
+                        String telefono) throws UsernameDuplicateException, TelefonoDuplicateException, UsuarioNotFoundException, EmailDuplicateException;
 
-        public void deleteUsuario(Long usuarioId)
+        public void deleteUsuario(String username)
                         throws UsuarioNotFoundException;
 
         public UsuarioDTO usuarioToUsuarioDTO(Usuario usuario);
 
         public List<UsuarioDTO> getAdministradores();
+
+        public UsuarioDTO convertToRole(String usuario, Role rol) throws UsuarioNotFoundException;
 }
