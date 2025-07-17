@@ -205,7 +205,8 @@ public class HabitacionServiceImpl implements HabitacionService {
                                         }).toList();
                         currentImages.addAll(newImages);
                 }
-                habitacion.setImagenes(currentImages);
+                habitacion.getImagenes().clear();
+                habitacion.getImagenes().addAll(currentImages);
 
                 return habitacionRepository.save(habitacion);
         }

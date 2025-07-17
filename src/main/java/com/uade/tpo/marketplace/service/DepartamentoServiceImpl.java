@@ -115,9 +115,15 @@ public class DepartamentoServiceImpl implements DepartamentoService {
                         return imagenService.save(newImagen);
                     })
                     .toList();
-            List<Imagen> todasImagenes = new ArrayList<>(departamento.getImagenes());
-            todasImagenes.addAll(nuevasImagenes);
-            departamento.setImagenes(todasImagenes);
+
+            // Modifica la lista existente, no la reemplaces
+            departamento.getImagenes().addAll(nuevasImagenes);
+
+            // Asigna el departamento a cada imagen nueva
+            for (Imagen img : nuevasImagenes) {
+                img.setAlojamiento(departamento);
+                imagenService.save(img);
+            }
         }
 
         departamento.setCapacidad(departamentoDTO.getCapacidad());

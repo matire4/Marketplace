@@ -206,6 +206,7 @@ public class HotelServiceImpl implements HotelService {
         public void deleteHotel(String nombre) throws HotelNotFoundException {
                 Hotel hotel = hotelRepository.findByNombre(nombre)
                         .orElseThrow(() -> new HotelNotFoundException());
+
                 hotelRepository.delete(hotel);
         }
 
@@ -247,18 +248,6 @@ public class HotelServiceImpl implements HotelService {
                 h.setEmail(hotel.getEmail());
 
                 h.setNombre(hotel.getNombre());
-                if (hotel.getHabitacionesParaCrear() != null) {
-                        hotel.getHabitacionesParaCrear().forEach(habitacion -> {
-                                hotel.addHabitacion(habitacion);
-                        });
-
-                        if (!hotel.getHabitaciones().isEmpty()) {
-                                h.setHabitaciones(hotel.getHabitaciones().stream()
-                                                .map(ho -> habitacionRepository.findById(ho.getId())
-                                                        .orElseThrow(() -> new RuntimeException("Habitación no encontrada con ID: " + ho.getId())))
-                                                .toList());
-                        }
-                }
 
                 List<Imagen> currentImages = new ArrayList<>();
 
@@ -285,7 +274,17 @@ public class HotelServiceImpl implements HotelService {
                                         }).toList();
                         currentImages.addAll(newImages);
                 }
-                h.setImagenes(currentImages);
+
+                // Solo actualiza imágenes si hay cambios
+                if (!currentImages.isEmpty()) {
+                        h.getImagenes().clear();
+                        h.getImagenes().addAll(currentImages);
+
+                        for (Imagen img : currentImages) {
+                                img.setAlojamiento(h); 
+                                imagenRepository.save(img);
+                        }
+                }
 
                 hotelRepository.save(h);
                 return hotelToHotelDTO(h);

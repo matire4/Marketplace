@@ -23,6 +23,7 @@ public class AlojamientoDTO {
     private Long categoriaId;
     private List<Long> reviews;
     private List<Long> preguntas;
+    private String gestor;
     // Solo IDs de imágenes en el response, no las imágenes completas
     private List<Long> imagenesIds;
     private String tipoAlojamiento;

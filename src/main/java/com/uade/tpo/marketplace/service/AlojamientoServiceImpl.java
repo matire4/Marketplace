@@ -74,7 +74,8 @@ public class AlojamientoServiceImpl implements AlojamientoService {
                 .descripcion(alojamiento.getDescripcion())
                 .direccion(alojamiento.getDireccion())
                 .ciudad(alojamiento.getCiudad())
-                .pais(alojamiento.getPais());
+                .pais(alojamiento.getPais())
+                .gestor(alojamiento.getGestor() != null ? alojamiento.getGestor().getUsername() : null);
         if (tipo == "hotel") {
             Hotel h = hotelService.findById(alojamiento.getId()).get();
             OptionalDouble minPrecio = h.getHabitaciones().stream()
